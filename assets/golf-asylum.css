@@ -355,3 +355,9 @@
     transition: none;
   }
 }
+
+/* The logo as an image (set in theme settings) rather than the drawn mark */
+.ga-mark-image {
+  display: block;
+  height: auto;
+}

@@ -183,7 +183,9 @@
             },
             "rows": {
               "type": "ga-product-accordion",
-              "settings": {}
+              "settings": {
+                "fabric_polo": "88% polyester, 12% spandex. Wash with like colors. Air dry suggested."
+              }
             }
           },
           "block_order": [

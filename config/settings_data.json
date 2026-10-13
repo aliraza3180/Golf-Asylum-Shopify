@@ -117,7 +117,8 @@
     "ga_color_white": "#FFFFFF",
     "ga_color_accent": "#1F6BFF",
     "ga_hand_font": "covered_by_your_grace_n4",
-    "favicon": "shopify://shop_images/golf-asylum-favicon.png"
+    "favicon": "shopify://shop_images/golf-asylum-favicon.png",
+    "ga_logo_mark": "shopify://shop_images/ballhead-logo.png"
   },
   "presets": {
     "Default": {

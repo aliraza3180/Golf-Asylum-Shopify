@@ -63,7 +63,8 @@
             "sticker": "New",
             "note": "",
             "note_position": "none",
-            "image": "shopify://shop_images/ga-polo-navy.png"
+            "image": "shopify://shop_images/jr-ballhead-polo-navy-front.jpg",
+            "zoom": 100
           }
         },
         "white": {
@@ -74,7 +75,8 @@
             "sticker": "",
             "note": "4-way\nstretch",
             "note_position": "left",
-            "image": "shopify://shop_images/ga-polo-white.png"
+            "image": "shopify://shop_images/jr-ballhead-polo-white-front.jpg",
+            "zoom": 100
           }
         },
         "electric": {
@@ -85,7 +87,8 @@
             "sticker": "",
             "note": "the Ballhead\npatch",
             "note_position": "right",
-            "image": "shopify://shop_images/ga-polo-electric.png"
+            "image": "shopify://shop_images/jr-ballhead-polo-electric-front.jpg",
+            "zoom": 100
           }
         }
       },

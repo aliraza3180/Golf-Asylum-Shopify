@@ -24,7 +24,7 @@
           assign url = product.url | default: bs.link | default: routes.all_products_collection_url
           assign card_image = bs.image | default: product.featured_image
         -%}
-        <li class="ga-card" {{ block.shopify_attributes }}>
+        <li class="ga-card" style="--ga-card-zoom: {{ bs.zoom | divided_by: 100.0 }};" {{ block.shopify_attributes }}>
           <a class="ga-card__link" href="{{ url }}">
             <span class="ga-card__frame">
               <span class="ga-card__media">
@@ -354,6 +354,17 @@
           "id": "image",
           "label": "Card image",
           "info": "Product alone on white or transparent works best. Leave empty to use the product's own first photo."
+        },
+        {
+          "type": "range",
+          "id": "zoom",
+          "label": "Image zoom",
+          "min": 100,
+          "max": 160,
+          "step": 5,
+          "unit": "%",
+          "default": 100,
+          "info": "Raise this when the product sits small inside its picture."
         },
         {
           "type": "text",

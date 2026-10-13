@@ -1101,6 +1101,12 @@
     "name": "Golf Asylum brand",
     "settings": [
       {
+        "type": "image_picker",
+        "id": "ga_logo_mark",
+        "label": "Ballhead logo image",
+        "info": "Shown beside the shop name in the header. Use a square image with a transparent background. The drawn Ballhead shows when empty."
+      },
+      {
         "type": "header",
         "content": "Brand colours"
       },

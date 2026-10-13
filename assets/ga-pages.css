@@ -421,6 +421,16 @@ textarea.ga-field__input {
   background: var(--ga-white);
 }
 
+/* Show the whole product inside the frame: Horizon crops to fill by default,
+   which cuts the sleeves off a shirt photographed flat. */
+.product-information .product-media-container.media-fit-cover {
+  --product-media-fit: contain;
+}
+
+.product-information .product-media-container.media-fit-cover :is(img, .deferred-media__poster-image) {
+  object-fit: contain;
+}
+
 .product-information .slideshow-controls__thumbnail,
 .product-information slideshow-controls [aria-selected] {
   border-radius: 0;
@@ -524,6 +534,10 @@ body.gift-card {
   padding-block: 36px 8px;
   color: var(--ga-bone);
   text-align: center;
+}
+
+.gift-card__brand .ga-mark-image {
+  width: 84px;
 }
 
 .gift-card__brand .ga-ballhead {

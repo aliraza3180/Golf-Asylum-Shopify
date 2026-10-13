@@ -1,0 +1,17 @@
+{%- doc -%}
+  The Ballhead mark used in the logo. Shows the logo image chosen in theme
+  settings (Golf Asylum brand > Ballhead logo image), or the drawn Ballhead
+  when none is chosen.
+
+  @param {string} [class] - Class names for the mark
+
+  @example
+  {% render 'ga-mark', class: 'ga-logo__mark' %}
+{%- enddoc -%}
+
+{%- if settings.ga_logo_mark != blank -%}
+  {%- assign mark_class = 'ga-mark-image ' | append: class | strip -%}
+  {{ settings.ga_logo_mark | image_url: width: 320 | image_tag: class: mark_class, alt: '', loading: 'eager', sizes: '80px', widths: '80, 160, 320' }}
+{%- else -%}
+  {%- render 'ga-ballhead', class: class -%}
+{%- endif -%}
