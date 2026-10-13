@@ -123,7 +123,7 @@
             "label": "Youth hoodies",
             "collection": "5150-code-jr-hoodies",
             "zoom": 130,
-            "focus_x": 50,
+            "focus_x": 30,
             "focus_y": 60,
             "image": "shopify://shop_images/ga-youth-hoodies.jpg"
           }
