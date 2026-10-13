@@ -1,0 +1,104 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="ga ga--bone ga-strip">
+    <p class="ga-display ga-strip__text">
+      {%- for block in section.blocks -%}
+        <span class="ga-strip__phrase" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</span>
+        {%- unless forloop.last -%}
+          <span class="ga-strip__dot" aria-hidden="true"></span>
+        {%- endunless -%}
+      {%- endfor -%}
+    </p>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ga-strip {
+    padding: 18px var(--ga-gutter);
+  }
+
+  .ga-strip__text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 14px;
+    font-size: 26px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .ga-strip__phrase {
+    white-space: nowrap;
+  }
+
+  .ga-strip__dot {
+    width: 0.28em;
+    height: 0.28em;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(var(--ga-u) * 99);
+      padding-block: 0;
+    }
+
+    .ga-strip__text {
+      flex-wrap: nowrap;
+      gap: calc(var(--ga-u) * 26);
+      font-size: calc(var(--ga-u) * 44);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Statement strip",
+  "tag": "section",
+  "class": "ga-section",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "phrase",
+      "name": "Phrase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Always golf"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Statement strip",
+      "blocks": [
+        {
+          "type": "phrase",
+          "settings": {
+            "text": "A little unhinged"
+          }
+        },
+        {
+          "type": "phrase",
+          "settings": {
+            "text": "A little obsessed"
+          }
+        },
+        {
+          "type": "phrase",
+          "settings": {
+            "text": "Always golf"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

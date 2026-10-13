@@ -1,0 +1,263 @@
+{%- liquid
+  assign s = section.settings
+  assign heading_lines = s.heading | newline_to_br | split: '<br />'
+-%}
+
+<div class="ga ga--black ga-hero">
+  <div class="ga-wrap ga-hero__inner">
+    <div class="ga-ballhead-bg ga-hero__ballhead" aria-hidden="true">
+      {%- render 'ga-ballhead' -%}
+    </div>
+
+    <div class="ga-hero__copy">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-hand--underline ga-hero__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+
+      {%- if s.heading != blank -%}
+        <h1 class="ga-display ga-hero__title">
+          {%- for line in heading_lines -%}
+            <span class="ga-hero__line">
+              {{- line | strip | escape -}}
+              {%- if forloop.last and s.show_dot -%}
+                <span class="ga-hero__dot" aria-hidden="true"></span>
+              {%- endif -%}
+            </span>
+          {%- endfor -%}
+        </h1>
+      {%- endif -%}
+
+      {%- if s.button_label != blank or s.button_2_label != blank -%}
+        <div class="ga-btns ga-hero__btns">
+          {%- if s.button_label != blank -%}
+            <a class="ga-btn ga-btn--light" href="{{ s.button_link | default: routes.all_products_collection_url }}">
+              {{- s.button_label | escape -}}
+            </a>
+          {%- endif -%}
+          {%- if s.button_2_label != blank -%}
+            <a
+              class="ga-btn ga-btn--outline-light"
+              href="{{ s.button_2_link | default: routes.all_products_collection_url }}"
+            >
+              {{- s.button_2_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="ga-hero__photo">
+      <div class="ga-torn ga-torn--1">
+        <div class="ga-torn__media">
+          {%- render 'ga-image',
+            image: s.image,
+            fallback: 'ga-hero-junior.jpg',
+            alt: s.image_alt,
+            sizes: '(min-width: 750px) 30vw, 80vw',
+            width: 1200,
+            eager: true
+          -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-block: 28px 40px;
+  }
+
+  .ga-hero__ballhead {
+    width: 115vw;
+    right: -52vw;
+    bottom: -6vw;
+    --ga-ballhead-bg-color: #3f3f43;
+    --ga-ballhead-stroke: 12;
+  }
+
+  .ga-hero__copy {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ga-hero__note {
+    font-size: 11vw;
+    margin-block: 0 0.5em;
+    --ga-hand-tilt: -6deg;
+    --ga-underline-start: 44%;
+  }
+
+  .ga-hero__title {
+    font-size: 27vw;
+    line-height: 0.915;
+  }
+
+  .ga-hero__line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .ga-hero__dot {
+    display: inline-block;
+    width: 0.2em;
+    height: 0.21em;
+    margin-inline-start: 0.03em;
+    background: var(--ga-accent);
+  }
+
+  .ga-hero__btns {
+    margin-block-start: 24px;
+    width: 100%;
+  }
+
+  .ga-hero__btns .ga-btn {
+    flex: 1 1 100%;
+  }
+
+  .ga-hero__photo {
+    position: relative;
+    z-index: 1;
+    width: 78%;
+    margin-inline: auto;
+  }
+
+  .ga-hero__photo .ga-torn {
+    aspect-ratio: 411 / 690;
+    --ga-tilt: 3deg;
+    --ga-paper: var(--ga-bone);
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-hero__inner {
+      display: block;
+      min-height: calc(var(--ga-u) * 737);
+      padding-block: calc(var(--ga-u) * 34) calc(var(--ga-u) * 47);
+    }
+
+    .ga-hero__ballhead {
+      width: calc(var(--ga-u) * 592);
+      right: auto;
+      bottom: auto;
+      left: calc(var(--ga-u) * 977);
+      top: calc(var(--ga-u) * 7);
+    }
+
+    .ga-hero__note {
+      font-size: calc(var(--ga-u) * 58);
+      margin-block: calc(var(--ga-u) * 50) calc(var(--ga-u) * 24);
+      margin-inline-start: calc(var(--ga-u) * 18);
+    }
+
+    .ga-hero__title {
+      font-size: calc(var(--ga-u) * 171);
+      margin-inline-start: calc(var(--ga-u) * 16);
+    }
+
+    .ga-hero__btns {
+      width: auto;
+      margin-block-start: calc(var(--ga-u) * 30);
+      margin-inline-start: calc(var(--ga-u) * 16);
+    }
+
+    .ga-hero__btns .ga-btn {
+      flex: none;
+      min-width: calc(var(--ga-u) * 235);
+    }
+
+    .ga-hero__photo {
+      position: absolute;
+      top: calc(var(--ga-u) * 15);
+      left: calc(var(--ga-u) * 573);
+      width: calc(var(--ga-u) * 411);
+      margin: 0;
+    }
+
+    .ga-hero__photo .ga-torn {
+      --ga-tilt: 4deg;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Hero",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "the only way to play"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Each line break starts a new line.",
+      "default": "Out of\nyour\nmind"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dot",
+      "label": "End the heading with the accent square",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "First button label",
+      "default": "Shop youth polos"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "First button link"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Second button label",
+      "default": "Shop adult"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Second button link"
+    },
+    {
+      "type": "header",
+      "content": "Photo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo",
+      "info": "Portrait works best. A bundled photo shows until you pick one."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo description",
+      "info": "Read out by screen readers.",
+      "default": "Junior golfer in a white Ballhead polo and Golf Asylum cap lining up a shot"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Hero"
+    }
+  ]
+}
+{% endschema %}

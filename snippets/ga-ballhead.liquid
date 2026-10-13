@@ -1,0 +1,45 @@
+{%- doc -%}
+  Golf Asylum "Ballhead" mark, drawn as inline SVG so it takes its colour from CSS.
+  Features use `currentColor`. Set `--ga-ballhead-disc` to fill the ball behind them.
+  Stand-in artwork redrawn from the client's patch image; swap for the official vector when supplied.
+
+  @param {string} [class] - Extra class names for the svg
+  @param {string} [label] - Accessible name. Omit for decorative use
+
+  @example
+  {% render 'ga-ballhead', class: 'ga-logo__mark', label: 'Golf Asylum' %}
+{%- enddoc -%}
+
+<svg
+  class="ga-ballhead{% if class != blank %} {{ class }}{% endif %}"
+  viewBox="0 0 200 200"
+  xmlns="http://www.w3.org/2000/svg"
+  {% if label != blank %}
+    role="img"
+    aria-label="{{ label | escape }}"
+  {% else %}
+    aria-hidden="true"
+    focusable="false"
+  {% endif %}
+>
+  <circle class="ga-ballhead__disc" cx="100" cy="100" r="95" />
+  <circle class="ga-ballhead__ring" cx="100" cy="100" r="95" />
+  <g class="ga-ballhead__dimples">
+    {%- for i in (0..17) -%}
+      {%- assign angle = i | times: 20 | plus: 10 -%}
+      <path d="M-10.5 3.5Q0 -8.5 10.5 3.5Q0 -0.5 -10.5 3.5Z" transform="rotate({{ angle }} 100 100) translate(100 19.5)" />
+    {%- endfor -%}
+  </g>
+  <g class="ga-ballhead__stroke">
+    <path class="ga-ballhead__x" d="M41 71L69 107M68 70L42 108" />
+    <path class="ga-ballhead__smile" d="M33 114Q34 124 42 126Q100 160 158 126Q166 124 167 114" />
+    <path class="ga-ballhead__stitches" d="M60.3 128.6L55.7 139.6M76.5 134L73.5 145.6M92.5 136.7L91.5 148.7M107.5 136.7L108.5 148.7M123.5 134L126.5 145.6M139.7 128.6L144.3 139.6" />
+    <path class="ga-ballhead__lash" d="M138 60Q146 51 154 56" />
+    <path class="ga-ballhead__lid" d="M105 90Q103 84 109 86Q116 93 126 86Q142 76 156 67" />
+  </g>
+  <path
+    class="ga-ballhead__eye"
+    fill-rule="evenodd"
+    d="M114 93Q136 88 156 70Q163 96 146 110Q128 122 114 93ZM122 96Q133 104 142 96Q146 91 144 84Q134 92 122 96Z"
+  />
+</svg>

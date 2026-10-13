@@ -1,0 +1,379 @@
+{%- liquid
+  assign s = section.settings
+  assign tags = s.tags | split: ','
+  assign fallback = blank
+  if s.bundled_image
+    assign fallback = 'ga-waterproofs.jpg'
+  endif
+-%}
+
+<div class="ga ga--black ga-split">
+  <div class="ga-split__media ga-torn-edge--left">
+    <div
+      class="ga-split__photo ga-torn-edge--left-inner{% if s.black_and_white %} ga-split__photo--bw{% endif %}"
+      style="--ga-zoom: {{ s.zoom | divided_by: 100.0 }}; --ga-focus-x: {{ s.focus_x }}%; --ga-focus-y: {{ s.focus_y }}%;"
+    >
+      {%- render 'ga-image', image: s.image, fallback: fallback, alt: s.image_alt, sizes: '(min-width: 750px) 52vw, 100vw', width: 1600 -%}
+    </div>
+  </div>
+
+  <div class="ga-wrap ga-split__inner">
+    <div class="ga-ballhead-bg ga-split__ballhead" aria-hidden="true">
+      {%- render 'ga-ballhead' -%}
+    </div>
+
+    <div class="ga-split__copy">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-hand--underline ga-split__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+
+      {%- if s.heading != blank -%}
+        <h2 class="ga-display ga-split__title">{{ s.heading | escape | newline_to_br }}</h2>
+      {%- endif -%}
+
+      {%- if s.text != blank -%}
+        <p class="ga-text ga-split__text">{{ s.text | escape }}</p>
+      {%- endif -%}
+
+      {%- if tags.size > 0 -%}
+        <ul class="ga-split__tags" role="list">
+          {%- for tag in tags -%}
+            {%- assign tag_text = tag | strip -%}
+            {%- if tag_text != blank -%}
+              <li class="ga-label ga-split__tag">{{ tag_text | escape }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if s.button_label != blank or s.button_2_label != blank -%}
+        <div class="ga-btns ga-split__btns">
+          {%- if s.button_label != blank -%}
+            <a class="ga-btn ga-btn--light" href="{{ s.button_link | default: routes.all_products_collection_url }}">
+              {{- s.button_label | escape -}}
+            </a>
+          {%- endif -%}
+          {%- if s.button_2_label != blank -%}
+            <a
+              class="ga-btn ga-btn--outline-light"
+              href="{{ s.button_2_link | default: routes.all_products_collection_url }}"
+            >
+              {{- s.button_2_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-split {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .ga-split__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: #f1f1f1;
+    clip-path: none;
+    /* The photo can be zoomed, so keep it inside its own box. */
+    overflow: hidden;
+  }
+
+  .ga-split__photo {
+    position: absolute;
+    inset: 0;
+    clip-path: none;
+    overflow: hidden;
+  }
+
+  .ga-split__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--ga-focus-x, 50%) var(--ga-focus-y, 50%);
+    transform: scale(var(--ga-zoom, 1));
+    transform-origin: var(--ga-focus-x, 50%) var(--ga-focus-y, 50%);
+  }
+
+  .ga-split__photo--bw img {
+    filter: grayscale(1) contrast(1.12);
+  }
+
+  .ga-split__inner {
+    padding-block: 52px 48px;
+  }
+
+  .ga-split__ballhead {
+    width: 120vw;
+    left: -40vw;
+    top: -18vw;
+    --ga-ballhead-bg-color: #17171a;
+    --ga-ballhead-stroke: 11;
+  }
+
+  .ga-split__copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ga-split__note {
+    font-size: 10vw;
+    margin-block-end: 0.55em;
+    --ga-hand-tilt: -6deg;
+  }
+
+  .ga-split__title {
+    font-size: 15.2vw;
+    line-height: 1.04;
+  }
+
+  .ga-split__text {
+    margin-block-start: 18px;
+    color: var(--ga-bone);
+    font-size: 17px;
+  }
+
+  .ga-split__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-split__tag {
+    font-size: 17px;
+    padding: 0.5em 0.75em 0.42em;
+  }
+
+  .ga-split__tag:nth-child(even) {
+    --ga-label-tilt: 2deg;
+  }
+
+  .ga-split__tag:nth-child(3n) {
+    --ga-label-tilt: -2deg;
+  }
+
+  .ga-split__btns {
+    width: 100%;
+    margin-block-start: 30px;
+  }
+
+  .ga-split__btns .ga-btn {
+    flex: 1 1 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-split {
+      display: block;
+    }
+
+    .ga-split__media {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: calc(50% - var(--ga-u) * 24);
+      aspect-ratio: auto;
+    }
+
+    .ga-split__media.ga-torn-edge--left {
+      clip-path: var(--ga-torn-left);
+    }
+
+    .ga-split__photo {
+      left: calc(var(--ga-u) * 9);
+    }
+
+    .ga-split__photo.ga-torn-edge--left-inner {
+      clip-path: var(--ga-torn-left-inner);
+    }
+
+    .ga-split__inner {
+      min-height: calc(var(--ga-u) * 960);
+      padding-block: calc(var(--ga-u) * 262) calc(var(--ga-u) * 130);
+    }
+
+    .ga-split__ballhead {
+      width: calc(var(--ga-u) * 620);
+      left: calc(var(--ga-u) * -40);
+      top: calc(var(--ga-u) * 10);
+    }
+
+    .ga-split__copy {
+      max-width: calc(var(--ga-u) * 660);
+      padding-inline-start: calc(var(--ga-u) * 22);
+    }
+
+    .ga-split__note {
+      font-size: calc(var(--ga-u) * 60);
+      margin-block-end: calc(var(--ga-u) * 34);
+    }
+
+    .ga-split__title {
+      font-size: calc(var(--ga-u) * 100);
+      line-height: 1.08;
+      white-space: nowrap;
+    }
+
+    .ga-split__text {
+      margin-block-start: calc(var(--ga-u) * 26);
+      font-size: max(15px, calc(var(--ga-u) * 24));
+    }
+
+    .ga-split__tags {
+      gap: calc(var(--ga-u) * 20);
+      margin-block-start: calc(var(--ga-u) * 40);
+    }
+
+    .ga-split__tag {
+      font-size: max(13px, calc(var(--ga-u) * 23));
+    }
+
+    .ga-split__btns {
+      width: auto;
+      flex-wrap: nowrap;
+      margin-block-start: calc(var(--ga-u) * 46);
+    }
+
+    .ga-split__btns .ga-btn {
+      flex: none;
+      min-height: calc(var(--ga-u) * 61);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Split banner",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "rain or shine"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Each line break starts a new line.",
+      "default": "Caddy & player\nwaterproofs"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Built for the elements. Made for the game."
+    },
+    {
+      "type": "text",
+      "id": "tags",
+      "label": "Paper labels",
+      "info": "Separate with commas. Only list what is true of the product.",
+      "default": "Waterproof, Windproof, Lightweight"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "First button label",
+      "default": "Shop youth waterproofs"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "First button link"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Second button label",
+      "default": "Shop adult waterproofs"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Second button link"
+    },
+    {
+      "type": "header",
+      "content": "Photo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "checkbox",
+      "id": "bundled_image",
+      "label": "Use the bundled rain photo until one is picked",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "black_and_white",
+      "label": "Show the photo in black and white",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo description",
+      "default": "Two junior golfers in black Golf Asylum waterproofs walking down a wet fairway"
+    },
+    {
+      "type": "header",
+      "content": "Photo framing"
+    },
+    {
+      "type": "range",
+      "id": "zoom",
+      "label": "Zoom",
+      "min": 100,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "focus_x",
+      "label": "Focus, left to right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "focus_y",
+      "label": "Focus, top to bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Split banner"
+    }
+  ]
+}
+{% endschema %}

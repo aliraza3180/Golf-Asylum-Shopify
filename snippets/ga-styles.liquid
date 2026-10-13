@@ -1,0 +1,25 @@
+{%- doc -%}
+  Golf Asylum brand tokens. Loads the handwriting font and exposes the brand
+  colours from theme settings as CSS custom properties for the `ga-*` sections.
+{%- enddoc -%}
+
+{%- assign ga_hand = settings.ga_hand_font -%}
+
+<style>
+  {{ ga_hand | font_face: font_display: 'swap' }}
+
+  :root {
+    --ga-black: {{ settings.ga_color_black }};
+    --ga-charcoal: {{ settings.ga_color_charcoal }};
+    --ga-graphite: {{ settings.ga_color_graphite }};
+    --ga-grey: {{ settings.ga_color_grey }};
+    --ga-bone: {{ settings.ga_color_bone }};
+    --ga-white: {{ settings.ga_color_white }};
+    --ga-accent: {{ settings.ga_color_accent }};
+    --ga-font-display: var(--font-heading--family);
+    --ga-font-hand: {{ ga_hand.family }}, {{ ga_hand.fallback_families }};
+  }
+</style>
+
+{{ 'ga-torn.css' | asset_url | stylesheet_tag }}
+{{ 'golf-asylum.css' | asset_url | stylesheet_tag }}

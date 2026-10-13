@@ -9,274 +9,292 @@
  */
 {
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
+    "hero": {
+      "type": "ga-hero",
+      "settings": {
+        "note": "the only way to play",
+        "heading": "Out of\nyour\nmind",
+        "show_dot": true,
+        "button_label": "Shop youth polos",
+        "button_link": "shopify://collections/ballhead-jr-polo-collection",
+        "button_2_label": "Shop adult",
+        "button_2_link": "shopify://collections/adult-ballhead-polo-collection",
+        "image_alt": "Junior golfer in a white Ballhead polo and Golf Asylum cap lining up a shot"
+      }
+    },
+    "strip": {
+      "type": "ga-strip",
       "blocks": {
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
+        "p1": {
+          "type": "phrase",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.background }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "text": "A little unhinged"
+          }
         },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
+        "p2": {
+          "type": "phrase",
           "settings": {
-            "label": "Shop all",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-custom",
-            "custom_button_background": "rgba(0, 0, 0, 0)",
-            "custom_button_text": "{{ settings.color_palette.background }}",
-            "custom_button_border": "{{ settings.color_palette.background }}",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "text": "A little obsessed"
+          }
+        },
+        "p3": {
+          "type": "phrase",
+          "settings": {
+            "text": "Always golf"
+          }
         }
       },
       "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
+        "p1",
+        "p2",
+        "p3"
       ],
-      "name": "t:names.hero",
-      "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
-      }
+      "settings": {}
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "polos": {
+      "type": "ga-products",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "navy": {
+          "type": "product",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "button-unstyled",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
+            "product": "jr-ballhead-blue-polo",
+            "title": "Youth Ballhead Polo, Navy",
+            "bundled_image": "ga-polo-navy.png",
+            "sticker": "New",
+            "note": "",
+            "note_position": "none"
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "white": {
+          "type": "product",
           "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+            "product": "jr-ballhead-white-polo",
+            "title": "Youth Ballhead Polo, White",
+            "bundled_image": "ga-polo-white.png",
+            "sticker": "",
+            "note": "4-way\nstretch",
+            "note_position": "left"
+          }
+        },
+        "electric": {
+          "type": "product",
+          "settings": {
+            "product": "jr-ballhead-electric-blue-white-polo",
+            "title": "Youth Ballhead Polo, Electric Blue/White",
+            "bundled_image": "ga-polo-electric.png",
+            "sticker": "",
+            "note": "the Ballhead\npatch",
+            "note_position": "right"
+          }
         }
       },
-      "name": "t:names.featured_collection",
+      "block_order": [
+        "navy",
+        "white",
+        "electric"
+      ],
       "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "heading": "The Ballhead has arrived.",
+        "link_label": "Shop all youth polos",
+        "link": "shopify://collections/ballhead-jr-polo-collection"
       }
+    },
+    "youth": {
+      "type": "ga-tiles",
+      "blocks": {
+        "polos": {
+          "type": "tile",
+          "settings": {
+            "label": "Youth polos",
+            "collection": "ballhead-jr-polo-collection",
+            "bundled_image": "ga-youth-polos.jpg",
+            "zoom": 155,
+            "focus_x": 40,
+            "focus_y": 55
+          }
+        },
+        "hoodies": {
+          "type": "tile",
+          "settings": {
+            "label": "Youth hoodies",
+            "collection": "5150-code-jr-hoodies",
+            "bundled_image": "ga-youth-hoodies.jpg",
+            "zoom": 130,
+            "focus_x": 50,
+            "focus_y": 60
+          }
+        },
+        "shorts": {
+          "type": "tile",
+          "settings": {
+            "label": "Youth shorts",
+            "collection": "jr-fairway-felon-short-collection",
+            "bundled_image": "ga-youth-shorts.jpg",
+            "zoom": 125,
+            "focus_x": 55,
+            "focus_y": 60
+          }
+        }
+      },
+      "block_order": [
+        "polos",
+        "hoodies",
+        "shorts"
+      ],
+      "settings": {
+        "heading": "Shop youth",
+        "link_label": "View all youth",
+        "link": "shopify://collections/all"
+      }
+    },
+    "why": {
+      "type": "ga-stamps",
+      "blocks": {
+        "stretch": {
+          "type": "stamp",
+          "settings": {
+            "title": "4-way\nstretch",
+            "text": "Performance fabric that moves with the swing."
+          }
+        },
+        "fit": {
+          "type": "stamp",
+          "settings": {
+            "title": "Athletic\njunior fit",
+            "text": "Cut for young players, not scaled down from an adult pattern."
+          }
+        },
+        "sized": {
+          "type": "stamp",
+          "settings": {
+            "title": "Sized on\nreal kids",
+            "text": "See every size on a junior, with their height."
+          }
+        }
+      },
+      "block_order": [
+        "stretch",
+        "fit",
+        "sized"
+      ],
+      "settings": {
+        "heading": "Not shrunk from adults.",
+        "button_label": "See the size guide",
+        "button_link": "shopify://pages/size-guide"
+      }
+    },
+    "waterproofs": {
+      "type": "ga-split",
+      "settings": {
+        "note": "rain or shine",
+        "heading": "Caddy & player\nwaterproofs",
+        "text": "Built for the elements. Made for the game.",
+        "tags": "Waterproof, Windproof, Lightweight",
+        "button_label": "Shop youth waterproofs",
+        "button_2_label": "Shop adult waterproofs",
+        "bundled_image": true,
+        "black_and_white": true,
+        "image_alt": "Two junior golfers in black Golf Asylum waterproofs walking down a wet fairway",
+        "zoom": 115,
+        "focus_x": 55,
+        "focus_y": 65
+      }
+    },
+    "inmates": {
+      "type": "ga-community",
+      "blocks": {
+        "ph1": {
+          "type": "photo",
+          "settings": {
+            "bundled_image": "ga-invitational-1.jpg",
+            "alt": "Junior golfer finishing a tee shot at the Golf Asylum Invitational",
+            "zoom": 130,
+            "focus_x": 35,
+            "focus_y": 35
+          }
+        },
+        "ph2": {
+          "type": "photo",
+          "settings": {
+            "bundled_image": "ga-invitational-2.jpg",
+            "alt": "Junior golfer at the top of his swing at the Golf Asylum Invitational",
+            "zoom": 150,
+            "focus_x": 30,
+            "focus_y": 30
+          }
+        },
+        "ph3": {
+          "type": "photo",
+          "settings": {
+            "bundled_image": "ga-invitational-3.jpg",
+            "alt": "Junior golfer swinging beside the water at the Golf Asylum Invitational",
+            "zoom": 110,
+            "focus_x": 60,
+            "focus_y": 50
+          }
+        }
+      },
+      "block_order": [
+        "ph1",
+        "ph2",
+        "ph3"
+      ],
+      "settings": {
+        "heading": "Meet the\nInmates.",
+        "text": "Our ambassadors, our Invitational, our people. Juniors who play their own way.",
+        "button_label": "Become an Inmate",
+        "button_link": "shopify://pages/brand-ambassadors",
+        "video_link": "https://www.instagram.com/golf_asylum/",
+        "play_label": "Watch the Golf Asylum Invitational video on Instagram",
+        "bundled_cover": true,
+        "cover_alt": "Golf Asylum tee markers beside a lake at the Invitational",
+        "caption": "The Invitational, June 2026"
+      }
+    },
+    "adult_caps": {
+      "type": "ga-duo",
+      "blocks": {
+        "adult": {
+          "type": "tile",
+          "settings": {
+            "style": "photo",
+            "heading": "For the caddy.",
+            "text": "Adult polos now. Hoodies coming soon.",
+            "button_label": "Shop adult",
+            "button_link": "shopify://collections/adult-ballhead-polo-collection",
+            "bundled_image": "ga-placeholder-adult-golfer.jpg",
+            "black_and_white": false,
+            "image_alt": "Adult golfer in a navy Ballhead polo, seen from behind on a course"
+          }
+        },
+        "caps": {
+          "type": "tile",
+          "settings": {
+            "style": "product",
+            "heading": "Caps & beanies.",
+            "text": "Finish the fit.",
+            "button_label": "Shop caps & beanies",
+            "button_link": "shopify://collections/junior-golf-asylum-off-script-cap",
+            "bundled_image": "ga-caps.jpg",
+            "image_alt": "Three Golf Asylum Off Script caps in white and black, black, and white"
+          }
+        }
+      },
+      "block_order": [
+        "adult",
+        "caps"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "hero",
+    "strip",
+    "polos",
+    "youth",
+    "why",
+    "waterproofs",
+    "inmates",
+    "adult_caps"
   ]
 }

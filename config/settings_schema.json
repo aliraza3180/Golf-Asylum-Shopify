@@ -1098,6 +1098,74 @@
     ]
   },
   {
+    "name": "Golf Asylum brand",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand colours"
+      },
+      {
+        "type": "paragraph",
+        "content": "Used by the Golf Asylum homepage sections. The main palette above still controls the rest of the store."
+      },
+      {
+        "type": "color",
+        "id": "ga_color_black",
+        "label": "Asylum black",
+        "default": "#0A0A0A"
+      },
+      {
+        "type": "color",
+        "id": "ga_color_charcoal",
+        "label": "Charcoal",
+        "default": "#17171A"
+      },
+      {
+        "type": "color",
+        "id": "ga_color_graphite",
+        "label": "Graphite",
+        "info": "Faint background graphics and lines on dark sections.",
+        "default": "#2A2A2E"
+      },
+      {
+        "type": "color",
+        "id": "ga_color_grey",
+        "label": "Grey text on dark",
+        "default": "#A3A3A8"
+      },
+      {
+        "type": "color",
+        "id": "ga_color_bone",
+        "label": "Bone",
+        "info": "The off-white used for text on dark sections, paper labels and light bands.",
+        "default": "#F4F2EE"
+      },
+      {
+        "type": "color",
+        "id": "ga_color_white",
+        "label": "White",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "ga_color_accent",
+        "label": "Accent",
+        "info": "Electric blue. Use it once per screen at most.",
+        "default": "#1F6BFF"
+      },
+      {
+        "type": "header",
+        "content": "Handwriting"
+      },
+      {
+        "type": "font_picker",
+        "id": "ga_hand_font",
+        "label": "Handwriting font",
+        "default": "covered_by_your_grace_n4"
+      }
+    ]
+  },
+  {
     "name": "t:names.page_layout",
     "settings": [
       {

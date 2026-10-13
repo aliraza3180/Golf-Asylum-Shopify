@@ -1,0 +1,495 @@
+{%- liquid
+  assign s = section.settings
+  assign cover_fallback = blank
+  if s.bundled_cover
+    assign cover_fallback = 'ga-invitational-cover.jpg'
+  endif
+  assign has_cover = false
+  if s.cover != blank or cover_fallback != blank or s.video != blank
+    assign has_cover = true
+  endif
+-%}
+
+<div class="ga ga--black ga-community">
+  <div class="ga-wrap ga-community__inner">
+    <div class="ga-ballhead-bg ga-community__ballhead" aria-hidden="true">
+      {%- render 'ga-ballhead' -%}
+    </div>
+
+    <div class="ga-community__copy">
+      {%- if s.heading != blank -%}
+        <h2 class="ga-display ga-community__title">{{ s.heading | escape | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- if s.text != blank -%}
+        <p class="ga-text ga-text--muted ga-community__text">{{ s.text | escape }}</p>
+      {%- endif -%}
+      {%- if s.button_label != blank -%}
+        <a class="ga-btn ga-btn--light ga-community__btn" href="{{ s.button_link | default: routes.root_url }}">
+          {{- s.button_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if has_cover -%}
+      <div class="ga-community__video">
+        <div class="ga-torn ga-torn--1 ga-community__frame">
+          <div class="ga-torn__media ga-community__stage" data-ga-video-stage>
+            {%- if s.cover != blank or cover_fallback != blank -%}
+              {%- render 'ga-image',
+                image: s.cover,
+                fallback: cover_fallback,
+                alt: s.cover_alt,
+                sizes: '(min-width: 750px) 28vw, 80vw',
+                width: 1000
+              -%}
+            {%- elsif s.video != blank -%}
+              {{ s.video.preview_image | image_url: width: 1000 | image_tag: alt: s.cover_alt, loading: 'lazy' }}
+            {%- endif -%}
+
+            {%- if s.video != blank -%}
+              <button type="button" class="ga-community__play" data-ga-video-play>
+                <span class="visually-hidden">{{ s.play_label | escape }}</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" /></svg>
+              </button>
+              <template data-ga-video-template>
+                {{ s.video | video_tag: controls: true, autoplay: true, playsinline: true, preload: 'metadata', class: 'ga-community__player' }}
+              </template>
+            {%- elsif s.video_link != blank -%}
+              <a class="ga-community__play" href="{{ s.video_link }}">
+                <span class="visually-hidden">{{ s.play_label | escape }}</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" /></svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+        {%- if s.caption != blank -%}
+          <p class="ga-label ga-community__caption">{{ s.caption | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="ga-community__photos" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign bs = block.settings
+            assign variant = forloop.index0 | modulo: 3 | plus: 2
+            assign fallback = blank
+            if bs.bundled_image != 'none'
+              assign fallback = bs.bundled_image
+            endif
+          -%}
+          {%- if bs.image != blank or fallback != blank -%}
+            <li
+              class="ga-community__photo ga-community__photo--{{ forloop.index0 | modulo: 3 | plus: 1 }}"
+              style="--ga-zoom: {{ bs.zoom | divided_by: 100.0 }}; --ga-focus-x: {{ bs.focus_x }}%; --ga-focus-y: {{ bs.focus_y }}%;"
+              {{ block.shopify_attributes }}
+            >
+              <div class="ga-torn ga-torn--{{ variant }}">
+                <div class="ga-torn__media">
+                  {%- render 'ga-image', image: bs.image, fallback: fallback, alt: bs.alt, sizes: '(min-width: 750px) 12vw, 30vw', width: 600 -%}
+                </div>
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% javascript %}
+  document.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target.closest('[data-ga-video-play]') : null;
+    if (!target) return;
+
+    const stage = target.closest('[data-ga-video-stage]');
+    const template = stage?.querySelector('[data-ga-video-template]');
+    if (!stage || !(template instanceof HTMLTemplateElement)) return;
+
+    stage.replaceChildren(template.content.cloneNode(true));
+    const video = stage.querySelector('video');
+    if (video) {
+      video.focus();
+      video.play().catch(() => {});
+    }
+  });
+{% endjavascript %}
+
+{% stylesheet %}
+  .ga-community__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-block: 56px 64px;
+  }
+
+  .ga-community__ballhead {
+    width: 120vw;
+    left: -46vw;
+    top: -24vw;
+    --ga-ballhead-bg-color: #17171a;
+    --ga-ballhead-stroke: 11;
+  }
+
+  .ga-community__copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ga-community__title {
+    font-size: 19vw;
+    line-height: 1;
+  }
+
+  .ga-community__text {
+    max-width: 24em;
+    margin-block-start: 20px;
+  }
+
+  .ga-community__btn {
+    margin-block-start: 28px;
+  }
+
+  .ga-community__video {
+    position: relative;
+    width: 78%;
+    margin-inline: auto;
+  }
+
+  .ga-community__frame {
+    aspect-ratio: 386 / 682;
+    --ga-tilt: -2deg;
+  }
+
+  .ga-community__stage {
+    position: relative;
+  }
+
+  .ga-community__player {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--ga-black);
+  }
+
+  .ga-community__play {
+    position: absolute;
+    top: 46%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ga-bone);
+    color: var(--ga-black);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease-out;
+  }
+
+  .ga-community__play:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+
+  .ga-community__play svg {
+    width: 46%;
+    height: 46%;
+    margin-inline-start: 6%;
+    fill: currentColor;
+  }
+
+  .ga-community__caption {
+    position: absolute;
+    left: 8%;
+    bottom: -14px;
+    margin: 0;
+    font-size: 17px;
+    padding: 0.6em 0.7em 0.5em;
+    --ga-label-tilt: -5deg;
+  }
+
+  .ga-community__photos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-community__photo .ga-torn {
+    aspect-ratio: 170 / 492;
+    padding: max(4px, calc(var(--ga-u) * 7));
+  }
+
+  .ga-community__photo img {
+    object-position: var(--ga-focus-x, 50%) var(--ga-focus-y, 50%);
+    transform: scale(var(--ga-zoom, 1));
+    transform-origin: var(--ga-focus-x, 50%) var(--ga-focus-y, 50%);
+  }
+
+  .ga-community__photo--1 .ga-torn {
+    --ga-tilt: -2deg;
+  }
+
+  .ga-community__photo--2 .ga-torn {
+    --ga-tilt: 1deg;
+  }
+
+  .ga-community__photo--3 .ga-torn {
+    --ga-tilt: 2deg;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-community__inner {
+      display: block;
+      min-height: calc(var(--ga-u) * 960);
+      padding-block: calc(var(--ga-u) * 312) 0;
+    }
+
+    .ga-community__ballhead {
+      width: calc(var(--ga-u) * 620);
+      left: calc(var(--ga-u) * -200);
+      top: calc(var(--ga-u) * -50);
+    }
+
+    .ga-community__copy {
+      width: calc(var(--ga-u) * 400);
+      padding-inline-start: calc(var(--ga-u) * 16);
+    }
+
+    .ga-community__title {
+      font-size: calc(var(--ga-u) * 105);
+      white-space: nowrap;
+    }
+
+    .ga-community__text {
+      max-width: calc(var(--ga-u) * 370);
+      margin-block-start: calc(var(--ga-u) * 30);
+    }
+
+    .ga-community__btn {
+      min-width: calc(var(--ga-u) * 317);
+      min-height: calc(var(--ga-u) * 60);
+      margin-block-start: calc(var(--ga-u) * 34);
+    }
+
+    .ga-community__video {
+      position: absolute;
+      top: calc(var(--ga-u) * 127);
+      left: calc(var(--ga-u) * 411);
+      width: calc(var(--ga-u) * 386);
+      margin: 0;
+    }
+
+    .ga-community__play {
+      width: calc(var(--ga-u) * 98);
+      height: calc(var(--ga-u) * 98);
+    }
+
+    .ga-community__caption {
+      left: calc(var(--ga-u) * 40);
+      bottom: calc(var(--ga-u) * -26);
+      font-size: max(13px, calc(var(--ga-u) * 24));
+    }
+
+    .ga-community__photos {
+      position: absolute;
+      top: calc(var(--ga-u) * 239);
+      left: calc(var(--ga-u) * 826);
+      width: calc(var(--ga-u) * 540);
+      gap: calc(var(--ga-u) * 14);
+      margin: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ga-community__play {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Community",
+  "tag": "section",
+  "class": "ga-section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Each line break starts a new line.",
+      "default": "Meet the\nInmates."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Our ambassadors, our Invitational, our people. Juniors who play their own way."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Become an Inmate"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Portrait video works best. It plays only when a visitor presses play."
+    },
+    {
+      "type": "url",
+      "id": "video_link",
+      "label": "Link for the play button",
+      "info": "Used only when no video is picked, for example a link to the video on Instagram."
+    },
+    {
+      "type": "text",
+      "id": "play_label",
+      "label": "Play button description",
+      "info": "Read out by screen readers.",
+      "default": "Play the Golf Asylum Invitational video"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover",
+      "label": "Cover image",
+      "info": "Shown before the video plays."
+    },
+    {
+      "type": "checkbox",
+      "id": "bundled_cover",
+      "label": "Use the bundled Invitational still until a cover is picked",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cover_alt",
+      "label": "Cover description",
+      "default": "Golf Asylum tee markers beside a lake at the Invitational"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Paper label on the video",
+      "default": "The Invitational, June 2026"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Tall portrait works best."
+        },
+        {
+          "type": "select",
+          "id": "bundled_image",
+          "label": "Bundled photo",
+          "info": "Shown until you pick a photo.",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "ga-invitational-1.jpg",
+              "label": "Invitational, tee shot"
+            },
+            {
+              "value": "ga-invitational-2.jpg",
+              "label": "Invitational, swing"
+            },
+            {
+              "value": "ga-invitational-3.jpg",
+              "label": "Invitational, swing by the water"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Photo description",
+          "default": "Junior golfer swinging at the Golf Asylum Invitational"
+        },
+        {
+          "type": "header",
+          "content": "Photo framing"
+        },
+        {
+          "type": "range",
+          "id": "zoom",
+          "label": "Zoom",
+          "min": 100,
+          "max": 200,
+          "step": 5,
+          "unit": "%",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "focus_x",
+          "label": "Focus, left to right",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "focus_y",
+          "label": "Focus, top to bottom",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Community",
+      "blocks": [
+        {
+          "type": "photo"
+        },
+        {
+          "type": "photo"
+        },
+        {
+          "type": "photo"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

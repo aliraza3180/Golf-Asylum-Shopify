@@ -1,0 +1,278 @@
+{%- liquid
+  assign s = section.settings
+  assign form_id = 'ga-signup-' | append: section.id
+  assign field_id = 'ga-signup-email-' | append: section.id
+-%}
+
+<div class="ga ga--bone ga-signup">
+  <div class="ga-wrap ga-signup__inner">
+    <div class="ga-ballhead-bg ga-signup__ballhead" aria-hidden="true">
+      {%- render 'ga-ballhead' -%}
+    </div>
+
+    <div class="ga-signup__copy">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-signup__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <h2 class="ga-display ga-signup__title">{{ s.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if s.text != blank -%}
+        <p class="ga-text ga-signup__text">{{ s.text | escape }}</p>
+      {%- endif -%}
+
+      {%- form 'customer', id: form_id, class: 'ga-signup__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        {%- if form.posted_successfully? -%}
+          <p class="ga-signup__message" role="status" tabindex="-1" autofocus>{{ s.success_text | escape }}</p>
+        {%- else -%}
+          <div class="ga-signup__row">
+            <label class="visually-hidden" for="{{ field_id }}">{{ s.placeholder | escape }}</label>
+            <input
+              class="ga-signup__input"
+              id="{{ field_id }}"
+              type="email"
+              name="contact[email]"
+              value="{{ form.email }}"
+              placeholder="{{ s.placeholder | escape }}"
+              autocomplete="email"
+              autocapitalize="off"
+              autocorrect="off"
+              required
+              {% if form.errors %}
+                aria-invalid="true"
+                aria-describedby="{{ field_id }}-error"
+              {% endif %}
+            >
+            <button class="ga-btn ga-btn--dark ga-signup__btn" type="submit">{{ s.button_label | escape }}</button>
+          </div>
+          {%- if form.errors -%}
+            <p class="ga-signup__message ga-signup__message--error" id="{{ field_id }}-error" role="alert">
+              {{- form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email -}}
+            </p>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-signup__inner {
+    padding-block: 44px 52px;
+  }
+
+  .ga-signup__ballhead {
+    width: 70vw;
+    right: -30vw;
+    top: -8vw;
+    opacity: 0.12;
+    --ga-ballhead-bg-color: var(--ga-black);
+    --ga-ballhead-stroke: 11;
+  }
+
+  .ga-signup__copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ga-signup__note {
+    font-size: 11.5vw;
+    margin-block-end: 0.2em;
+    --ga-hand-tilt: -6deg;
+  }
+
+  .ga-signup__title {
+    font-size: 13.2vw;
+    white-space: nowrap;
+  }
+
+  .ga-signup__text {
+    margin-block-start: 14px;
+    font-size: 17px;
+  }
+
+  .ga-signup__form {
+    width: 100%;
+    margin-block-start: 24px;
+  }
+
+  .ga-signup__row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ga-signup__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 54px;
+    padding: 0 18px;
+    border: 2px solid var(--ga-black);
+    border-radius: 0;
+    background: var(--ga-white);
+    color: var(--ga-black);
+    font-family: var(--font-body--family);
+    font-size: 16px;
+  }
+
+  .ga-signup__input::placeholder {
+    color: #6e6e73;
+    opacity: 1;
+  }
+
+  .ga-signup__input:focus-visible {
+    outline: 2px solid var(--ga-black);
+    outline-offset: 2px;
+  }
+
+  .ga-signup__btn {
+    position: relative;
+    min-height: 54px;
+  }
+
+  .ga-signup__btn::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: -9px;
+    height: 5px;
+    background: var(--ga-accent);
+  }
+
+  .ga-signup__btn:hover {
+    background: var(--ga-charcoal);
+    color: var(--ga-bone);
+  }
+
+  .ga-signup__message {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .ga-signup__message--error {
+    margin-block-start: 16px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-signup__inner {
+      min-height: calc(var(--ga-u) * 494);
+      padding-block: calc(var(--ga-u) * 74) calc(var(--ga-u) * 40);
+    }
+
+    .ga-signup__ballhead {
+      width: calc(var(--ga-u) * 520);
+      right: auto;
+      left: calc(var(--ga-u) * 1012);
+      top: calc(var(--ga-u) * -22);
+      opacity: 1;
+    }
+
+    .ga-signup__copy {
+      padding-inline-start: calc(var(--ga-u) * 10);
+    }
+
+    .ga-signup__note {
+      font-size: calc(var(--ga-u) * 78);
+      margin-block-end: calc(var(--ga-u) * 4);
+      margin-inline-start: calc(var(--ga-u) * 4);
+      --ga-hand-tilt: -7deg;
+    }
+
+    .ga-signup__title {
+      font-size: calc(var(--ga-u) * 148);
+      line-height: 0.95;
+    }
+
+    .ga-signup__text {
+      margin-block-start: calc(var(--ga-u) * 18);
+      font-size: max(15px, calc(var(--ga-u) * 28));
+    }
+
+    .ga-signup__form {
+      width: auto;
+      margin-block-start: calc(var(--ga-u) * 30);
+    }
+
+    .ga-signup__row {
+      flex-direction: row;
+      gap: calc(var(--ga-u) * 5);
+    }
+
+    .ga-signup__input {
+      flex: none;
+      width: calc(var(--ga-u) * 483);
+      height: max(48px, calc(var(--ga-u) * 64));
+      padding: 0 calc(var(--ga-u) * 26);
+      font-size: max(16px, calc(var(--ga-u) * 20));
+    }
+
+    .ga-signup__btn {
+      min-width: calc(var(--ga-u) * 186);
+      min-height: max(48px, calc(var(--ga-u) * 64));
+      font-size: max(15px, calc(var(--ga-u) * 24));
+    }
+
+    .ga-signup__btn::after {
+      bottom: calc(var(--ga-u) * -9);
+      height: max(3px, calc(var(--ga-u) * 6));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Email signup",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "don't miss the drop"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join the Asylum."
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "info": "Say what subscribers get.",
+      "default": "First access to new drops, restocks and event updates."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Field label",
+      "default": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Sign up"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Message after signing up",
+      "default": "You're in. Watch your inbox for the next drop."
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Email signup"
+    }
+  ]
+}
+{% endschema %}

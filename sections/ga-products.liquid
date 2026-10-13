@@ -1,0 +1,448 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="ga ga--white ga-products">
+  <div class="ga-wrap">
+    <div class="ga-head ga-products__head">
+      {%- if s.heading != blank -%}
+        <h2 class="ga-display ga-products__title">{{ s.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if s.link_label != blank -%}
+        <a class="ga-link ga-products__all" href="{{ s.link | default: routes.all_products_collection_url }}">
+          {{- s.link_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <ul class="ga-products__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign bs = block.settings
+          assign product = bs.product
+          assign title = bs.title | default: product.title
+          assign url = product.url | default: bs.link | default: routes.all_products_collection_url
+          assign fallback = blank
+          if bs.bundled_image != 'none'
+            assign fallback = bs.bundled_image
+          endif
+        -%}
+        <li class="ga-card" {{ block.shopify_attributes }}>
+          <a class="ga-card__link" href="{{ url }}">
+            <span class="ga-card__frame">
+              <span class="ga-card__media">
+                {%- if bs.image != blank -%}
+                  {%- render 'ga-image', image: bs.image, fallback: fallback, alt: title, sizes: '(min-width: 750px) 31vw, 66vw', width: 1000 -%}
+                {%- elsif fallback != blank -%}
+                  {%- render 'ga-image', fallback: fallback, alt: title, sizes: '(min-width: 750px) 31vw, 66vw', width: 1000 -%}
+                {%- elsif product.featured_image != blank -%}
+                  {%- render 'ga-image',
+                    image: product.featured_image,
+                    fallback: fallback,
+                    alt: title,
+                    sizes: '(min-width: 750px) 31vw, 66vw',
+                    width: 1000
+                  -%}
+                {%- endif -%}
+              </span>
+
+              {%- if bs.sticker != blank -%}
+                <span class="ga-card__sticker"><span>{{ bs.sticker | escape }}</span></span>
+              {%- endif -%}
+
+              {%- if product != blank -%}
+                <span class="ga-card__price">{{ product.price | money_without_trailing_zeros }}</span>
+              {%- endif -%}
+
+              {%- if bs.note != blank and bs.note_position != 'none' -%}
+                <span class="ga-card__note ga-card__note--{{ bs.note_position }}" aria-hidden="true">
+                  <span class="ga-hand ga-card__note-text">{{ bs.note | escape | newline_to_br }}</span>
+                  <svg class="ga-card__arrow" viewBox="0 0 60 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {%- if bs.note_position == 'left' -%}
+                      <path d="M30 4C10 28 4 62 16 100" /><path d="M4 86L16 102L27 85" />
+                    {%- else -%}
+                      <path d="M52 4C56 40 40 70 10 86" /><path d="M24 70L8 87L30 94" />
+                    {%- endif -%}
+                  </svg>
+                </span>
+              {%- endif -%}
+            </span>
+
+            <span class="ga-card__name">{{ title | escape }}</span>
+            {%- if bs.note != blank and bs.note_position != 'none' -%}
+              <span class="visually-hidden">. {{ bs.note | escape }}</span>
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-products {
+    padding-block: 48px 56px;
+  }
+
+  .ga-products__head {
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-block-end: 24px;
+  }
+
+  .ga-products__title {
+    font-size: 12.4vw;
+  }
+
+  .ga-products__grid {
+    display: flex;
+    gap: 12px;
+    margin: 0 calc(var(--ga-gutter) * -1);
+    padding: 12px var(--ga-gutter) 4px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .ga-products__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ga-card {
+    flex: 0 0 66%;
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+
+  .ga-card__link {
+    display: block;
+    color: var(--ga-black);
+    text-decoration: none;
+  }
+
+  .ga-card__frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 445 / 589;
+    border: 2px solid var(--ga-black);
+    background: var(--ga-white);
+  }
+
+  .ga-card__media {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+  }
+
+  .ga-card__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: scale(var(--ga-card-zoom, 1.4));
+    transition: transform 0.25s ease-out;
+  }
+
+  .ga-card__link:hover .ga-card__media img {
+    transform: scale(calc(var(--ga-card-zoom, 1.4) * 1.03));
+  }
+
+  .ga-card__price {
+    position: absolute;
+    left: -2px;
+    bottom: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 62px;
+    height: 40px;
+    padding: 0 12px;
+    background: var(--ga-black);
+    color: var(--ga-bone);
+    font-family: var(--ga-font-display);
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .ga-card__sticker {
+    position: absolute;
+    top: -10px;
+    right: -6px;
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--ga-accent);
+    color: var(--ga-white);
+    font-family: var(--ga-font-display);
+    font-size: 22px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .ga-card__sticker span {
+    display: block;
+    transform: rotate(-10deg);
+  }
+
+  .ga-card__note {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    color: var(--ga-black);
+    pointer-events: none;
+  }
+
+  .ga-card__note-text {
+    font-size: 22px;
+    line-height: 0.95;
+    white-space: nowrap;
+  }
+
+  .ga-card__arrow {
+    width: 30px;
+    height: auto;
+    stroke: currentColor;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ga-card__note--left {
+    top: 8%;
+    left: 6%;
+    align-items: flex-start;
+    --ga-hand-tilt: -8deg;
+  }
+
+  .ga-card__note--left .ga-card__arrow {
+    margin: 10px 0 0 4px;
+  }
+
+  .ga-card__note--right {
+    top: 6%;
+    right: 4%;
+    align-items: flex-end;
+    text-align: right;
+    --ga-hand-tilt: -12deg;
+  }
+
+  .ga-card__note--right .ga-card__note-text {
+    transform-origin: right bottom;
+  }
+
+  .ga-card__note--right .ga-card__arrow {
+    margin: 4px 26px 0 0;
+  }
+
+  .ga-card__name {
+    display: block;
+    margin-block-start: 12px;
+    font-family: var(--ga-font-display);
+    font-size: 19px;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-products {
+      padding-block: calc(var(--ga-u) * 92) calc(var(--ga-u) * 82);
+    }
+
+    .ga-products__head {
+      flex-wrap: nowrap;
+      align-items: center;
+      margin-block-end: calc(var(--ga-u) * 42);
+      padding-inline: calc(var(--ga-u) * 22) calc(var(--ga-u) * 22);
+    }
+
+    .ga-products__title {
+      font-size: calc(var(--ga-u) * 97);
+      white-space: nowrap;
+    }
+
+    .ga-products__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: calc(var(--ga-u) * 12);
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .ga-card__price {
+      min-width: calc(var(--ga-u) * 80);
+      height: calc(var(--ga-u) * 50);
+      padding: 0 calc(var(--ga-u) * 14);
+      font-size: calc(var(--ga-u) * 31);
+    }
+
+    .ga-card__sticker {
+      top: calc(var(--ga-u) * -10);
+      right: calc(var(--ga-u) * -2);
+      width: calc(var(--ga-u) * 106);
+      height: calc(var(--ga-u) * 106);
+      font-size: calc(var(--ga-u) * 34);
+    }
+
+    .ga-card__note-text {
+      font-size: calc(var(--ga-u) * 36);
+    }
+
+    .ga-card__arrow {
+      width: calc(var(--ga-u) * 48);
+    }
+
+    .ga-card__note--left .ga-card__arrow {
+      margin: calc(var(--ga-u) * 16) 0 0 calc(var(--ga-u) * 4);
+    }
+
+    .ga-card__note--right .ga-card__arrow {
+      margin: calc(var(--ga-u) * 6) calc(var(--ga-u) * 40) 0 0;
+    }
+
+    .ga-card__name {
+      margin-block-start: calc(var(--ga-u) * 16);
+      padding-inline-start: calc(var(--ga-u) * 6);
+      font-size: calc(var(--ga-u) * 25);
+      letter-spacing: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ga-card__media img {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Product row",
+  "tag": "section",
+  "class": "ga-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Ballhead has arrived."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Shop all youth polos"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Supplies the price and the link."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name shown on the card",
+          "info": "Leave empty to use the product's own title."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image",
+          "info": "Product alone on white or transparent works best. Overrides the bundled image."
+        },
+        {
+          "type": "select",
+          "id": "bundled_image",
+          "label": "Bundled image",
+          "info": "Shown until you pick a card image. Choose None to use the product's own first photo.",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "ga-polo-navy.png",
+              "label": "Ballhead polo, navy"
+            },
+            {
+              "value": "ga-polo-white.png",
+              "label": "Ballhead polo, white"
+            },
+            {
+              "value": "ga-polo-electric.png",
+              "label": "Ballhead polo, electric blue and white"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "sticker",
+          "label": "Round sticker text",
+          "info": "For example: New. Leave empty for no sticker."
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Handwritten note",
+          "info": "Keep it to four words or fewer."
+        },
+        {
+          "type": "select",
+          "id": "note_position",
+          "label": "Note position",
+          "options": [
+            {
+              "value": "none",
+              "label": "Hidden"
+            },
+            {
+              "value": "left",
+              "label": "Top left"
+            },
+            {
+              "value": "right",
+              "label": "Top right"
+            }
+          ],
+          "default": "none"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Product row",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

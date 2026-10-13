@@ -1,0 +1,240 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="ga ga--charcoal ga-stamps">
+  <div class="ga-wrap ga-stamps__inner">
+    {%- if s.heading != blank -%}
+      <h2 class="ga-display ga-stamps__title">{{ s.heading | escape }}</h2>
+    {%- endif -%}
+
+    <ul class="ga-stamps__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign bs = block.settings
+          assign tilt_index = forloop.index0 | modulo: 3
+        -%}
+        <li class="ga-stamp ga-stamp--{{ tilt_index | plus: 1 }}" {{ block.shopify_attributes }}>
+          <div class="ga-stamp__mark">
+            <svg class="ga-stamp__ring" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+              <defs>
+                <filter id="ga-ink-{{ block.id }}" x="-6%" y="-6%" width="112%" height="112%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="{{ forloop.index | times: 7 }}" result="warp" />
+                  <feDisplacementMap in="SourceGraphic" in2="warp" scale="5" xChannelSelector="R" yChannelSelector="G" result="warped" />
+                  <feTurbulence type="fractalNoise" baseFrequency="0.14" numOctaves="2" seed="{{ forloop.index | times: 3 }}" result="grain" />
+                  <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -40 27.4" result="holes" />
+                  <feComposite in="warped" in2="holes" operator="in" />
+                </filter>
+              </defs>
+              <g filter="url(#ga-ink-{{ block.id }})" fill="none" stroke="currentColor">
+                <circle cx="160" cy="160" r="149" stroke-width="11" />
+                <circle cx="160" cy="160" r="134" stroke-width="3.5" />
+              </g>
+            </svg>
+            <p class="ga-display ga-stamp__text">{{ bs.title | escape | newline_to_br }}</p>
+          </div>
+          {%- if bs.text != blank -%}
+            <p class="ga-text ga-text--muted ga-stamp__desc">{{ bs.text | escape }}</p>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if s.button_label != blank -%}
+      <a class="ga-btn ga-btn--outline-light ga-stamps__btn" href="{{ s.button_link | default: routes.root_url }}">
+        {{- s.button_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-stamps {
+    padding-block: 56px 64px;
+  }
+
+  .ga-stamps__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ga-stamps__title {
+    font-size: 13.5vw;
+    max-width: 12ch;
+  }
+
+  .ga-stamps__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+    width: 100%;
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-stamp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ga-stamp__mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(64vw, 260px);
+    aspect-ratio: 1;
+    color: var(--ga-bone);
+  }
+
+  .ga-stamp__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .ga-stamp__text {
+    position: relative;
+    font-size: min(13vw, 54px);
+    line-height: 0.98;
+    transform: rotate(var(--ga-stamp-tilt, -8deg));
+  }
+
+  .ga-stamp--2 {
+    --ga-stamp-tilt: -6deg;
+  }
+
+  .ga-stamp--3 {
+    --ga-stamp-tilt: -9deg;
+  }
+
+  .ga-stamp__desc {
+    max-width: 22em;
+    margin-block-start: 18px;
+    text-wrap: balance;
+  }
+
+  .ga-stamps__btn {
+    margin-block-start: 40px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-stamps {
+      padding-block: calc(var(--ga-u) * 122) calc(var(--ga-u) * 118);
+    }
+
+    .ga-stamps__title {
+      font-size: calc(var(--ga-u) * 115);
+      max-width: none;
+      white-space: nowrap;
+    }
+
+    .ga-stamps__grid {
+      grid-template-columns: repeat(3, calc(var(--ga-u) * 435));
+      justify-content: center;
+      gap: 0;
+      margin-block-start: calc(var(--ga-u) * 60);
+    }
+
+    .ga-stamp__mark {
+      width: calc(var(--ga-u) * 323);
+    }
+
+    .ga-stamp__text {
+      font-size: calc(var(--ga-u) * 68);
+    }
+
+    .ga-stamp__desc {
+      max-width: calc(var(--ga-u) * 400);
+      margin-block-start: calc(var(--ga-u) * 28);
+    }
+
+    .ga-stamps__btn {
+      min-width: calc(var(--ga-u) * 340);
+      min-height: calc(var(--ga-u) * 68);
+      margin-block-start: calc(var(--ga-u) * 72);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Stamps",
+  "tag": "section",
+  "class": "ga-section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Not shrunk from adults."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "See the size guide"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stamp",
+      "name": "Stamp",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Stamp text",
+          "info": "Two short lines read best. Use a line break between them.",
+          "default": "4-way\nstretch"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Line underneath",
+          "default": "Performance fabric that moves with the swing."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Stamps",
+      "blocks": [
+        {
+          "type": "stamp",
+          "settings": {
+            "title": "4-way\nstretch",
+            "text": "Performance fabric that moves with the swing."
+          }
+        },
+        {
+          "type": "stamp",
+          "settings": {
+            "title": "Athletic\njunior fit",
+            "text": "Cut for young players, not scaled down from an adult pattern."
+          }
+        },
+        {
+          "type": "stamp",
+          "settings": {
+            "title": "Sized on\nreal kids",
+            "text": "See every size on a junior, with their height."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
