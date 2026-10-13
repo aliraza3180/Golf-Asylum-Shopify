@@ -18,10 +18,7 @@
         {%- liquid
           assign bs = block.settings
           assign variant = forloop.index0 | modulo: 3 | plus: 1
-          assign fallback = blank
-          if bs.bundled_image != 'none'
-            assign fallback = bs.bundled_image
-          endif
+          assign tile_image = bs.image | default: bs.collection.featured_image
           assign url = bs.link | default: bs.collection.url | default: routes.collections_url
           assign label = bs.label | default: bs.collection.title
         -%}
@@ -33,16 +30,8 @@
           <a class="ga-tile__link" href="{{ url }}">
             <span class="ga-torn ga-torn--{{ variant | plus: 1 }} ga-tile__paper">
               <span class="ga-torn__media">
-                {%- if bs.image != blank or fallback != blank -%}
-                  {%- render 'ga-image', image: bs.image, fallback: fallback, alt: '', sizes: '(min-width: 750px) 48vw, 140vw', width: 1800 -%}
-                {%- elsif bs.collection.featured_image != blank -%}
-                  {%- render 'ga-image',
-                    image: bs.collection.featured_image,
-                    fallback: fallback,
-                    alt: '',
-                    sizes: '(min-width: 750px) 31vw, 92vw',
-                    width: 1200
-                  -%}
+                {%- if tile_image != blank -%}
+                  {%- render 'ga-image', image: tile_image, alt: '', sizes: '(min-width: 750px) 48vw, 140vw', width: 1800 -%}
                 {%- endif -%}
               </span>
             </span>
@@ -208,31 +197,6 @@
           "id": "image",
           "label": "Photo",
           "info": "Portrait works best."
-        },
-        {
-          "type": "select",
-          "id": "bundled_image",
-          "label": "Bundled photo",
-          "info": "Shown until you pick a photo.",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "ga-youth-polos.jpg",
-              "label": "Juniors in polos"
-            },
-            {
-              "value": "ga-youth-hoodies.jpg",
-              "label": "Junior in a hoodie"
-            },
-            {
-              "value": "ga-youth-shorts.jpg",
-              "label": "Junior in shorts"
-            }
-          ],
-          "default": "none"
         },
         {
           "type": "header",

@@ -4,16 +4,12 @@
       {%- for block in section.blocks -%}
         {%- liquid
           assign bs = block.settings
-          assign fallback = blank
-          if bs.bundled_image != 'none'
-            assign fallback = bs.bundled_image
-          endif
           assign url = bs.button_link | default: routes.all_products_collection_url
         -%}
         <li class="ga-duo__tile ga-duo__tile--{{ bs.style }}" {{ block.shopify_attributes }}>
-          {%- if bs.image != blank or fallback != blank -%}
+          {%- if bs.image != blank -%}
             <div class="ga-duo__media{% if bs.style == 'photo' and bs.black_and_white %} ga-duo__media--bw{% endif %}">
-              {%- render 'ga-image', image: bs.image, fallback: fallback, alt: bs.image_alt, sizes: '(min-width: 750px) 47vw, 92vw', width: 1400 -%}
+              {%- render 'ga-image', image: bs.image, alt: bs.image_alt, sizes: '(min-width: 750px) 47vw, 92vw', width: 1400 -%}
             </div>
           {%- endif -%}
 
@@ -228,27 +224,6 @@
           "info": "Photo style: a person on a course. Product style: products alone on white."
         },
         {
-          "type": "select",
-          "id": "bundled_image",
-          "label": "Bundled image",
-          "info": "Shown until you pick an image. The adult golfer is a placeholder and must be replaced with a real photo before launch.",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "ga-placeholder-adult-golfer.jpg",
-              "label": "Placeholder: adult golfer"
-            },
-            {
-              "value": "ga-caps.jpg",
-              "label": "Three caps"
-            }
-          ],
-          "default": "none"
-        },
-        {
           "type": "checkbox",
           "id": "black_and_white",
           "label": "Photo style: show in black and white",
@@ -283,6 +258,7 @@
         }
       ]
     }
-  ]
+  ],
+  "settings": []
 }
 {% endschema %}

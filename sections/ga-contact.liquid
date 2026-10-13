@@ -1,0 +1,309 @@
+{%- liquid
+  assign s = section.settings
+  assign form_id = 'GaContact-' | append: section.id
+-%}
+
+<div class="ga ga--white ga-contact">
+  <div class="ga-wrap ga-contact__inner">
+    <div class="ga-contact__form">
+      {%- form 'contact', id: form_id, class: 'ga-contact__fields' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="ga-label ga-contact__status" role="status" tabindex="-1" autofocus>{{ s.success | escape }}</p>
+        {%- elsif form.errors -%}
+          <div class="ga-contact__errors" role="alert">
+            <p class="ga-field__label">{{ s.error | escape }}</p>
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <label class="ga-field">
+          <span class="ga-field__label">{{ s.name_label | escape }}</span>
+          <input
+            class="ga-field__input"
+            type="text"
+            name="contact[name]"
+            autocomplete="name"
+            value="{{ form.name | default: customer.name }}"
+          >
+        </label>
+
+        <label class="ga-field">
+          <span class="ga-field__label">{{ s.email_label | escape }}</span>
+          <input
+            class="ga-field__input"
+            type="email"
+            name="contact[email]"
+            autocomplete="email"
+            autocapitalize="off"
+            spellcheck="false"
+            required
+            value="{{ form.email | default: customer.email }}"
+          >
+        </label>
+
+        <label class="ga-field">
+          <span class="ga-field__label">{{ s.message_label | escape }}</span>
+          <textarea class="ga-field__input" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+        </label>
+
+        <button type="submit" class="ga-btn ga-btn--dark ga-contact__submit">{{ s.button_label | escape }}</button>
+      {%- endform -%}
+    </div>
+
+    <aside class="ga-contact__aside">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-hand--underline ga-contact__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+
+      <dl class="ga-contact__list">
+        {%- if s.email != blank -%}
+          <div>
+            <dt class="ga-field__label">{{ s.email_heading | escape }}</dt>
+            <dd><a class="ga-contact__value" href="mailto:{{ s.email | escape }}">{{ s.email | escape }}</a></dd>
+          </div>
+        {%- endif -%}
+        {%- if s.instagram != blank -%}
+          <div>
+            <dt class="ga-field__label">{{ s.instagram_heading | escape }}</dt>
+            <dd>
+              <a class="ga-contact__value" href="{{ s.instagram }}" target="_blank" rel="noopener">{{ s.instagram_label | escape }}</a>
+            </dd>
+          </div>
+        {%- endif -%}
+        {%- if s.extra_heading != blank and s.extra_text != blank -%}
+          <div>
+            <dt class="ga-field__label">{{ s.extra_heading | escape }}</dt>
+            <dd class="ga-contact__extra">{{ s.extra_text }}</dd>
+          </div>
+        {%- endif -%}
+      </dl>
+    </aside>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-contact {
+    padding-block: 40px 64px;
+  }
+
+  .ga-contact__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+
+  .ga-contact__fields {
+    display: grid;
+    gap: 20px;
+  }
+
+  .ga-contact__submit {
+    justify-self: start;
+    min-width: 200px;
+  }
+
+  .ga-contact__status {
+    justify-self: start;
+    background: var(--ga-black);
+    color: var(--ga-bone);
+    font-size: 20px;
+    white-space: normal;
+    --ga-label-tilt: -1deg;
+  }
+
+  .ga-contact__errors {
+    padding: 16px;
+    border: 2px solid var(--ga-black);
+  }
+
+  .ga-contact__errors ul {
+    margin: 0;
+    padding-inline-start: 1.2em;
+  }
+
+  .ga-contact__aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 22px 30px;
+    background: var(--ga-black);
+    color: var(--ga-bone);
+  }
+
+  .ga-contact__note {
+    font-size: 34px;
+    margin-block-end: 0.9em;
+    --ga-hand-tilt: -4deg;
+  }
+
+  .ga-contact__list {
+    display: grid;
+    gap: 22px;
+    margin: 0;
+  }
+
+  .ga-contact__list dt {
+    color: var(--ga-grey);
+  }
+
+  .ga-contact__list dd {
+    margin: 0;
+  }
+
+  .ga-contact__value {
+    color: inherit;
+    font-family: var(--ga-font-display);
+    font-size: 26px;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+  }
+
+  .ga-contact__extra {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .ga-contact__extra p {
+    margin: 0 0 0.5em;
+  }
+
+  .ga-contact__extra a {
+    color: inherit;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-contact {
+      padding-block: calc(var(--ga-u) * 72) calc(var(--ga-u) * 120);
+    }
+
+    .ga-contact__inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: calc(var(--ga-u) * 80);
+      align-items: start;
+      padding-inline: calc(var(--ga-u) * 16);
+    }
+
+    .ga-contact__fields {
+      gap: calc(var(--ga-u) * 26);
+    }
+
+    .ga-contact__aside {
+      padding: calc(var(--ga-u) * 48) calc(var(--ga-u) * 44) calc(var(--ga-u) * 52);
+    }
+
+    .ga-contact__note {
+      font-size: calc(var(--ga-u) * 46);
+    }
+
+    .ga-contact__value {
+      font-size: max(22px, calc(var(--ga-u) * 32));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Contact",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Name field",
+      "default": "Name"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email field",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "message_label",
+      "label": "Message field",
+      "default": "Message"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Send message"
+    },
+    {
+      "type": "text",
+      "id": "success",
+      "label": "Message after sending",
+      "default": "Got it. We'll get back to you."
+    },
+    {
+      "type": "text",
+      "id": "error",
+      "label": "Heading above errors",
+      "default": "Please check the form"
+    },
+    {
+      "type": "header",
+      "content": "Side panel"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "we read everything"
+    },
+    {
+      "type": "text",
+      "id": "email_heading",
+      "label": "Email heading",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "instagram_heading",
+      "label": "Instagram heading",
+      "default": "Instagram"
+    },
+    {
+      "type": "text",
+      "id": "instagram_label",
+      "label": "Instagram name",
+      "default": "@golf_asylum"
+    },
+    {
+      "type": "url",
+      "id": "instagram",
+      "label": "Instagram link"
+    },
+    {
+      "type": "text",
+      "id": "extra_heading",
+      "label": "Extra heading"
+    },
+    {
+      "type": "richtext",
+      "id": "extra_text",
+      "label": "Extra text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Contact"
+    }
+  ]
+}
+{% endschema %}

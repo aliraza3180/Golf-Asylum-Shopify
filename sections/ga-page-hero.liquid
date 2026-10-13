@@ -1,0 +1,350 @@
+{%- liquid
+  assign s = section.settings
+
+  # Heading, text and photo fall back to the page or collection being viewed.
+  assign heading = s.heading
+  assign text = s.text
+  assign image = s.image
+  if request.page_type == 'collection'
+    assign heading = heading | default: collection.title
+    assign plain_description = collection.description | strip_html | strip
+    assign text = text | default: plain_description
+    assign image = image | default: collection.image
+  elsif request.page_type == 'page'
+    assign heading = heading | default: page.title
+  elsif request.page_type == 'blog'
+    assign heading = heading | default: blog.title
+  elsif request.page_type == 'article'
+    assign heading = heading | default: article.title
+  endif
+
+  # The longest line decides the type size, so long titles still fit.
+  assign longest = 0
+  assign heading_lines = heading | newline_to_br | split: '<br />'
+  for line in heading_lines
+    assign line_size = line | strip | size
+    if line_size > longest
+      assign longest = line_size
+    endif
+  endfor
+  assign size = 'lg'
+  if longest > 20
+    assign size = 'sm'
+  elsif longest > 11
+    assign size = 'md'
+  elsif longest > 9 and image != blank
+    assign size = 'md'
+  endif
+-%}
+
+<div class="ga ga--black ga-phero{% if image != blank %} ga-phero--photo{% endif %}">
+  <div class="ga-wrap ga-phero__inner">
+    {%- if s.show_ballhead -%}
+      <div class="ga-ballhead-bg ga-phero__ballhead" aria-hidden="true">
+        {%- render 'ga-ballhead' -%}
+      </div>
+    {%- endif -%}
+
+    <div class="ga-phero__copy">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-hand--underline ga-phero__note" style="--ga-note-length: {{ s.note.size }};">{{ s.note | escape }}</p>
+      {%- endif -%}
+
+      {%- if heading != blank -%}
+        <h1 class="ga-display ga-phero__title ga-phero__title--{{ size }}">
+          {{- heading | escape | newline_to_br -}}
+          {%- if s.show_dot -%}
+            <span class="ga-phero__dot" aria-hidden="true"></span>
+          {%- endif -%}
+        </h1>
+      {%- endif -%}
+
+      {%- if text != blank -%}
+        <p class="ga-text ga-text--muted ga-phero__text">{{ text | escape }}</p>
+      {%- endif -%}
+
+      {%- if s.button_label != blank -%}
+        <div class="ga-btns ga-phero__btns">
+          <a class="ga-btn ga-btn--light" href="{{ s.button_link | default: routes.all_products_collection_url }}">
+            {{- s.button_label | escape -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if image != blank -%}
+      <div
+        class="ga-phero__photo{% if s.black_and_white %} ga-phero__photo--bw{% endif %}"
+        style="--ga-zoom: {{ s.zoom | divided_by: 100.0 }}; --ga-focus-x: {{ s.focus_x }}%; --ga-focus-y: {{ s.focus_y }}%;"
+      >
+        <div class="ga-torn ga-torn--2">
+          <div class="ga-torn__media">
+            {%- render 'ga-image', image: image, alt: s.image_alt, sizes: '(min-width: 750px) 36vw, 80vw', width: 1400, eager: true -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-phero__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-block: 36px 40px;
+  }
+
+  .ga-phero--photo .ga-phero__inner {
+    padding-block-end: 0;
+  }
+
+  .ga-phero__ballhead {
+    width: 110vw;
+    right: -50vw;
+    top: -10vw;
+    --ga-ballhead-bg-color: #2a2a2e;
+    --ga-ballhead-stroke: 11;
+  }
+
+  .ga-phero__copy {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ga-phero__note {
+    /* A character is about 0.44em wide, so this keeps the note on one line. */
+    font-size: min(8.4vw, calc(196vw / var(--ga-note-length, 20)));
+    margin-block: 0 0.6em;
+    --ga-hand-tilt: -5deg;
+  }
+
+  .ga-phero__title {
+    font-size: 22vw;
+  }
+
+  .ga-phero__title--md {
+    font-size: 16vw;
+  }
+
+  .ga-phero__title--sm {
+    font-size: 11.5vw;
+  }
+
+  .ga-phero__dot {
+    display: inline-block;
+    width: 0.2em;
+    height: 0.21em;
+    margin-inline-start: 0.04em;
+    background: var(--ga-accent);
+  }
+
+  .ga-phero__text {
+    max-width: 34em;
+    margin-block-start: 16px;
+    font-size: 16px;
+  }
+
+  .ga-phero__btns {
+    margin-block-start: 24px;
+  }
+
+  .ga-phero__photo {
+    position: relative;
+    z-index: 1;
+    width: 82%;
+    margin: 0 auto -44px;
+  }
+
+  .ga-phero__photo .ga-torn {
+    aspect-ratio: 5 / 4;
+    --ga-tilt: 2deg;
+    --ga-paper: var(--ga-bone);
+  }
+
+  .ga-phero__photo img {
+    object-position: var(--ga-focus-x, 50%) var(--ga-focus-y, 50%);
+    transform: scale(var(--ga-zoom, 1));
+    transform-origin: var(--ga-focus-x, 50%) var(--ga-focus-y, 50%);
+  }
+
+  .ga-phero__photo--bw img {
+    filter: grayscale(1) contrast(1.1);
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-phero__inner {
+      display: block;
+      padding-block: calc(var(--ga-u) * 64) calc(var(--ga-u) * 60);
+    }
+
+    .ga-phero--photo .ga-phero__inner {
+      min-height: calc(var(--ga-u) * 420);
+      padding-block-end: calc(var(--ga-u) * 60);
+    }
+
+    .ga-phero__ballhead {
+      width: calc(var(--ga-u) * 520);
+      right: calc(var(--ga-u) * -90);
+      top: calc(var(--ga-u) * -60);
+    }
+
+    .ga-phero__copy {
+      padding-inline-start: calc(var(--ga-u) * 16);
+    }
+
+    .ga-phero--photo .ga-phero__copy {
+      max-width: 56%;
+    }
+
+    .ga-phero__note {
+      font-size: calc(var(--ga-u) * 46);
+      margin-block: 0 calc(var(--ga-u) * 22);
+    }
+
+    .ga-phero__title {
+      font-size: calc(var(--ga-u) * 150);
+    }
+
+    .ga-phero__title--md {
+      font-size: calc(var(--ga-u) * 118);
+    }
+
+    .ga-phero__title--sm {
+      font-size: calc(var(--ga-u) * 84);
+    }
+
+    .ga-phero__text {
+      max-width: calc(var(--ga-u) * 600);
+      margin-block-start: calc(var(--ga-u) * 22);
+      font-size: max(15px, calc(var(--ga-u) * 19));
+    }
+
+    .ga-phero__btns {
+      margin-block-start: calc(var(--ga-u) * 30);
+    }
+
+    .ga-phero__photo {
+      position: absolute;
+      top: calc(var(--ga-u) * 44);
+      right: calc(var(--ga-u) * 40);
+      width: calc(var(--ga-u) * 500);
+      margin: 0;
+    }
+
+    .ga-phero__photo .ga-torn {
+      aspect-ratio: 500 / 440;
+      --ga-tilt: 3deg;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Page header",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "the full lineup"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave empty to use the title of the page or collection being viewed."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dot",
+      "label": "End the heading with the accent square",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "info": "Leave empty on a collection to use the collection description."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Photo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo",
+      "info": "Leave empty on a collection to use the collection image."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo description",
+      "info": "Read out by screen readers. Leave empty if the photo is decorative."
+    },
+    {
+      "type": "checkbox",
+      "id": "black_and_white",
+      "label": "Show the photo in black and white",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "zoom",
+      "label": "Zoom",
+      "min": 100,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "focus_x",
+      "label": "Focus, left to right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "focus_y",
+      "label": "Focus, top to bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ballhead",
+      "label": "Show the large Ballhead outline",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Page header"
+    }
+  ]
+}
+{% endschema %}

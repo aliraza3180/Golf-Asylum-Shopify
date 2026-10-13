@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -16,23 +7,23 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "grid",
+            "media_presentation": "carousel",
             "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
             "icons_style": "arrow",
-            "slideshow_controls_style": "counter",
+            "slideshow_controls_style": "thumbnails",
             "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "right",
-            "thumbnail_width": 44,
-            "aspect_ratio": "adapt",
-            "constrain_to_viewport": true,
+            "thumbnail_position": "bottom",
+            "thumbnail_width": 72,
+            "aspect_ratio": "1/1.25",
+            "constrain_to_viewport": false,
             "media_fit": "contain",
             "media_radius": 0,
             "extend_media": false,
             "zoom": true,
             "video_loop": false,
-            "hide_variants": true,
+            "hide_variants": false,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -50,7 +41,7 @@
             "custom_width_mobile": 100,
             "height": "fit",
             "details_position": "flex-start",
-            "gap": 28,
+            "gap": 22,
             "sticky_details_desktop": true,
             "background_media": "none",
             "video_position": "cover",
@@ -59,116 +50,56 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_radius": 0,
-            "padding-block-start": 24,
-            "padding-block-end": 24,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
           "blocks": {
-            "group_icgrde": {
-              "type": "group",
-              "name": "t:names.header",
+            "heading": {
+              "type": "ga-product-heading",
               "settings": {
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "background_media": "none",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "link": "",
-                "open_in_new_tab": false,
-                "placeholder": "",
+                "note": "a little unhinged",
+                "youth_label": "Youth",
+                "adult_label": "Adult",
+                "new_collection": "ballhead-jr-polo-collection",
+                "new_label": "New"
+              }
+            },
+            "price": {
+              "type": "price",
+              "settings": {
+                "show_sale_price_first": true,
+                "show_installments": false,
+                "show_tax_info": false,
+                "type_preset": "h3",
+                "width": "100%",
+                "alignment": "left",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
-              "blocks": {
-                "text_xpVMaM": {
-                  "type": "text",
-                  "name": "t:names.title",
-                  "settings": {
-                    "text": "<h1>{{ closest.product.title }}</h1>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "h3",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "price_tVjtKg": {
-                  "type": "price",
-                  "settings": {
-                    "show_sale_price_first": true,
-                    "show_installments": true,
-                    "show_tax_info": true,
-                    "type_preset": "paragraph",
-                    "width": "100%",
-                    "alignment": "left",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "padding-block-start": 4,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_xpVMaM",
-                "price_tVjtKg"
-              ]
-            },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "divider_color": "{{ settings.color_palette.color3 }}",
-                "width_percent": 100,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
               "blocks": {}
             },
-            "variant_picker_R3rGDr": {
+            "siblings": {
+              "type": "ga-product-siblings",
+              "settings": {
+                "label": "Colours",
+                "ignore": [
+                  "youth",
+                  "adult",
+                  "caps-beanies"
+                ],
+                "max": 6
+              }
+            },
+            "picker": {
               "type": "variant-picker",
               "settings": {
                 "variant_style": "buttons",
@@ -181,7 +112,16 @@
               },
               "blocks": {}
             },
-            "buy_buttons_eYQEYi": {
+            "fit": {
+              "type": "ga-size-fit",
+              "settings": {
+                "page": "size-guide",
+                "fit": "Athletic fit.",
+                "link_label": "Size guide",
+                "hint_youth_polo": "By age: S 6–7, M 8, L 10, XL 12."
+              }
+            },
+            "buy": {
               "type": "buy-buttons",
               "settings": {
                 "stacking": true,
@@ -216,7 +156,7 @@
               },
               "block_order": []
             },
-            "text_aEtTtq": {
+            "description": {
               "type": "text",
               "name": "t:names.product_description",
               "settings": {
@@ -240,176 +180,136 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "rows": {
+              "type": "ga-product-accordion",
+              "settings": {}
             }
           },
           "block_order": [
-            "group_icgrde",
-            "divider_VJhene",
-            "variant_picker_R3rGDr",
-            "buy_buttons_eYQEYi",
-            "text_aEtTtq"
+            "heading",
+            "price",
+            "siblings",
+            "picker",
+            "fit",
+            "buy",
+            "description",
+            "rows"
           ]
-        },
-        "disclosures": {
-          "type": "disclosures",
-          "settings": {
-            "padding-block-start": 0,
-            "padding-block-end": 0
-          },
-          "blocks": {}
         }
       },
-      "block_order": [
-        "disclosures"
-      ],
+      "block_order": [],
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
         "equal_columns": false,
         "limit_details_width": false,
         "gap": 48,
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-start": 28,
+        "padding-block-end": 72
       }
     },
-    "product_recommendations_qggXJq": {
-      "type": "product-recommendations",
+    "strip": {
+      "type": "ga-strip",
       "blocks": {
-        "text_cbcgyb": {
-          "type": "text",
-          "name": "t:names.header",
+        "p1": {
+          "type": "phrase",
           "settings": {
-            "text": "<h2>You may also like </h2>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h4",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "text": "A little unhinged"
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "p2": {
+          "type": "phrase",
           "settings": {
-            "product_card_gap": 8,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_DNizbJ": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_M7MJkb": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_gLWgA6": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_DNizbJ",
-            "product_title_M7MJkb",
-            "price_gLWgA6"
-          ]
+            "text": "A little obsessed"
+          }
+        },
+        "p3": {
+          "type": "phrase",
+          "settings": {
+            "text": "Always golf"
+          }
         }
       },
       "block_order": [
-        "text_cbcgyb"
-      ],
-      "name": "t:names.product_recommendations",
+        "p1",
+        "p2",
+        "p3"
+      ]
+    },
+    "story": {
+      "type": "ga-split",
       "settings": {
-        "product": "{{ closest.product }}",
-        "recommendation_type": "related",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "columns_gap": 12,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 28,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "visibility": "youth",
+        "note": "the only way to play",
+        "heading": "Built for\njunior golfers.",
+        "text": "Not scaled-down adult clothing. Real performance apparel built for the next generation of players.",
+        "tags": "",
+        "button_label": "See the size guide",
+        "button_link": "shopify://pages/size-guide",
+        "button_2_label": "Our story",
+        "button_2_link": "shopify://pages/about-us",
+        "image": "shopify://shop_images/TB_1_group_3.jpg",
+        "black_and_white": true,
+        "image_alt": "Five junior golfers in Golf Asylum polos and caps",
+        "zoom": 100,
+        "focus_x": 50,
+        "focus_y": 40
+      }
+    },
+    "why": {
+      "type": "ga-stamps",
+      "settings": {
+        "visibility": "youth",
+        "heading": "Not shrunk from adults.",
+        "button_label": ""
+      },
+      "blocks": {
+        "stretch": {
+          "type": "stamp",
+          "settings": {
+            "title": "4-way\nstretch",
+            "text": "Performance fabric that moves with the swing."
+          }
+        },
+        "fit": {
+          "type": "stamp",
+          "settings": {
+            "title": "Athletic\njunior fit",
+            "text": "Cut for young players, not scaled down from an adult pattern."
+          }
+        },
+        "sized": {
+          "type": "stamp",
+          "settings": {
+            "title": "Sized on\nreal kids",
+            "text": "See every size on a junior, with their height."
+          }
+        }
+      },
+      "block_order": [
+        "stretch",
+        "fit",
+        "sized"
+      ]
+    },
+    "kit": {
+      "type": "ga-kit",
+      "settings": {
+        "heading": "Complete the kit",
+        "link_label": "Shop all",
+        "limit": 4,
+        "youth_collection": "youth",
+        "adult_collection": "adult",
+        "collection": "youth"
       }
     }
   },
   "order": [
     "main",
-    "product_recommendations_qggXJq"
+    "strip",
+    "story",
+    "why",
+    "kit"
   ]
 }

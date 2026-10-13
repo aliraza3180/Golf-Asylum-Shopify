@@ -1,0 +1,40 @@
+{%- doc -%}
+  Outputs who a product is for and what it is, as "audience-kind", for example
+  "youth-polo" or "adult-cap". Read from the product type and title, because
+  the catalogue has no consistent tags. Capture the output to use it.
+
+  @param {product} product - The product to classify
+
+  @example
+  {% capture kind %}{% render 'ga-product-kind', product: product %}{% endcapture %}
+{%- enddoc -%}
+
+{%- liquid
+  assign haystack = product.title | append: ' ' | append: product.type | downcase
+
+  assign audience = 'adult'
+  if haystack contains 'jr' or haystack contains 'junior' or haystack contains 'youth'
+    assign audience = 'youth'
+  endif
+
+  assign kind = 'other'
+  if product.gift_card?
+    assign kind = 'gift'
+    assign audience = 'all'
+  elsif haystack contains 'polo'
+    assign kind = 'polo'
+  elsif haystack contains 'hoodie'
+    assign kind = 'hoodie'
+  elsif haystack contains 'short'
+    assign kind = 'shorts'
+  elsif haystack contains 'beanie'
+    assign kind = 'beanie'
+  elsif haystack contains ' cap'
+    assign kind = 'cap'
+  elsif haystack contains 'jacket'
+    assign kind = 'jacket'
+  elsif haystack contains 'pant'
+    assign kind = 'pants'
+  endif
+-%}
+{{- audience }}-{{ kind -}}

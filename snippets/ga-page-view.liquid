@@ -1,0 +1,37 @@
+{%- doc -%}
+  Shows the right design on the About, Size guide, Inmates and Contact pages
+  while this theme is still unpublished.
+
+  Each of those pages has its own template (page.about.json and so on). The
+  Shopify admin only lets a page be assigned a template from the published
+  theme, so until launch the page is sent to the same address with
+  "?view=<template>", which renders the right one. Once the page has its
+  template assigned in the admin, this does nothing.
+{%- enddoc -%}
+
+{%- if request.page_type == 'page' and template.suffix == blank and request.design_mode == false -%}
+  {%- liquid
+    assign view = blank
+    case page.handle
+      when 'about-us'
+        assign view = 'about'
+      when 'size-guide'
+        assign view = 'size-guide'
+      when 'brand-ambassadors'
+        assign view = 'inmates'
+      when 'contact'
+        assign view = 'contact'
+    endcase
+  -%}
+  {%- if view != blank -%}
+    <script>
+      (function () {
+        var url = new URL(window.location.href);
+        if (!url.searchParams.has('view')) {
+          url.searchParams.set('view', {{ view | json }});
+          window.location.replace(url.toString());
+        }
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}

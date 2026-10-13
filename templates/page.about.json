@@ -1,0 +1,105 @@
+{
+  "sections": {
+    "hero": {
+      "type": "ga-page-hero",
+      "settings": {
+        "note": "not started in a board room",
+        "heading": "Started\nby a golf\nfamily",
+        "show_dot": true,
+        "text": "Traveling from tournament to tournament, watching our son chase his dreams, we realized junior golfers deserved better.",
+        "show_ballhead": true,
+        "image": "shopify://shop_images/TB_1_group_3.jpg",
+        "image_alt": "Five junior golfers in Golf Asylum polos and caps"
+      }
+    },
+    "problem": {
+      "type": "ga-story",
+      "settings": {
+        "tone": "white",
+        "note": "",
+        "heading": "Junior golfers\ndeserved better.",
+        "text": "<p>Junior golfers were expected to train, compete, and carry themselves like serious athletes, yet the clothing available to them often felt like an afterthought.</p><p>The options were often oversized, outdated, lacking performance features, or priced too high for families with growing kids.</p>",
+        "image": "shopify://shop_images/Jax_GA.jpg",
+        "image_alt": "Junior golfer in a Golf Asylum cap"
+      }
+    },
+    "answer": {
+      "type": "ga-story",
+      "settings": {
+        "tone": "bone",
+        "note": "so we built something different",
+        "heading": "Not scaled-down\nadult clothing.",
+        "text": "<p>Golf Asylum was created with one goal: to help grow the game by giving junior golfers apparel designed specifically for them. Not budget alternatives. Real performance apparel built for the next generation of players.</p><p>We studied the fit, fabrics, and styles worn by the world's best players and combined them with feedback from junior golfers and their families.</p>",
+        "button_label": "Shop youth",
+        "button_link": "shopify://collections/youth"
+      }
+    },
+    "commitment": {
+      "type": "ga-stamps",
+      "settings": {
+        "visibility": "all",
+        "heading": "Our commitment.",
+        "button_label": ""
+      },
+      "blocks": {
+        "fabric": {
+          "type": "stamp",
+          "settings": {
+            "title": "Premium\nfabrics",
+            "text": "Premium performance fabrics built for competition."
+          }
+        },
+        "fit": {
+          "type": "stamp",
+          "settings": {
+            "title": "Athletic\njunior fit",
+            "text": "Modern, athletic fits designed specifically for junior golfers."
+          }
+        },
+        "style": {
+          "type": "stamp",
+          "settings": {
+            "title": "Tour\nstyle",
+            "text": "Tour-inspired style without luxury pricing."
+          }
+        },
+        "game": {
+          "type": "stamp",
+          "settings": {
+            "title": "Growing\nthe game",
+            "text": "A brand dedicated to supporting and growing junior golf."
+          }
+        }
+      },
+      "block_order": [
+        "fabric",
+        "fit",
+        "style",
+        "game"
+      ]
+    },
+    "motto": {
+      "type": "ga-closing",
+      "settings": {
+        "note": "our motto",
+        "heading": "The only way to play\nis out of your mind.",
+        "signoff": "the Golf Asylum family",
+        "button_label": "Shop youth",
+        "button_link": "shopify://collections/youth",
+        "button_2_label": "Meet the Inmates",
+        "button_2_link": "shopify://pages/brand-ambassadors",
+        "image_1": "shopify://shop_images/invitational-2026-529.jpg",
+        "image_1_alt": "Junior golfers high-fiving at the Golf Asylum Invitational",
+        "image_2": "shopify://shop_images/invitational-2026-450.jpg",
+        "image_2_alt": "Junior golfer celebrating on the green at the Golf Asylum Invitational"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "problem",
+    "answer",
+    "commitment",
+    "motto"
+  ]
+}

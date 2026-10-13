@@ -1,11 +1,7 @@
 {%- liquid
   assign s = section.settings
-  assign cover_fallback = blank
-  if s.bundled_cover
-    assign cover_fallback = 'ga-invitational-cover.jpg'
-  endif
   assign has_cover = false
-  if s.cover != blank or cover_fallback != blank or s.video != blank
+  if s.cover != blank or s.video != blank
     assign has_cover = true
   endif
 -%}
@@ -18,7 +14,7 @@
 
     <div class="ga-community__copy">
       {%- if s.heading != blank -%}
-        <h2 class="ga-display ga-community__title">{{ s.heading | escape | newline_to_br }}</h2>
+        <h2 class="ga-display ga-community__title{% if s.small_heading %} ga-community__title--small{% endif %}">{{ s.heading | escape | newline_to_br }}</h2>
       {%- endif -%}
       {%- if s.text != blank -%}
         <p class="ga-text ga-text--muted ga-community__text">{{ s.text | escape }}</p>
@@ -34,10 +30,9 @@
       <div class="ga-community__video">
         <div class="ga-torn ga-torn--1 ga-community__frame">
           <div class="ga-torn__media ga-community__stage" data-ga-video-stage>
-            {%- if s.cover != blank or cover_fallback != blank -%}
+            {%- if s.cover != blank -%}
               {%- render 'ga-image',
                 image: s.cover,
-                fallback: cover_fallback,
                 alt: s.cover_alt,
                 sizes: '(min-width: 750px) 28vw, 80vw',
                 width: 1000
@@ -74,12 +69,8 @@
           {%- liquid
             assign bs = block.settings
             assign variant = forloop.index0 | modulo: 3 | plus: 2
-            assign fallback = blank
-            if bs.bundled_image != 'none'
-              assign fallback = bs.bundled_image
-            endif
           -%}
-          {%- if bs.image != blank or fallback != blank -%}
+          {%- if bs.image != blank -%}
             <li
               class="ga-community__photo ga-community__photo--{{ forloop.index0 | modulo: 3 | plus: 1 }}"
               style="--ga-zoom: {{ bs.zoom | divided_by: 100.0 }}; --ga-focus-x: {{ bs.focus_x }}%; --ga-focus-y: {{ bs.focus_y }}%;"
@@ -87,7 +78,7 @@
             >
               <div class="ga-torn ga-torn--{{ variant }}">
                 <div class="ga-torn__media">
-                  {%- render 'ga-image', image: bs.image, fallback: fallback, alt: bs.alt, sizes: '(min-width: 750px) 12vw, 30vw', width: 600 -%}
+                  {%- render 'ga-image', image: bs.image, alt: bs.alt, sizes: '(min-width: 750px) 12vw, 30vw', width: 600 -%}
                 </div>
               </div>
             </li>
@@ -142,6 +133,10 @@
   .ga-community__title {
     font-size: 19vw;
     line-height: 1;
+  }
+
+  .ga-community__title--small {
+    font-size: 13.5vw;
   }
 
   .ga-community__text {
@@ -270,6 +265,10 @@
       white-space: nowrap;
     }
 
+    .ga-community__title--small {
+      font-size: calc(var(--ga-u) * 64);
+    }
+
     .ga-community__text {
       max-width: calc(var(--ga-u) * 370);
       margin-block-start: calc(var(--ga-u) * 30);
@@ -332,6 +331,12 @@
       "default": "Meet the\nInmates."
     },
     {
+      "type": "checkbox",
+      "id": "small_heading",
+      "label": "Smaller heading, for long words",
+      "default": false
+    },
+    {
       "type": "textarea",
       "id": "text",
       "label": "Text",
@@ -378,12 +383,6 @@
       "info": "Shown before the video plays."
     },
     {
-      "type": "checkbox",
-      "id": "bundled_cover",
-      "label": "Use the bundled Invitational still until a cover is picked",
-      "default": true
-    },
-    {
       "type": "text",
       "id": "cover_alt",
       "label": "Cover description",
@@ -406,31 +405,6 @@
           "id": "image",
           "label": "Photo",
           "info": "Tall portrait works best."
-        },
-        {
-          "type": "select",
-          "id": "bundled_image",
-          "label": "Bundled photo",
-          "info": "Shown until you pick a photo.",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "ga-invitational-1.jpg",
-              "label": "Invitational, tee shot"
-            },
-            {
-              "value": "ga-invitational-2.jpg",
-              "label": "Invitational, swing"
-            },
-            {
-              "value": "ga-invitational-3.jpg",
-              "label": "Invitational, swing by the water"
-            }
-          ],
-          "default": "none"
         },
         {
           "type": "text",

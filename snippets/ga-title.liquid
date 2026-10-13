@@ -1,0 +1,19 @@
+{%- doc -%}
+  Outputs a product title without the "GOLF ASYLUM -" prefix that many products
+  carry, so cards and headings read cleanly. The product itself is not changed.
+
+  @param {string} title - The product title
+
+  @example
+  {% render 'ga-title', title: product.title %}
+{%- enddoc -%}
+
+{%- liquid
+  assign clean = title | remove: 'GOLF ASYLUM' | remove: 'Golf Asylum' | strip
+  assign first = clean | slice: 0
+  if first == '-' or first == ':'
+    assign clean = clean | remove_first: first | strip
+  endif
+  assign clean = clean | replace: '  ', ' ' | replace: '  ', ' '
+-%}
+{{- clean | escape -}}

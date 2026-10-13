@@ -1,0 +1,617 @@
+/*
+ * Golf Asylum styles shared by the inner pages: product cards, grids, text
+ * pages and forms. Section-specific rules live in each `ga-*` section.
+ * Sizes follow golf-asylum.css: `--ga-u` is one pixel on the 1440px design.
+ */
+
+/* Product card ------------------------------------------------------------ */
+
+.ga-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ga-grid > [hidden] {
+  display: none;
+}
+
+.ga-pcard {
+  display: block;
+  color: var(--ga-black);
+  text-decoration: none;
+}
+
+.ga--black .ga-pcard,
+.ga--charcoal .ga-pcard {
+  color: var(--ga-bone);
+}
+
+.ga-pcard__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border: 2px solid var(--ga-black);
+  background: var(--ga-white);
+}
+
+.ga-pcard__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+
+.ga-pcard__frame--contain .ga-pcard__img {
+  object-fit: contain;
+  padding: 6%;
+}
+
+.ga-pcard__img--hover {
+  opacity: 0;
+}
+
+.ga-pcard__frame--contain .ga-pcard__img--hover {
+  background: var(--ga-white);
+}
+
+.ga-pcard__empty {
+  position: absolute;
+  inset: 22%;
+  color: #d9d7d2;
+}
+
+.ga-pcard__price {
+  position: absolute;
+  left: -2px;
+  bottom: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  height: 34px;
+  padding: 0 10px;
+  background: var(--ga-black);
+  color: var(--ga-bone);
+  font-family: var(--ga-font-display);
+  font-size: 19px;
+  line-height: 1;
+}
+
+.ga-pcard__sticker {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--ga-accent);
+  color: var(--ga-white);
+  font-family: var(--ga-font-display);
+  font-size: 17px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ga-pcard__sticker span {
+  display: block;
+  transform: rotate(-10deg);
+}
+
+.ga-pcard__flag {
+  position: absolute;
+  top: 10px;
+  left: -6px;
+  background: var(--ga-black);
+  color: var(--ga-bone);
+  font-size: 15px;
+}
+
+.ga-pcard__name {
+  display: block;
+  margin-block-start: 10px;
+  font-family: var(--ga-font-display);
+  font-size: 16px;
+  line-height: 1.12;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+@media (hover: hover) {
+  .ga-pcard:hover .ga-pcard__img--hover {
+    opacity: 1;
+  }
+
+  .ga-pcard:hover .ga-pcard__img:only-of-type {
+    transform: scale(1.03);
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .ga-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(var(--ga-u) * 52) calc(var(--ga-u) * 20);
+  }
+
+  .ga-pcard__price {
+    min-width: calc(var(--ga-u) * 68);
+    height: max(34px, calc(var(--ga-u) * 44));
+    padding: 0 calc(var(--ga-u) * 13);
+    font-size: max(19px, calc(var(--ga-u) * 26));
+  }
+
+  .ga-pcard__sticker {
+    top: calc(var(--ga-u) * -14);
+    right: calc(var(--ga-u) * -10);
+    width: max(54px, calc(var(--ga-u) * 78));
+    height: max(54px, calc(var(--ga-u) * 78));
+    font-size: max(17px, calc(var(--ga-u) * 25));
+  }
+
+  .ga-pcard__name {
+    margin-block-start: calc(var(--ga-u) * 14);
+    padding-inline-start: calc(var(--ga-u) * 4);
+    font-size: max(16px, calc(var(--ga-u) * 21));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .ga-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Chips, small controls --------------------------------------------------- */
+
+.ga-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 2px solid var(--ga-black);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ga-black);
+  font-family: var(--ga-font-display);
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, color 0.15s ease-out;
+}
+
+.ga-chip:hover {
+  background: var(--ga-bone);
+}
+
+.ga-chip[aria-pressed='true'],
+.ga-chip[aria-selected='true'],
+.ga-chip--on {
+  background: var(--ga-black);
+  color: var(--ga-bone);
+}
+
+.ga--black .ga-chip,
+.ga--charcoal .ga-chip {
+  border-color: var(--ga-bone);
+  color: var(--ga-bone);
+}
+
+.ga--black .ga-chip:hover,
+.ga--charcoal .ga-chip:hover {
+  background: var(--ga-graphite);
+}
+
+.ga--black .ga-chip[aria-pressed='true'],
+.ga--charcoal .ga-chip[aria-pressed='true'] {
+  background: var(--ga-bone);
+  color: var(--ga-black);
+}
+
+@media screen and (min-width: 750px) {
+  .ga-chip {
+    min-height: max(40px, calc(var(--ga-u) * 46));
+    padding: 0 max(14px, calc(var(--ga-u) * 20));
+    font-size: max(16px, calc(var(--ga-u) * 19));
+  }
+}
+
+/* Readable text blocks (page content, policies, descriptions) ------------- */
+
+.ga-prose {
+  max-width: 68ch;
+  font-family: var(--font-body--family);
+  font-size: max(16px, calc(var(--ga-u) * 18));
+  line-height: 1.6;
+}
+
+.ga-prose > * + * {
+  margin-block-start: 1em;
+}
+
+.ga-prose h1,
+.ga-prose h2,
+.ga-prose h3,
+.ga-prose h4,
+.ga-prose h5,
+.ga-prose h6 {
+  margin-block: 1.6em 0.5em;
+  font-family: var(--ga-font-display);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.ga-prose h1,
+.ga-prose h2 {
+  font-size: max(30px, calc(var(--ga-u) * 44));
+}
+
+.ga-prose h3,
+.ga-prose h4,
+.ga-prose h5,
+.ga-prose h6 {
+  font-size: max(22px, calc(var(--ga-u) * 28));
+}
+
+.ga-prose > :first-child {
+  margin-block-start: 0;
+}
+
+.ga-prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.ga-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.ga-prose ul,
+.ga-prose ol {
+  padding-inline-start: 1.3em;
+}
+
+.ga-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+
+.ga-prose th,
+.ga-prose td {
+  padding: 0.6em 0.8em;
+  border-block-end: 1px solid #d9d7d2;
+  text-align: start;
+}
+
+/* Form fields ------------------------------------------------------------- */
+
+.ga-field {
+  display: block;
+}
+
+.ga-field__label {
+  display: block;
+  margin-block-end: 8px;
+  font-family: var(--ga-font-display);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ga-field__input {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 14px;
+  border: 2px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-body--family);
+  font-size: 16px;
+  line-height: 1.4;
+  appearance: none;
+}
+
+.ga-field__input::placeholder {
+  color: var(--ga-grey);
+  opacity: 1;
+}
+
+.ga-field__input:focus-visible {
+  outline: 2px solid var(--ga-accent);
+  outline-offset: 2px;
+}
+
+textarea.ga-field__input {
+  min-height: 160px;
+  resize: vertical;
+}
+
+/* Pagination -------------------------------------------------------------- */
+
+.ga-pages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ga-pages .ga-chip {
+  min-width: 44px;
+  justify-content: center;
+}
+
+/* Shopify policy pages (rendered by Shopify, outside any section) --------- */
+
+.shopify-policy__container {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 48px 16px 80px;
+}
+
+.shopify-policy__title h1 {
+  margin: 0 0 32px;
+  font-family: var(--ga-font-display);
+  font-size: clamp(44px, 8vw, 96px);
+  font-weight: 400;
+  line-height: 0.95;
+  text-align: start;
+  text-transform: uppercase;
+}
+
+.shopify-policy__body {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.shopify-policy__body h1,
+.shopify-policy__body h2,
+.shopify-policy__body h3,
+.shopify-policy__body h4 {
+  margin-block: 1.6em 0.5em;
+  font-family: var(--ga-font-display);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.shopify-policy__body a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ga-pcard__img,
+  .ga-chip {
+    transition: none;
+  }
+}
+
+/* Product page: the native Horizon product section, tuned to the design ---- */
+
+.product-information .product-media-container {
+  border: 2px solid var(--ga-black);
+  background: var(--ga-white);
+}
+
+.product-information .slideshow-controls__thumbnail,
+.product-information slideshow-controls [aria-selected] {
+  border-radius: 0;
+}
+
+.product-details product-price .price {
+  font-family: var(--ga-font-display);
+  font-size: clamp(30px, calc(var(--ga-u) * 44), 44px);
+  line-height: 1;
+}
+
+.product-details .variant-option--buttons legend {
+  margin-block-end: 10px;
+  font-family: var(--ga-font-display);
+  font-size: 17px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.product-details .variant-option__button-label {
+  min-height: 56px;
+  font-family: var(--ga-font-display);
+  font-size: 22px;
+  letter-spacing: 0.02em;
+}
+
+/* Sizes read S to XL whatever order they were entered in the admin. */
+.product-details .variant-option__button-label:has(input[value='XXS' i]) { order: 1; }
+.product-details .variant-option__button-label:has(input[value='XS' i]) { order: 2; }
+.product-details .variant-option__button-label:has(input[value='S' i]) { order: 3; }
+.product-details .variant-option__button-label:has(input[value='M' i]) { order: 4; }
+.product-details .variant-option__button-label:has(input[value='L' i]) { order: 5; }
+.product-details .variant-option__button-label:has(input[value='XL' i]) { order: 6; }
+.product-details .variant-option__button-label:has(input[value='XXL' i]) { order: 7; }
+.product-details .variant-option__button-label:has(input[value='2XL' i]) { order: 7; }
+
+.product-details .add-to-cart-button {
+  min-height: 56px;
+  font-size: 19px;
+  letter-spacing: 0.04em;
+}
+
+.product-details .quantity-selector {
+  min-height: 56px;
+}
+
+.sticky-add-to-cart__bar,
+.sticky-add-to-cart__image {
+  border-radius: 0;
+}
+
+.sticky-add-to-cart__title {
+  font-family: var(--ga-font-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@media screen and (min-width: 750px) {
+  .product-details .variant-option__button-label {
+    min-height: max(52px, calc(var(--ga-u) * 62));
+    font-size: max(20px, calc(var(--ga-u) * 26));
+  }
+}
+
+/* "Coming soon" card in a collection grid ------------------------------------ */
+
+.ga-pcard--soon .ga-pcard__frame {
+  background: var(--ga-bone);
+}
+
+.ga-pcard--soon .ga-pcard__empty {
+  color: #c9c6bf;
+}
+
+.ga-pcard__sub {
+  display: block;
+  margin-block-start: 6px;
+  color: #55555a;
+  font-size: 14px;
+  line-height: 1.35;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Gift card page (the card a customer receives by email) ---------------------- */
+
+body.gift-card {
+  background: var(--ga-black);
+  color: var(--ga-bone);
+  --color-foreground: var(--ga-bone);
+  --color-background: var(--ga-black);
+}
+
+.gift-card__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-block: 36px 8px;
+  color: var(--ga-bone);
+  text-align: center;
+}
+
+.gift-card__brand .ga-ballhead {
+  width: 84px;
+  color: var(--ga-black);
+  --ga-ballhead-disc: var(--ga-bone);
+  --ga-ballhead-ring: var(--ga-bone);
+}
+
+.gift-card__brand-name {
+  font-size: 40px;
+}
+
+.gift-card__brand-note {
+  font-size: 30px;
+  --ga-hand-tilt: -4deg;
+  transform-origin: center;
+}
+
+body.gift-card .gift-card__main {
+  color: var(--ga-bone);
+}
+
+body.gift-card .gift-card__price h2 {
+  font-family: var(--ga-font-display);
+  font-size: clamp(64px, 16vw, 112px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+body.gift-card .gift-card__code {
+  display: inline-block;
+  padding: 12px 18px;
+  border: 2px solid var(--ga-bone);
+  font-family: var(--ga-font-display);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+body.gift-card .gift-card__qr-code {
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+  padding: 8px;
+  background: var(--ga-white);
+}
+
+body.gift-card .gift-card__price {
+  margin-block-start: 18px;
+}
+
+body.gift-card .button {
+  border: 2px solid var(--ga-bone);
+  border-radius: 0;
+  background: var(--ga-bone);
+  color: var(--ga-black);
+  font-family: var(--ga-font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+body.gift-card .button.button-secondary {
+  background: transparent;
+  color: var(--ga-bone);
+}
+
+/* Blog --------------------------------------------------------------------------- */
+
+.blog-posts .blog-post-card__content h2,
+.blog-posts .blog-post-card__content h3,
+.blog-post-title {
+  font-family: var(--ga-font-display);
+  text-transform: uppercase;
+}
+
+.ga-blog-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-block: 48px 72px;
+}
+
+.ga-blog-empty__note {
+  font-size: 32px;
+}
+
+.ga-blog-empty__title {
+  font-size: clamp(44px, 9vw, 110px);
+}

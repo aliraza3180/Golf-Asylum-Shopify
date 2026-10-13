@@ -1,0 +1,57 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+{%- if blog.articles_count == 0 -%}
+  <div class="ga ga--white">
+    <div class="ga-wrap ga-blog-empty">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-blog-empty__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+      <p class="ga-display ga-blog-empty__title">{{ s.heading | escape }}</p>
+      {%- if s.button_label != blank -%}
+        <a class="ga-btn ga-btn--dark" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GA Empty blog",
+  "tag": "section",
+  "class": "ga-section",
+  "enabled_on": {
+    "templates": ["blog"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shown only while the blog has no posts."
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "nothing posted yet"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stories coming soon."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop everything"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ]
+}
+{% endschema %}

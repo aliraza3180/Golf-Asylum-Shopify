@@ -22,27 +22,14 @@
           assign product = bs.product
           assign title = bs.title | default: product.title
           assign url = product.url | default: bs.link | default: routes.all_products_collection_url
-          assign fallback = blank
-          if bs.bundled_image != 'none'
-            assign fallback = bs.bundled_image
-          endif
+          assign card_image = bs.image | default: product.featured_image
         -%}
         <li class="ga-card" {{ block.shopify_attributes }}>
           <a class="ga-card__link" href="{{ url }}">
             <span class="ga-card__frame">
               <span class="ga-card__media">
-                {%- if bs.image != blank -%}
-                  {%- render 'ga-image', image: bs.image, fallback: fallback, alt: title, sizes: '(min-width: 750px) 31vw, 66vw', width: 1000 -%}
-                {%- elsif fallback != blank -%}
-                  {%- render 'ga-image', fallback: fallback, alt: title, sizes: '(min-width: 750px) 31vw, 66vw', width: 1000 -%}
-                {%- elsif product.featured_image != blank -%}
-                  {%- render 'ga-image',
-                    image: product.featured_image,
-                    fallback: fallback,
-                    alt: title,
-                    sizes: '(min-width: 750px) 31vw, 66vw',
-                    width: 1000
-                  -%}
+                {%- if card_image != blank -%}
+                  {%- render 'ga-image', image: card_image, alt: title, sizes: '(min-width: 750px) 31vw, 66vw', width: 1000 -%}
                 {%- endif -%}
               </span>
 
@@ -366,32 +353,7 @@
           "type": "image_picker",
           "id": "image",
           "label": "Card image",
-          "info": "Product alone on white or transparent works best. Overrides the bundled image."
-        },
-        {
-          "type": "select",
-          "id": "bundled_image",
-          "label": "Bundled image",
-          "info": "Shown until you pick a card image. Choose None to use the product's own first photo.",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "ga-polo-navy.png",
-              "label": "Ballhead polo, navy"
-            },
-            {
-              "value": "ga-polo-white.png",
-              "label": "Ballhead polo, white"
-            },
-            {
-              "value": "ga-polo-electric.png",
-              "label": "Ballhead polo, electric blue and white"
-            }
-          ],
-          "default": "none"
+          "info": "Product alone on white or transparent works best. Leave empty to use the product's own first photo."
         },
         {
           "type": "text",

@@ -1,0 +1,323 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="ga ga--black ga-search-hero">
+  <div class="ga-wrap ga-search-hero__inner">
+    {%- if s.note != blank -%}
+      <p class="ga-hand ga-hand--underline ga-search-hero__note">{{ s.note | escape }}</p>
+    {%- endif -%}
+    <h1 class="ga-display ga-search-hero__title">
+      {%- if search.performed and search.terms != blank -%}
+        {{ s.results_heading | escape }}
+      {%- else -%}
+        {{ s.heading | escape }}
+      {%- endif -%}
+    </h1>
+
+    <form class="ga-search-hero__form" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="GaSearch-{{ section.id }}">{{ s.placeholder | escape }}</label>
+      <input
+        class="ga-field__input ga-search-hero__input"
+        id="GaSearch-{{ section.id }}"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ s.placeholder | escape }}"
+        autocomplete="off"
+      >
+      <input type="hidden" name="type" value="product,page">
+      <button type="submit" class="ga-btn ga-btn--light ga-search-hero__submit">{{ s.button_label | escape }}</button>
+    </form>
+  </div>
+</div>
+
+{%- if search.performed -%}
+  <div class="ga ga--white ga-search">
+    <div class="ga-wrap">
+      {%- paginate search.results by 24 -%}
+        {%- if search.results_count == 0 -%}
+          <div class="ga-search__empty">
+            <p class="ga-hand ga-search__empty-note">{{ s.empty_note | escape }}</p>
+            <p class="ga-display ga-search__empty-title">{{ s.empty_heading | escape }}</p>
+            <a class="ga-btn ga-btn--dark" href="{{ routes.all_products_collection_url }}">{{ s.empty_button | escape }}</a>
+          </div>
+        {%- else -%}
+          <p class="ga-search__count" role="status">
+            {{ search.results_count }}
+            {{ s.count_label | escape }}
+            &ldquo;{{ search.terms | escape }}&rdquo;
+          </p>
+
+          <ul class="ga-grid" role="list">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                <li>{%- render 'ga-product-card', product: item -%}</li>
+              {%- else -%}
+                <li>
+                  <a class="ga-search__page" href="{{ item.url }}">
+                    <span class="ga-label ga-search__page-kind">{{ s.page_label | escape }}</span>
+                    <span class="ga-display ga-search__page-title">{{ item.title | escape }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if paginate.pages > 1 -%}
+          <nav aria-label="{{ s.pages_label | escape }}">
+            <ul class="ga-pages" role="list">
+              {%- if paginate.previous -%}
+                <li><a class="ga-chip" href="{{ paginate.previous.url }}" aria-label="{{ s.previous_label | escape }}">&larr;</a></li>
+              {%- endif -%}
+              {%- for part in paginate.parts -%}
+                <li>
+                  {%- if part.is_link -%}
+                    <a class="ga-chip" href="{{ part.url }}">{{ part.title }}</a>
+                  {%- elsif part.title == paginate.current_page -%}
+                    <span class="ga-chip ga-chip--on" aria-current="page">{{ part.title }}</span>
+                  {%- else -%}
+                    <span class="ga-chip" aria-hidden="true">{{ part.title }}</span>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+              {%- if paginate.next -%}
+                <li><a class="ga-chip" href="{{ paginate.next.url }}" aria-label="{{ s.next_label | escape }}">&rarr;</a></li>
+              {%- endif -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ga-search-hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 36px 44px;
+  }
+
+  .ga-search-hero__note {
+    font-size: 8.4vw;
+    margin-block-end: 0.6em;
+    --ga-hand-tilt: -5deg;
+  }
+
+  .ga-search-hero__title {
+    font-size: 20vw;
+  }
+
+  .ga-search-hero__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-block-start: 26px;
+  }
+
+  .ga-search-hero__input {
+    border-color: var(--ga-bone);
+    background: var(--ga-white);
+    color: var(--ga-black);
+  }
+
+  .ga-search {
+    padding-block: 32px 64px;
+  }
+
+  .ga-search__count {
+    margin: 0 0 24px;
+    color: #6e6e73;
+    font-size: 15px;
+  }
+
+  .ga-search__page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 14px;
+    aspect-ratio: 4 / 5;
+    padding: 16px;
+    border: 2px solid var(--ga-black);
+    background: var(--ga-bone);
+    color: var(--ga-black);
+    text-decoration: none;
+  }
+
+  .ga-search__page-kind {
+    background: var(--ga-black);
+    color: var(--ga-bone);
+    font-size: 15px;
+  }
+
+  .ga-search__page-title {
+    font-size: 30px;
+  }
+
+  .ga-search__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-block: 28px;
+  }
+
+  .ga-search__empty-note {
+    font-size: 32px;
+  }
+
+  .ga-search__empty-title {
+    font-size: 14vw;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-search-hero__inner {
+      padding-block: calc(var(--ga-u) * 64) calc(var(--ga-u) * 72);
+      padding-inline-start: calc(var(--ga-u) * 16);
+    }
+
+    .ga-search-hero__note {
+      font-size: calc(var(--ga-u) * 46);
+    }
+
+    .ga-search-hero__title {
+      font-size: calc(var(--ga-u) * 150);
+    }
+
+    .ga-search-hero__form {
+      flex-direction: row;
+      max-width: calc(var(--ga-u) * 760);
+      margin-block-start: calc(var(--ga-u) * 36);
+    }
+
+    .ga-search-hero__input {
+      flex: 1 1 auto;
+      min-height: max(52px, calc(var(--ga-u) * 60));
+    }
+
+    .ga-search-hero__submit {
+      flex: none;
+      min-height: max(52px, calc(var(--ga-u) * 60));
+    }
+
+    .ga-search {
+      padding-block: calc(var(--ga-u) * 48) calc(var(--ga-u) * 110);
+    }
+
+    .ga-search__count {
+      margin-block-end: calc(var(--ga-u) * 36);
+    }
+
+    .ga-search__page-title {
+      font-size: max(26px, calc(var(--ga-u) * 40));
+    }
+
+    .ga-search__empty-title {
+      font-size: calc(var(--ga-u) * 110);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Search",
+  "tag": "section",
+  "class": "ga-section",
+  "enabled_on": {
+    "templates": ["search"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "looking for something?"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading before a search",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "results_heading",
+      "label": "Heading on results",
+      "default": "Results"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Search field hint",
+      "default": "Search polos, hoodies, caps"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "count_label",
+      "label": "Words between the count and the search term",
+      "default": "results for"
+    },
+    {
+      "type": "text",
+      "id": "page_label",
+      "label": "Label on page results",
+      "default": "Page"
+    },
+    {
+      "type": "header",
+      "content": "No results"
+    },
+    {
+      "type": "text",
+      "id": "empty_note",
+      "label": "Handwritten note",
+      "default": "nothing in the bag"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Heading",
+      "default": "No results."
+    },
+    {
+      "type": "text",
+      "id": "empty_button",
+      "label": "Button label",
+      "default": "Shop everything"
+    },
+    {
+      "type": "header",
+      "content": "Screen reader labels"
+    },
+    {
+      "type": "text",
+      "id": "pages_label",
+      "label": "Page links",
+      "default": "Pages"
+    },
+    {
+      "type": "text",
+      "id": "previous_label",
+      "label": "Previous page",
+      "default": "Previous page"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next page",
+      "default": "Next page"
+    }
+  ]
+}
+{% endschema %}

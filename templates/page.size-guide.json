@@ -1,0 +1,156 @@
+{
+  "sections": {
+    "hero": {
+      "type": "ga-page-hero",
+      "settings": {
+        "note": "no guessing",
+        "heading": "Size guide",
+        "show_dot": false,
+        "text": "Every size, shown on real juniors.",
+        "show_ballhead": true
+      }
+    },
+    "guide": {
+      "type": "ga-size-guide",
+      "settings": {},
+      "blocks": {
+        "youth_polo": {
+          "type": "chart",
+          "settings": {
+            "audience": "youth",
+            "kind": "polo",
+            "heading": "Youth polos",
+            "short_label": "Polos",
+            "columns": "Size | Age | Chest | Length | Sleeve",
+            "rows": "S | 6–7 | 14 | 19 1/4 | 6 3/4\nM | 8 | 15 1/2 | 21 3/4 | 7 1/4\nL | 10 | 17 | 23 1/2 | 7 1/4\nXL | 12 | 19 1/2 | 24 1/2 | 8",
+            "note": "Chest is measured across the garment laid flat.",
+            "photo_1": "shopify://shop_images/Seb_Polo.jpg",
+            "caption_1": "Small. 45 in tall.",
+            "photo_2": "shopify://shop_images/Loch_Polo.jpg",
+            "caption_2": "Medium. 56 in tall.",
+            "photo_3": "shopify://shop_images/Mav_polo.jpg",
+            "caption_3": "Large. 59 in tall.",
+            "button_label": "Shop youth polos",
+            "button_link": "shopify://collections/youth"
+          }
+        },
+        "youth_hoodie": {
+          "type": "chart",
+          "settings": {
+            "audience": "youth",
+            "kind": "hoodie",
+            "heading": "Youth hoodies",
+            "short_label": "Hoodies",
+            "columns": "Size | Chest | Base width | Back length | Sleeve",
+            "rows": "S | 16 | 15 1/2 | 17 3/4 | 22 3/4\nM | 17 | 15 3/4 | 19 1/2 | 24\nL | 18 | 16 1/2 | 21 3/4 | 24 1/4\nXL | 19 | 17 1/2 | 22 3/4 | 25 1/2",
+            "note": "Chest and base width are measured across the garment laid flat.",
+            "photo_1": "shopify://shop_images/max_white_hoodie.jpg",
+            "caption_1": "Small. 42 in tall.",
+            "photo_2": "shopify://shop_images/Jax_white_hoodie.jpg",
+            "caption_2": "Medium. 54 in tall.",
+            "photo_3": "shopify://shop_images/MAv_white_hoodie.jpg",
+            "caption_3": "Large. 59 in tall.",
+            "button_label": "Shop youth hoodies",
+            "button_link": "shopify://collections/5150-code-jr-hoodies"
+          }
+        },
+        "youth_shorts": {
+          "type": "chart",
+          "settings": {
+            "audience": "youth",
+            "kind": "shorts",
+            "heading": "Youth shorts",
+            "short_label": "Shorts",
+            "columns": "Size | Waist | Hip | Length | Inseam",
+            "rows": "S | 24 | 28 1/2 | 14 | 6 1/4\nM | 25 1/4 | 31 | 15 1/2 | 7\nL | 26 1/2 | 32 1/2 | 17 | 7 5/8\nXL | 28 | 33 1/2 | 18 1/2 | 8 1/2",
+            "note": "Waist and hip are measured all the way round.",
+            "photo_1": "shopify://shop_images/Seb_short.jpg",
+            "caption_1": "Small. 45 in tall.",
+            "photo_2": "shopify://shop_images/loch_shorts.jpg",
+            "caption_2": "Medium. 59 in tall.",
+            "photo_3": "shopify://shop_images/Mav_shorts.jpg",
+            "caption_3": "Large. 59 in tall.",
+            "button_label": "Shop youth shorts",
+            "button_link": "shopify://collections/jr-fairway-felon-short-collection"
+          }
+        },
+        "adult_polo": {
+          "type": "chart",
+          "settings": {
+            "audience": "adult",
+            "kind": "polo",
+            "heading": "Adult polos",
+            "short_label": "Polos",
+            "columns": "Size | Chest | Length | Shoulder | Sleeve",
+            "rows": "S | 20 | 28 | 16 | 8 3/4\nM | 21 | 28 3/4 | 17 | 9 1/8\nL | 23 | 29 1/2 | 18 3/4 | 9 1/2\nXL | 25 | 30 | 19 1/2 | 9 7/8",
+            "note": "Chest and shoulder are measured across the garment laid flat.",
+            "button_label": "Shop adult polos",
+            "button_link": "shopify://collections/adult-ballhead-polo-collection"
+          }
+        },
+        "youth_jacket": {
+          "type": "chart",
+          "settings": {
+            "audience": "youth",
+            "kind": "jacket",
+            "heading": "Youth waterproof jacket",
+            "short_label": "Waterproof jacket",
+            "columns": "Size | Chest | Bottom opening | Front length | Shoulder",
+            "rows": "S | 33 | 33 | 19 1/4 | 13\nM | 36 | 36 | 22 1/2 | 14 1/2\nL | 39 | 39 | 23 1/2 | 16\nXL | 42 | 42 | 24 1/2 | 17 1/2",
+            "note": "Front length is measured from the high point of the shoulder."
+          }
+        },
+        "youth_pants": {
+          "type": "chart",
+          "settings": {
+            "audience": "youth",
+            "kind": "pants",
+            "heading": "Youth waterproof pants",
+            "short_label": "Waterproof pants",
+            "columns": "Size | Waist, relaxed | Waist, stretched | Length",
+            "rows": "S | 11 | 15 | 30\nM | 12 1/2 | 16 | 33\nL | 14 | 17.5 | 36\nXL | 15 | 18.5 | 39",
+            "note": "Waist is measured straight across the top of the waistband. Length runs from the top of the waistband to the hem."
+          }
+        },
+        "adult_jacket": {
+          "type": "chart",
+          "settings": {
+            "audience": "adult",
+            "kind": "jacket",
+            "heading": "Adult waterproof jacket",
+            "short_label": "Waterproof jacket",
+            "columns": "Size | Chest | Hem | Front length | Shoulder | Sleeve",
+            "rows": "S | 21.75 | 21.75 | 28 | 18 | 33.75\nM | 23.25 | 23.25 | 29 | 19 | 34.75\nL | 24.75 | 24.75 | 30 | 20 | 35.75\nXL | 26.25 | 26.25 | 31 | 21 | 36.75",
+            "note": "Chest and hem are measured across the garment laid flat. Sleeve runs from the centre back to the cuff."
+          }
+        },
+        "adult_pants": {
+          "type": "chart",
+          "settings": {
+            "audience": "adult",
+            "kind": "pants",
+            "heading": "Adult waterproof pants",
+            "short_label": "Waterproof pants",
+            "columns": "Size | Waist | Leg opening | Inseam",
+            "rows": "S | 16 | 9.25 | 32\nM | 16.5 | 9.5 | 32\nL | 17 | 9.75 | 32\nXL | 17.5 | 10 | 32",
+            "note": "Waist is measured straight across the top of the waistband."
+          }
+        }
+      },
+      "block_order": [
+        "youth_polo",
+        "youth_hoodie",
+        "youth_shorts",
+        "youth_jacket",
+        "youth_pants",
+        "adult_polo",
+        "adult_jacket",
+        "adult_pants"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "guide"
+  ]
+}

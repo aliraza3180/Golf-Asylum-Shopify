@@ -1,0 +1,322 @@
+{%- doc -%}
+  Fit line and "Size guide" link for product pages. The link opens a panel
+  holding the one chart that matches the product (for example youth polos),
+  loaded from the Size guide page so there is a single place to edit charts.
+  Hidden on products without a Size option, such as caps.
+{%- enddoc -%}
+
+{%- liquid
+  assign bs = block.settings
+  assign product = closest.product
+
+  capture chart_key
+    render 'ga-product-kind', product: product
+  endcapture
+
+  assign has_size = false
+  for option in product.options
+    assign option_name = option | downcase
+    if option_name contains 'size'
+      assign has_size = true
+    endif
+  endfor
+
+  assign hint = blank
+  case chart_key
+    when 'youth-polo'
+      assign hint = bs.hint_youth_polo
+    when 'youth-hoodie'
+      assign hint = bs.hint_youth_hoodie
+    when 'youth-shorts'
+      assign hint = bs.hint_youth_shorts
+  endcase
+
+  assign guide_url = bs.page.url
+-%}
+
+{%- if has_size -%}
+  <ga-size-panel
+    class="ga-fit"
+    data-url="{{ guide_url }}?view=size-guide"
+    data-chart="{{ chart_key }}"
+    data-missing="{{ bs.missing_label | escape }}"
+    {{ block.shopify_attributes }}
+  >
+    <div class="ga-fit__row">
+      <p class="ga-fit__text">
+        {%- if bs.fit != blank -%}
+          <strong>{{ bs.fit | escape }}</strong>
+        {%- endif -%}
+        {%- if hint != blank %} {{ hint | escape }}{% endif -%}
+      </p>
+      {%- if bs.link_label != blank and guide_url != blank -%}
+        <a class="ga-link ga-fit__link" href="{{ guide_url }}#chart-{{ chart_key }}" data-open>{{ bs.link_label | escape }}</a>
+      {%- endif -%}
+    </div>
+
+    <dialog class="ga-dialog" aria-label="{{ bs.link_label | escape }}">
+      <div class="ga-dialog__bar">
+        <p class="ga-display ga-dialog__title">{{ bs.link_label | escape }}</p>
+        <button type="button" class="ga-dialog__close" data-close aria-label="{{ bs.close_label | escape }}">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M5 5l14 14M19 5L5 19" />
+          </svg>
+        </button>
+      </div>
+      <div class="ga-dialog__body" data-body>
+        <p class="ga-dialog__status">{{ bs.loading_label | escape }}</p>
+      </div>
+      <div class="ga-dialog__foot">
+        <a class="ga-link" href="{{ guide_url }}">{{ bs.full_label | escape }}</a>
+      </div>
+    </dialog>
+  </ga-size-panel>
+  <script src="{{ 'ga-size-chart.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .ga-fit {
+    display: block;
+    width: 100%;
+  }
+
+  .ga-fit__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .ga-fit__text {
+    margin: 0;
+    color: #55555a;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ga-fit__text strong {
+    color: var(--ga-black);
+    font-weight: 600;
+  }
+
+  .ga-fit__link {
+    flex: none;
+    font-size: 16px;
+  }
+
+  .ga-dialog {
+    width: min(100vw - 24px, 760px);
+    max-height: min(100dvh - 24px, 820px);
+    padding: 0;
+    border: 2px solid var(--ga-black);
+    border-radius: 0;
+    background: var(--ga-white);
+    color: var(--ga-black);
+    overflow: auto;
+  }
+
+  .ga-dialog::backdrop {
+    background: rgb(10 10 10 / 0.72);
+  }
+
+  .ga-dialog__bar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 12px 20px;
+    background: var(--ga-black);
+    color: var(--ga-bone);
+  }
+
+  .ga-dialog__title {
+    font-size: 30px;
+  }
+
+  .ga-dialog__close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .ga-dialog__close:focus-visible {
+    outline: 2px solid var(--ga-bone);
+    outline-offset: -4px;
+  }
+
+  .ga-dialog__body {
+    padding: 22px 20px 8px;
+  }
+
+  .ga-dialog__body .ga-chart {
+    margin-block-start: 0;
+    padding-block-start: 0;
+    border-block-start: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .ga-dialog__body .ga-chart__title {
+    font-size: 38px;
+  }
+
+  .ga-dialog__body .ga-chart__btn {
+    display: none;
+  }
+
+  .ga-dialog__status {
+    margin: 0;
+    padding-block: 24px;
+    color: #6e6e73;
+  }
+
+  .ga-dialog__foot {
+    padding: 18px 20px 24px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-dialog__body {
+      padding: 30px 32px 10px;
+    }
+
+    .ga-dialog__foot {
+      padding: 20px 32px 30px;
+    }
+
+    .ga-dialog__bar {
+      padding-inline: 32px 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /* Opens the size guide panel and fills it with the matching chart from the Size guide page. */
+  class GaSizePanel extends HTMLElement {
+    connectedCallback() {
+      this.dialog = this.querySelector('dialog');
+      this.body = this.querySelector('[data-body]');
+      const opener = this.querySelector('[data-open]');
+      if (!this.dialog || !opener || typeof this.dialog.showModal !== 'function') return;
+
+      opener.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.dialog.showModal();
+        this.load();
+      });
+      this.querySelector('[data-close]').addEventListener('click', () => this.dialog.close());
+      this.dialog.addEventListener('click', (event) => {
+        if (event.target === this.dialog) this.dialog.close();
+      });
+    }
+
+    async load() {
+      if (this.loaded) return;
+      this.loaded = true;
+      try {
+        const response = await fetch(this.dataset.url, { credentials: 'same-origin' });
+        if (!response.ok) throw new Error(String(response.status));
+        const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const chart = page.querySelector(`[data-ga-chart="${this.dataset.chart}"]`);
+        if (!chart) throw new Error('No chart for ' + this.dataset.chart);
+        chart.hidden = false;
+        chart.removeAttribute('id');
+        this.body.replaceChildren(document.importNode(chart, true));
+      } catch (error) {
+        // No chart for this product yet: the link under the panel still leads to the full guide.
+        const status = document.createElement('p');
+        status.className = 'ga-dialog__status';
+        status.textContent = this.dataset.missing;
+        this.body.replaceChildren(status);
+      }
+    }
+  }
+
+  if (!customElements.get('ga-size-panel')) customElements.define('ga-size-panel', GaSizePanel);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "GA Size and fit",
+  "tag": null,
+  "settings": [
+    {
+      "type": "page",
+      "id": "page",
+      "label": "Size guide page"
+    },
+    {
+      "type": "text",
+      "id": "fit",
+      "label": "Fit line",
+      "default": "Athletic fit."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Size guide"
+    },
+    {
+      "type": "header",
+      "content": "Size hints",
+      "info": "Shown after the fit line on the matching products. Leave empty to show nothing."
+    },
+    {
+      "type": "text",
+      "id": "hint_youth_polo",
+      "label": "Youth polos",
+      "default": "By age: S 6–7, M 8, L 10, XL 12."
+    },
+    {
+      "type": "text",
+      "id": "hint_youth_hoodie",
+      "label": "Youth hoodies"
+    },
+    {
+      "type": "text",
+      "id": "hint_youth_shorts",
+      "label": "Youth shorts"
+    },
+    {
+      "type": "header",
+      "content": "Panel wording"
+    },
+    {
+      "type": "text",
+      "id": "loading_label",
+      "label": "While the chart loads",
+      "default": "Loading the chart…"
+    },
+    {
+      "type": "text",
+      "id": "missing_label",
+      "label": "When there is no chart for the product",
+      "default": "This chart is on its way. The full size guide has every chart we have so far."
+    },
+    {
+      "type": "text",
+      "id": "full_label",
+      "label": "Link to the full guide",
+      "default": "See the full size guide"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Close button, for screen readers",
+      "default": "Close"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Size and fit"
+    }
+  ]
+}
+{% endschema %}

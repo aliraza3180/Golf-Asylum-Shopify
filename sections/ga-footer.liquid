@@ -46,7 +46,7 @@
             <span class="ga-footer__wordmark">{{ shop.name }}</span>
           </a>
           {%- if s.tagline != blank -%}
-            <p class="ga-hand ga-footer__tagline">{{ s.tagline | escape }}</p>
+            <p class="ga-hand ga-footer__tagline">{{ s.tagline | escape | newline_to_br }}</p>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -189,9 +189,11 @@
   .ga-footer__tagline {
     margin-block-start: 10px;
     color: var(--ga-bone);
-    font-size: 34px;
+    font-size: 28px;
+    line-height: 1.02;
+    text-align: center;
     transform-origin: center;
-    --ga-hand-tilt: -6deg;
+    --ga-hand-tilt: -5deg;
   }
 
   .ga-footer__bottom {
@@ -332,8 +334,8 @@
     }
 
     .ga-footer__tagline {
-      margin-block-start: calc(var(--ga-u) * 8);
-      font-size: calc(var(--ga-u) * 46);
+      margin-block-start: calc(var(--ga-u) * 14);
+      font-size: max(24px, calc(var(--ga-u) * 36));
     }
 
     .ga-footer__bottom {
@@ -378,10 +380,11 @@
       "default": true
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "tagline",
       "label": "Handwritten line under the logo",
-      "default": "out of your mind"
+      "default": "the only way to play\nis out of your mind",
+      "info": "A line break starts a new line."
     },
     {
       "type": "header",

@@ -30,11 +30,11 @@
           "settings": {
             "heading": "Shop",
             "link_1_label": "Youth",
-            "link_1_url": "shopify://collections/all",
+            "link_1_url": "shopify://collections/youth",
             "link_2_label": "Adult",
-            "link_2_url": "shopify://collections/adult-ballhead-polo-collection",
+            "link_2_url": "shopify://collections/adult",
             "link_3_label": "Caps & Beanies",
-            "link_3_url": "shopify://collections/junior-golf-asylum-off-script-cap",
+            "link_3_url": "shopify://collections/caps-beanies",
             "link_4_label": "Gift card",
             "link_4_url": "shopify://products/golf-asylum-gift-card"
           }
@@ -73,7 +73,7 @@
       ],
       "settings": {
         "show_logo": true,
-        "tagline": "out of your mind",
+        "tagline": "the only way to play\nis out of your mind",
         "show_policies": false,
         "show_country": true,
         "country_label": "Country and currency",

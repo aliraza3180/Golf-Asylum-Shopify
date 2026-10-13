@@ -1,0 +1,203 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="ga ga--{{ s.tone }} ga-story{% if s.image != blank %} ga-story--photo{% endif %}">
+  <div class="ga-wrap ga-story__inner">
+    <div class="ga-story__lead">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-hand--underline ga-story__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <h2 class="ga-display ga-story__title">{{ s.heading | escape | newline_to_br }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- if s.image != blank -%}
+      <div class="ga-story__photo">
+        <div class="ga-torn ga-torn--3">
+          <div class="ga-torn__media">
+            {%- render 'ga-image', image: s.image, alt: s.image_alt, sizes: '(min-width: 750px) 20vw, 60vw', width: 900 -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="ga-story__body">
+      {%- if s.text != blank -%}
+        <div class="ga-prose ga-story__text">{{ s.text }}</div>
+      {%- endif -%}
+      {%- if s.button_label != blank -%}
+        {%- liquid
+          assign button_class = 'ga-btn--dark'
+          if s.tone == 'black' or s.tone == 'charcoal'
+            assign button_class = 'ga-btn--light'
+          endif
+        -%}
+        <a class="ga-btn {{ button_class }} ga-story__btn" href="{{ s.button_link | default: routes.root_url }}">{{ s.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-story {
+    padding-block: 52px 56px;
+  }
+
+  .ga-story__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .ga-story__lead {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ga-story__note {
+    font-size: 32px;
+    margin-block-end: 0.5em;
+    --ga-hand-tilt: -4deg;
+  }
+
+  .ga-story__title {
+    font-size: 13.5vw;
+  }
+
+  .ga-story__photo {
+    width: 62%;
+    margin-inline: auto;
+  }
+
+  .ga-story__photo .ga-torn {
+    aspect-ratio: 4 / 5;
+    --ga-tilt: -3deg;
+    --ga-paper: var(--ga-bone);
+  }
+
+  .ga--bone .ga-story__photo .ga-torn {
+    --ga-paper: var(--ga-white);
+  }
+
+  .ga-story__btn {
+    margin-block-start: 26px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-story {
+      padding-block: calc(var(--ga-u) * 110) calc(var(--ga-u) * 116);
+    }
+
+    .ga-story__inner {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      gap: calc(var(--ga-u) * 70);
+      align-items: center;
+      padding-inline: calc(var(--ga-u) * 16);
+    }
+
+    .ga-story--photo .ga-story__inner {
+      grid-template-columns: minmax(0, 5fr) calc(var(--ga-u) * 250) minmax(0, 5fr);
+      gap: calc(var(--ga-u) * 56);
+    }
+
+    .ga-story__note {
+      font-size: calc(var(--ga-u) * 44);
+    }
+
+    .ga-story__title {
+      font-size: calc(var(--ga-u) * 96);
+    }
+
+    .ga-story__photo {
+      width: 100%;
+    }
+
+    .ga-story__text {
+      font-size: max(16px, calc(var(--ga-u) * 20));
+    }
+
+    .ga-story__btn {
+      margin-block-start: calc(var(--ga-u) * 34);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Story",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background",
+      "options": [
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "bone",
+          "label": "Off-white"
+        },
+        {
+          "value": "charcoal",
+          "label": "Charcoal"
+        },
+        {
+          "value": "black",
+          "label": "Black"
+        }
+      ],
+      "default": "white"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Junior golfers\ndeserved better."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Tell the story here.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo",
+      "info": "Optional. Shown small, between the heading and the text."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Photo description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Story"
+    }
+  ]
+}
+{% endschema %}

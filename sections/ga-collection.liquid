@@ -1,0 +1,645 @@
+{%- liquid
+  assign s = section.settings
+  assign new_collection = s.new_collection
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+
+  # Cross-link under the grid: adults are pointed at youth and the other way round.
+  assign cross_note = s.cross_note
+  assign cross_label = s.cross_label
+  assign cross_link = s.cross_link
+  if s.cross_swap_collection != blank and collection.handle == s.cross_swap_collection.handle
+    assign cross_note = s.cross_alt_note
+    assign cross_label = s.cross_alt_label
+    assign cross_link = s.cross_alt_link
+  endif
+-%}
+
+<div class="ga ga--white ga-coll">
+  <div class="ga-wrap">
+    {%- paginate collection.products by 48 -%}
+      {%- liquid
+        # Which product kinds are on this page, to build the chips.
+        assign kinds_found = ''
+        for product in collection.products
+          capture kind_full
+            render 'ga-product-kind', product: product
+          endcapture
+          assign kind = kind_full | split: '-' | last
+          unless kinds_found contains kind
+            assign kinds_found = kinds_found | append: kind | append: ','
+          endunless
+        endfor
+        assign kind_order = 'polo,hoodie,shorts,jacket,pants,cap,beanie,gift,other' | split: ','
+        assign kind_count = kinds_found | split: ',' | size
+      -%}
+
+      <ga-collection class="ga-coll__root">
+        <div class="ga-coll__bar">
+          {%- if kind_count > 1 -%}
+            <div class="ga-coll__chips" role="group" aria-label="{{ s.chips_label | escape }}">
+              <button type="button" class="ga-chip" data-kind="all" aria-pressed="true">{{ s.all_label | escape }}</button>
+              {%- for kind in kind_order -%}
+                {%- if kinds_found contains kind -%}
+                  {%- liquid
+                    case kind
+                      when 'polo'
+                        assign chip = s.label_polo
+                      when 'hoodie'
+                        assign chip = s.label_hoodie
+                      when 'shorts'
+                        assign chip = s.label_shorts
+                      when 'jacket'
+                        assign chip = s.label_jacket
+                      when 'pants'
+                        assign chip = s.label_pants
+                      when 'cap'
+                        assign chip = s.label_cap
+                      when 'beanie'
+                        assign chip = s.label_beanie
+                      when 'gift'
+                        assign chip = s.label_gift
+                      else
+                        assign chip = s.label_other
+                    endcase
+                  -%}
+                  <button type="button" class="ga-chip" data-kind="{{ kind }}" aria-pressed="false">{{ chip | escape }}</button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div class="ga-coll__tools">
+            <p class="ga-coll__count" aria-live="polite">
+              <span data-count>{{ collection.products_count }}</span>
+              {{ s.count_label | escape }}
+            </p>
+
+            {%- if s.guide_label != blank -%}
+              <a class="ga-link ga-coll__guide" href="{{ s.guide_link | default: routes.root_url }}">{{ s.guide_label | escape }}</a>
+            {%- endif -%}
+
+            <label class="ga-coll__sort">
+              <span class="visually-hidden">{{ s.sort_label | escape }}</span>
+              <select class="ga-coll__select" data-sort aria-label="{{ s.sort_label | escape }}">
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>
+                    {{- option.name | escape -}}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </label>
+          </div>
+        </div>
+
+        {%- if collection.products.size > 0 -%}
+          <ul class="ga-grid ga-coll__grid" role="list">
+            {%- for product in collection.products -%}
+              {%- liquid
+                capture kind_full
+                  render 'ga-product-kind', product: product
+                endcapture
+                assign kind = kind_full | split: '-' | last
+                assign sticker = blank
+                if new_collection != blank and s.new_label != blank
+                  for c in product.collections
+                    if c.handle == new_collection.handle
+                      assign sticker = s.new_label
+                      break
+                    endif
+                  endfor
+                endif
+                assign eager = false
+                if forloop.index <= 4
+                  assign eager = true
+                endif
+              -%}
+              <li data-kind="{{ kind }}">
+                {%- render 'ga-product-card', product: product, sticker: sticker, eager: eager -%}
+              </li>
+            {%- endfor -%}
+
+            {%- comment -%} Products that are on their way, shown on one chosen collection. {%- endcomment -%}
+            {%- for block in section.blocks -%}
+              {%- assign bs = block.settings -%}
+              {%- if bs.collection == blank or bs.collection.handle != collection.handle or paginate.current_page > 1 -%}
+                {%- continue -%}
+              {%- endif -%}
+              <li data-kind="soon" {{ block.shopify_attributes }}>
+                <a class="ga-pcard ga-pcard--soon" href="{{ bs.link | default: '#ga-signup' }}">
+                  <span class="ga-pcard__frame">
+                    {%- if bs.image != blank -%}
+                      {{ bs.image | image_url: width: 900 | image_tag: class: 'ga-pcard__img', alt: '', loading: 'lazy', sizes: '(min-width: 990px) 23vw, (min-width: 750px) 31vw, 46vw', widths: '240, 360, 480, 640, 900' }}
+                    {%- else -%}
+                      <span class="ga-pcard__empty" aria-hidden="true">{%- render 'ga-ballhead' -%}</span>
+                    {%- endif -%}
+                    {%- if bs.label != blank -%}
+                      <span class="ga-label ga-pcard__flag">{{ bs.label | escape }}</span>
+                    {%- endif -%}
+                  </span>
+                  <span class="ga-pcard__name">{{ bs.title | escape }}</span>
+                  {%- if bs.text != blank -%}
+                    <span class="ga-pcard__sub">{{ bs.text | escape }}</span>
+                  {%- endif -%}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <div class="ga-coll__empty">
+            <p class="ga-hand ga-coll__empty-note">{{ s.empty_note | escape }}</p>
+            <p class="ga-display ga-coll__empty-title">{{ s.empty_heading | escape }}</p>
+            <a class="ga-btn ga-btn--dark" href="{{ routes.all_products_collection_url }}">{{ s.empty_button | escape }}</a>
+          </div>
+        {%- endif -%}
+      </ga-collection>
+
+      {%- if paginate.pages > 1 -%}
+        <nav aria-label="{{ s.pages_label | escape }}">
+          <ul class="ga-pages" role="list">
+            {%- if paginate.previous -%}
+              <li><a class="ga-chip" href="{{ paginate.previous.url }}" aria-label="{{ s.previous_label | escape }}">&larr;</a></li>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              <li>
+                {%- if part.is_link -%}
+                  <a class="ga-chip" href="{{ part.url }}">{{ part.title }}</a>
+                {%- elsif part.title == paginate.current_page -%}
+                  <span class="ga-chip ga-chip--on" aria-current="page">{{ part.title }}</span>
+                {%- else -%}
+                  <span class="ga-chip" aria-hidden="true">{{ part.title }}</span>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <li><a class="ga-chip" href="{{ paginate.next.url }}" aria-label="{{ s.next_label | escape }}">&rarr;</a></li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{%- if cross_label != blank -%}
+  <div class="ga ga--black ga-coll-cross">
+    <div class="ga-wrap ga-coll-cross__inner">
+      {%- if cross_note != blank -%}
+        <p class="ga-hand ga-coll-cross__note">{{ cross_note | escape }}</p>
+      {%- endif -%}
+      <a class="ga-btn ga-btn--outline-light" href="{{ cross_link | default: routes.collections_url }}">{{ cross_label | escape }}</a>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ga-coll {
+    padding-block: 28px 64px;
+  }
+
+  .ga-coll__root {
+    display: block;
+  }
+
+  .ga-coll__bar {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-block-end: 28px;
+  }
+
+  .ga-coll__chips {
+    display: flex;
+    gap: 8px;
+    margin-inline: calc(var(--ga-gutter) * -1);
+    padding-inline: var(--ga-gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ga-coll__chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ga-coll__tools {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ga-coll__count {
+    margin: 0 auto 0 0;
+    color: #6e6e73;
+    font-size: 14px;
+  }
+
+  .ga-coll__guide {
+    font-size: 15px;
+  }
+
+  .ga-coll__select {
+    min-height: 40px;
+    padding: 0 34px 0 12px;
+    border: 2px solid var(--ga-black);
+    border-radius: 0;
+    background: var(--ga-white)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%230a0a0a' stroke-width='2'/%3E%3C/svg%3E")
+      right 12px center / 12px 8px no-repeat;
+    color: var(--ga-black);
+    font-family: var(--ga-font-display);
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .ga-coll__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-block: 40px;
+  }
+
+  .ga-coll__empty-note {
+    font-size: 32px;
+  }
+
+  .ga-coll__empty-title {
+    font-size: 15vw;
+  }
+
+  .ga-coll-cross {
+    padding-block: 44px 48px;
+  }
+
+  .ga-coll-cross__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    text-align: center;
+  }
+
+  .ga-coll-cross__note {
+    font-size: 34px;
+    --ga-hand-tilt: -3deg;
+    transform-origin: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-coll {
+      padding-block: calc(var(--ga-u) * 40) calc(var(--ga-u) * 110);
+    }
+
+    .ga-coll__bar {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: calc(var(--ga-u) * 24);
+      margin-block-end: calc(var(--ga-u) * 44);
+    }
+
+    .ga-coll__chips {
+      flex-wrap: wrap;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .ga-coll__tools {
+      flex: none;
+      gap: calc(var(--ga-u) * 26);
+      margin-inline-start: auto;
+    }
+
+    .ga-coll__count {
+      margin: 0;
+      font-size: max(14px, calc(var(--ga-u) * 16));
+    }
+
+    .ga-coll__guide {
+      font-size: max(15px, calc(var(--ga-u) * 18));
+    }
+
+    .ga-coll__select {
+      min-height: max(40px, calc(var(--ga-u) * 46));
+      font-size: max(15px, calc(var(--ga-u) * 18));
+    }
+
+    .ga-coll__empty-title {
+      font-size: calc(var(--ga-u) * 110);
+    }
+
+    .ga-coll-cross {
+      padding-block: calc(var(--ga-u) * 64) calc(var(--ga-u) * 70);
+    }
+
+    .ga-coll-cross__note {
+      font-size: calc(var(--ga-u) * 50);
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class GaCollection extends HTMLElement {
+    connectedCallback() {
+      this.chips = Array.from(this.querySelectorAll('.ga-chip[data-kind]'));
+      this.items = Array.from(this.querySelectorAll('.ga-grid > li'));
+      this.count = this.querySelector('[data-count]');
+      this.total = this.count ? this.count.textContent : '';
+
+      for (const chip of this.chips) {
+        chip.addEventListener('click', () => this.filter(chip.dataset.kind));
+      }
+
+      const sort = this.querySelector('[data-sort]');
+      if (sort) {
+        sort.addEventListener('change', () => {
+          const url = new URL(window.location.href);
+          url.searchParams.set('sort_by', sort.value);
+          url.searchParams.delete('page');
+          window.location.assign(url.toString());
+        });
+      }
+    }
+
+    filter(kind) {
+      let shown = 0;
+      for (const item of this.items) {
+        const match = kind === 'all' || item.dataset.kind === kind;
+        item.hidden = !match;
+        if (match) shown += 1;
+      }
+      for (const chip of this.chips) {
+        chip.setAttribute('aria-pressed', String(chip.dataset.kind === kind));
+      }
+      if (this.count) {
+        this.count.textContent = kind === 'all' ? this.total : String(shown);
+      }
+    }
+  }
+
+  if (!customElements.get('ga-collection')) {
+    customElements.define('ga-collection', GaCollection);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "GA Collection grid",
+  "tag": "section",
+  "class": "ga-section",
+  "enabled_on": {
+    "templates": [
+      "collection"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Toolbar"
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "Label for the \"all products\" chip",
+      "default": "All"
+    },
+    {
+      "type": "text",
+      "id": "count_label",
+      "label": "Word after the product count",
+      "default": "products"
+    },
+    {
+      "type": "text",
+      "id": "guide_label",
+      "label": "Size guide link label",
+      "default": "Size guide"
+    },
+    {
+      "type": "url",
+      "id": "guide_link",
+      "label": "Size guide link"
+    },
+    {
+      "type": "header",
+      "content": "Chip names",
+      "info": "A chip appears only when the collection holds that kind of product."
+    },
+    {
+      "type": "text",
+      "id": "label_polo",
+      "label": "Polos",
+      "default": "Polos"
+    },
+    {
+      "type": "text",
+      "id": "label_hoodie",
+      "label": "Hoodies",
+      "default": "Hoodies"
+    },
+    {
+      "type": "text",
+      "id": "label_shorts",
+      "label": "Shorts",
+      "default": "Shorts"
+    },
+    {
+      "type": "text",
+      "id": "label_jacket",
+      "label": "Jackets",
+      "default": "Jackets"
+    },
+    {
+      "type": "text",
+      "id": "label_pants",
+      "label": "Pants",
+      "default": "Pants"
+    },
+    {
+      "type": "text",
+      "id": "label_cap",
+      "label": "Caps",
+      "default": "Caps"
+    },
+    {
+      "type": "text",
+      "id": "label_beanie",
+      "label": "Beanies",
+      "default": "Beanies"
+    },
+    {
+      "type": "text",
+      "id": "label_gift",
+      "label": "Gift cards",
+      "default": "Gift cards"
+    },
+    {
+      "type": "text",
+      "id": "label_other",
+      "label": "Everything else",
+      "default": "More"
+    },
+    {
+      "type": "header",
+      "content": "\"New\" sticker"
+    },
+    {
+      "type": "collection",
+      "id": "new_collection",
+      "label": "Show the sticker on products in this collection"
+    },
+    {
+      "type": "text",
+      "id": "new_label",
+      "label": "Sticker text",
+      "default": "New"
+    },
+    {
+      "type": "header",
+      "content": "Band under the grid"
+    },
+    {
+      "type": "text",
+      "id": "cross_note",
+      "label": "Handwritten note",
+      "default": "shopping for the caddy?"
+    },
+    {
+      "type": "text",
+      "id": "cross_label",
+      "label": "Button label",
+      "default": "Shop adult"
+    },
+    {
+      "type": "url",
+      "id": "cross_link",
+      "label": "Button link"
+    },
+    {
+      "type": "collection",
+      "id": "cross_swap_collection",
+      "label": "On this collection, show the alternative band instead"
+    },
+    {
+      "type": "text",
+      "id": "cross_alt_note",
+      "label": "Alternative handwritten note",
+      "default": "shopping for a junior?"
+    },
+    {
+      "type": "text",
+      "id": "cross_alt_label",
+      "label": "Alternative button label",
+      "default": "Shop youth"
+    },
+    {
+      "type": "url",
+      "id": "cross_alt_link",
+      "label": "Alternative button link"
+    },
+    {
+      "type": "header",
+      "content": "Empty collection"
+    },
+    {
+      "type": "text",
+      "id": "empty_note",
+      "label": "Handwritten note",
+      "default": "nothing here yet"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Heading",
+      "default": "Check back soon."
+    },
+    {
+      "type": "text",
+      "id": "empty_button",
+      "label": "Button label",
+      "default": "Shop everything"
+    },
+    {
+      "type": "header",
+      "content": "Screen reader labels"
+    },
+    {
+      "type": "text",
+      "id": "chips_label",
+      "label": "Chip group",
+      "default": "Filter by product type"
+    },
+    {
+      "type": "text",
+      "id": "sort_label",
+      "label": "Sort menu",
+      "default": "Sort by"
+    },
+    {
+      "type": "text",
+      "id": "pages_label",
+      "label": "Page links",
+      "default": "Pages"
+    },
+    {
+      "type": "text",
+      "id": "previous_label",
+      "label": "Previous page",
+      "default": "Previous page"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next page",
+      "default": "Next page"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "coming_soon",
+      "name": "Coming soon card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Show on this collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product name",
+          "default": "Adult Hoodie"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Coming soon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Line under the name",
+          "default": "Join the list to hear when it lands"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Optional. The Ballhead outline shows when empty."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Leave empty to jump to the email sign-up."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6
+}
+{% endschema %}

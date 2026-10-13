@@ -1,0 +1,207 @@
+{%- doc -%}
+  Product page heading in the Golf Asylum style: a handwritten note, a "Youth"
+  or "Adult" paper label, and the product title without the brand prefix.
+{%- enddoc -%}
+
+{%- liquid
+  assign bs = block.settings
+  assign product = closest.product
+
+  capture kind_full
+    render 'ga-product-kind', product: product
+  endcapture
+  assign audience = kind_full | split: '-' | first
+
+  assign label = blank
+  if audience == 'youth'
+    assign label = bs.youth_label
+  elsif audience == 'adult'
+    assign label = bs.adult_label
+  endif
+
+  # Long titles step down in size so they stay within three lines.
+  capture clean_title
+    render 'ga-title', title: product.title
+  endcapture
+  assign title_size = 'lg'
+  if clean_title.size > 40
+    assign title_size = 'sm'
+  elsif clean_title.size > 23
+    assign title_size = 'md'
+  endif
+
+  assign sticker = blank
+  if bs.new_collection != blank and bs.new_label != blank
+    for c in product.collections
+      if c.handle == bs.new_collection.handle
+        assign sticker = bs.new_label
+        break
+      endif
+    endfor
+  endif
+-%}
+
+<div class="ga-pdp-head" {{ block.shopify_attributes }}>
+  {%- if bs.note != blank or sticker != blank -%}
+    <div class="ga-pdp-head__top">
+      {%- if bs.note != blank -%}
+        <p class="ga-hand ga-hand--underline ga-pdp-head__note">{{ bs.note | escape }}</p>
+      {%- endif -%}
+      {%- if sticker != blank -%}
+        <span class="ga-pdp-head__sticker"><span>{{ sticker | escape }}</span></span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if label != blank -%}
+    <p class="ga-label ga-pdp-head__label">{{ label | escape }}</p>
+  {%- endif -%}
+
+  <h1 class="ga-display ga-pdp-head__title ga-pdp-head__title--{{ title_size }}">{{ clean_title }}</h1>
+</div>
+
+{% stylesheet %}
+  .ga-pdp-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    color: var(--ga-black);
+  }
+
+  .ga-pdp-head__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    margin-block-end: 18px;
+  }
+
+  .ga-pdp-head__note {
+    font-size: 34px;
+    --ga-hand-tilt: -4deg;
+    --ga-underline-start: 30%;
+  }
+
+  .ga-pdp-head__sticker {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--ga-accent);
+    color: var(--ga-white);
+    font-family: var(--ga-font-display);
+    font-size: 19px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .ga-pdp-head__sticker span {
+    display: block;
+    transform: rotate(-10deg);
+  }
+
+  .ga-pdp-head__label {
+    margin: 0 0 12px;
+    background: var(--ga-black);
+    color: var(--ga-bone);
+    font-size: 17px;
+    --ga-label-tilt: -2deg;
+  }
+
+  .ga-pdp-head__title {
+    font-size: clamp(44px, 12.5vw, 64px);
+    line-height: 0.95;
+  }
+
+  .ga-pdp-head__title--md {
+    font-size: clamp(36px, 10vw, 52px);
+  }
+
+  .ga-pdp-head__title--sm {
+    font-size: clamp(30px, 8vw, 40px);
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-pdp-head__top {
+      margin-block-end: calc(var(--ga-u) * 22);
+    }
+
+    .ga-pdp-head__note {
+      font-size: max(28px, calc(var(--ga-u) * 42));
+    }
+
+    .ga-pdp-head__sticker {
+      width: max(56px, calc(var(--ga-u) * 78));
+      height: max(56px, calc(var(--ga-u) * 78));
+      font-size: max(18px, calc(var(--ga-u) * 25));
+    }
+
+    .ga-pdp-head__label {
+      margin-block-end: calc(var(--ga-u) * 14);
+      font-size: max(15px, calc(var(--ga-u) * 20));
+    }
+
+    .ga-pdp-head__title {
+      font-size: max(40px, calc(var(--ga-u) * 78));
+    }
+
+    .ga-pdp-head__title--md {
+      font-size: max(34px, calc(var(--ga-u) * 60));
+    }
+
+    .ga-pdp-head__title--sm {
+      font-size: max(28px, calc(var(--ga-u) * 46));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Product heading",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "a little unhinged"
+    },
+    {
+      "type": "text",
+      "id": "youth_label",
+      "label": "Label on junior products",
+      "default": "Youth"
+    },
+    {
+      "type": "text",
+      "id": "adult_label",
+      "label": "Label on adult products",
+      "default": "Adult"
+    },
+    {
+      "type": "header",
+      "content": "\"New\" sticker"
+    },
+    {
+      "type": "collection",
+      "id": "new_collection",
+      "label": "Show the sticker on products in this collection"
+    },
+    {
+      "type": "text",
+      "id": "new_label",
+      "label": "Sticker text",
+      "default": "New"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Product heading"
+    }
+  ]
+}
+{% endschema %}

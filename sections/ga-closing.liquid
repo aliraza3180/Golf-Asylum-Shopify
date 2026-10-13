@@ -1,0 +1,233 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="ga ga--black ga-closing">
+  <div class="ga-wrap ga-closing__inner">
+    {%- if s.image_1 != blank -%}
+      <div class="ga-closing__photo ga-closing__photo--1">
+        <div class="ga-torn ga-torn--1">
+          <div class="ga-torn__media">
+            {%- render 'ga-image', image: s.image_1, alt: s.image_1_alt, sizes: '(min-width: 750px) 20vw, 44vw', width: 800 -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="ga-closing__copy">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-closing__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <h2 class="ga-display ga-closing__title">{{ s.heading | escape | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- if s.signoff != blank -%}
+        <p class="ga-hand ga-hand--underline ga-closing__signoff">{{ s.signoff | escape }}</p>
+      {%- endif -%}
+      {%- if s.button_label != blank or s.button_2_label != blank -%}
+        <div class="ga-btns ga-closing__btns">
+          {%- if s.button_label != blank -%}
+            <a class="ga-btn ga-btn--light" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+          {%- endif -%}
+          {%- if s.button_2_label != blank -%}
+            <a class="ga-btn ga-btn--outline-light" href="{{ s.button_2_link | default: routes.root_url }}">{{ s.button_2_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if s.image_2 != blank -%}
+      <div class="ga-closing__photo ga-closing__photo--2">
+        <div class="ga-torn ga-torn--4">
+          <div class="ga-torn__media">
+            {%- render 'ga-image', image: s.image_2, alt: s.image_2_alt, sizes: '(min-width: 750px) 20vw, 44vw', width: 800 -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-closing {
+    padding-block: 56px 60px;
+  }
+
+  .ga-closing__inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 14px;
+    align-items: center;
+  }
+
+  .ga-closing__copy {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ga-closing__note {
+    font-size: 30px;
+    margin-block-end: 0.5em;
+    transform-origin: center;
+    --ga-hand-tilt: -3deg;
+  }
+
+  .ga-closing__title {
+    font-size: 12.5vw;
+  }
+
+  .ga-closing__signoff {
+    margin-block-start: 0.9em;
+    font-size: 34px;
+    transform-origin: center;
+    --ga-hand-tilt: -4deg;
+  }
+
+  .ga-closing__btns {
+    justify-content: center;
+    margin-block-start: 34px;
+  }
+
+  .ga-closing__photo .ga-torn {
+    aspect-ratio: 4 / 5;
+    --ga-paper: var(--ga-bone);
+  }
+
+  .ga-closing__photo--1 .ga-torn {
+    --ga-tilt: -3deg;
+  }
+
+  .ga-closing__photo--2 .ga-torn {
+    --ga-tilt: 3deg;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-closing {
+      padding-block: calc(var(--ga-u) * 100) calc(var(--ga-u) * 110);
+    }
+
+    .ga-closing__inner {
+      grid-template-columns: calc(var(--ga-u) * 270) minmax(0, 1fr) calc(var(--ga-u) * 270);
+      gap: calc(var(--ga-u) * 40);
+    }
+
+    .ga-closing__copy {
+      grid-column: 2;
+    }
+
+    .ga-closing__photo--1 {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .ga-closing__photo--2 {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .ga-closing__note {
+      font-size: calc(var(--ga-u) * 42);
+    }
+
+    .ga-closing__title {
+      font-size: calc(var(--ga-u) * 92);
+    }
+
+    .ga-closing__signoff {
+      font-size: calc(var(--ga-u) * 46);
+    }
+
+    .ga-closing__btns {
+      margin-block-start: calc(var(--ga-u) * 44);
+    }
+
+    .ga-closing__btns .ga-btn {
+      min-width: calc(var(--ga-u) * 220);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Closing band",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "our motto"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The only way to play\nis out of your mind."
+    },
+    {
+      "type": "text",
+      "id": "signoff",
+      "label": "Handwritten sign-off",
+      "default": "the Golf Asylum family"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "First button label",
+      "default": "Shop youth"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "First button link"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Second button label",
+      "default": "Meet the Inmates"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Second button link"
+    },
+    {
+      "type": "header",
+      "content": "Photos"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Left photo"
+    },
+    {
+      "type": "text",
+      "id": "image_1_alt",
+      "label": "Left photo description",
+      "default": "Golf Asylum tee markers beside a lake at the Invitational"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Right photo"
+    },
+    {
+      "type": "text",
+      "id": "image_2_alt",
+      "label": "Right photo description",
+      "default": "Junior golfer finishing a tee shot at the Golf Asylum Invitational"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Closing band"
+    }
+  ]
+}
+{% endschema %}

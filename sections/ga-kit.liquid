@@ -1,0 +1,196 @@
+{%- liquid
+  assign s = section.settings
+
+  # On a product page, suggest other kinds of product for the same wearer:
+  # shorts, a cap and a hoodie next to a polo, never the polo's other colours.
+  assign source = s.collection
+  assign own_kind = blank
+  if request.page_type == 'product'
+    capture own_full
+      render 'ga-product-kind', product: product
+    endcapture
+    assign own_parts = own_full | split: '-'
+    assign own_kind = own_parts | last
+    if own_parts.first == 'adult' and s.adult_collection != blank
+      assign source = s.adult_collection
+    elsif own_parts.first == 'youth' and s.youth_collection != blank
+      assign source = s.youth_collection
+    endif
+  endif
+
+  assign limit = s.limit
+  assign shown = 0
+  assign kinds_shown = ''
+  assign picked = ''
+-%}
+
+{%- capture cards -%}
+  {%- comment -%} First pass: one product of each other kind. {%- endcomment -%}
+  {%- for p in source.products limit: 50 -%}
+    {%- if shown >= limit -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- if p.id == product.id or p.available == false -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- liquid
+      capture p_full
+        render 'ga-product-kind', product: p
+      endcapture
+      assign p_kind = p_full | split: '-' | last
+    -%}
+    {%- if p_kind == own_kind or kinds_shown contains p_kind -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- liquid
+      assign kinds_shown = kinds_shown | append: p_kind | append: ','
+      assign shown = shown | plus: 1
+      assign picked = picked | append: '|' | append: p.id | append: '|'
+    -%}
+    <li>{%- render 'ga-product-card', product: p -%}</li>
+  {%- endfor -%}
+
+  {%- comment -%} Second pass: fill the row with anything not shown yet. {%- endcomment -%}
+  {%- for p in source.products limit: 50 -%}
+    {%- if shown >= limit -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- assign p_key = '|' | append: p.id | append: '|' -%}
+    {%- if p.id == product.id or p.available == false or picked contains p_key -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- liquid
+      capture p_full
+        render 'ga-product-kind', product: p
+      endcapture
+      assign p_kind = p_full | split: '-' | last
+    -%}
+    {%- if p_kind == own_kind -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- assign shown = shown | plus: 1 -%}
+    <li>{%- render 'ga-product-card', product: p -%}</li>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if shown > 0 -%}
+  <div class="ga ga--white ga-kit">
+    <div class="ga-wrap">
+      <div class="ga-head ga-kit__head">
+        {%- if s.heading != blank -%}
+          <h2 class="ga-display ga-kit__title">{{ s.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if s.link_label != blank -%}
+          <a class="ga-link" href="{{ source.url | default: routes.all_products_collection_url }}">{{ s.link_label | escape }}</a>
+        {%- endif -%}
+      </div>
+      <ul class="ga-grid ga-kit__grid" role="list">
+        {{ cards }}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ga-kit {
+    padding-block: 48px 64px;
+  }
+
+  .ga-kit__head {
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-block-end: 28px;
+  }
+
+  .ga-kit__title {
+    font-size: 13vw;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-kit {
+      padding-block: calc(var(--ga-u) * 96) calc(var(--ga-u) * 110);
+    }
+
+    .ga-kit__head {
+      flex-wrap: nowrap;
+      align-items: center;
+      margin-block-end: calc(var(--ga-u) * 44);
+      padding-inline: calc(var(--ga-u) * 8);
+    }
+
+    .ga-kit__title {
+      font-size: calc(var(--ga-u) * 97);
+    }
+
+    /* A single row: the fourth card joins on wide screens only. */
+    .ga-kit__grid > li:nth-child(n + 4) {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .ga-kit__grid > li:nth-child(n + 4) {
+      display: block;
+    }
+
+    .ga-kit__grid > li:nth-child(n + 5) {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Complete the kit",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Complete the kit"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Shop all"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Products to show",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Where the products come from",
+      "info": "On a product page the row shows other kinds of product for the same wearer."
+    },
+    {
+      "type": "collection",
+      "id": "youth_collection",
+      "label": "Collection for junior products"
+    },
+    {
+      "type": "collection",
+      "id": "adult_collection",
+      "label": "Collection for adult products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection everywhere else"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Complete the kit"
+    }
+  ]
+}
+{% endschema %}

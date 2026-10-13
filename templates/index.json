@@ -18,8 +18,9 @@
         "button_label": "Shop youth polos",
         "button_link": "shopify://collections/ballhead-jr-polo-collection",
         "button_2_label": "Shop adult",
-        "button_2_link": "shopify://collections/adult-ballhead-polo-collection",
-        "image_alt": "Junior golfer in a white Ballhead polo and Golf Asylum cap lining up a shot"
+        "button_2_link": "shopify://collections/adult",
+        "image_alt": "Junior golfer holding his finish after a tee shot at the Golf Asylum Invitational",
+        "image": "shopify://shop_images/invitational-2026-027.jpg"
       }
     },
     "strip": {
@@ -59,10 +60,10 @@
           "settings": {
             "product": "jr-ballhead-blue-polo",
             "title": "Youth Ballhead Polo, Navy",
-            "bundled_image": "ga-polo-navy.png",
             "sticker": "New",
             "note": "",
-            "note_position": "none"
+            "note_position": "none",
+            "image": "shopify://shop_images/ga-polo-navy.png"
           }
         },
         "white": {
@@ -70,10 +71,10 @@
           "settings": {
             "product": "jr-ballhead-white-polo",
             "title": "Youth Ballhead Polo, White",
-            "bundled_image": "ga-polo-white.png",
             "sticker": "",
             "note": "4-way\nstretch",
-            "note_position": "left"
+            "note_position": "left",
+            "image": "shopify://shop_images/ga-polo-white.png"
           }
         },
         "electric": {
@@ -81,10 +82,10 @@
           "settings": {
             "product": "jr-ballhead-electric-blue-white-polo",
             "title": "Youth Ballhead Polo, Electric Blue/White",
-            "bundled_image": "ga-polo-electric.png",
             "sticker": "",
             "note": "the Ballhead\npatch",
-            "note_position": "right"
+            "note_position": "right",
+            "image": "shopify://shop_images/ga-polo-electric.png"
           }
         }
       },
@@ -107,10 +108,10 @@
           "settings": {
             "label": "Youth polos",
             "collection": "ballhead-jr-polo-collection",
-            "bundled_image": "ga-youth-polos.jpg",
             "zoom": 155,
             "focus_x": 40,
-            "focus_y": 55
+            "focus_y": 55,
+            "image": "shopify://shop_images/ga-youth-polos.jpg"
           }
         },
         "hoodies": {
@@ -118,10 +119,10 @@
           "settings": {
             "label": "Youth hoodies",
             "collection": "5150-code-jr-hoodies",
-            "bundled_image": "ga-youth-hoodies.jpg",
             "zoom": 130,
             "focus_x": 50,
-            "focus_y": 60
+            "focus_y": 60,
+            "image": "shopify://shop_images/ga-youth-hoodies.jpg"
           }
         },
         "shorts": {
@@ -129,10 +130,10 @@
           "settings": {
             "label": "Youth shorts",
             "collection": "jr-fairway-felon-short-collection",
-            "bundled_image": "ga-youth-shorts.jpg",
             "zoom": 125,
             "focus_x": 55,
-            "focus_y": 60
+            "focus_y": 60,
+            "image": "shopify://shop_images/ga-youth-shorts.jpg"
           }
         }
       },
@@ -144,7 +145,7 @@
       "settings": {
         "heading": "Shop youth",
         "link_label": "View all youth",
-        "link": "shopify://collections/all"
+        "link": "shopify://collections/youth"
       }
     },
     "why": {
@@ -192,12 +193,14 @@
         "tags": "Waterproof, Windproof, Lightweight",
         "button_label": "Shop youth waterproofs",
         "button_2_label": "Shop adult waterproofs",
-        "bundled_image": true,
         "black_and_white": true,
         "image_alt": "Two junior golfers in black Golf Asylum waterproofs walking down a wet fairway",
         "zoom": 115,
         "focus_x": 55,
-        "focus_y": 65
+        "focus_y": 65,
+        "image": "shopify://shop_images/ga-waterproofs.jpg",
+        "button_link": "shopify://collections/waterproofs",
+        "button_2_link": "shopify://collections/waterproofs"
       }
     },
     "inmates": {
@@ -206,31 +209,31 @@
         "ph1": {
           "type": "photo",
           "settings": {
-            "bundled_image": "ga-invitational-1.jpg",
-            "alt": "Junior golfer finishing a tee shot at the Golf Asylum Invitational",
-            "zoom": 130,
-            "focus_x": 35,
-            "focus_y": 35
+            "alt": "Junior golfer following through on a drive at the Golf Asylum Invitational",
+            "zoom": 100,
+            "focus_x": 50,
+            "focus_y": 50,
+            "image": "shopify://shop_images/invitational-2026-295.jpg"
           }
         },
         "ph2": {
           "type": "photo",
           "settings": {
-            "bundled_image": "ga-invitational-2.jpg",
-            "alt": "Junior golfer at the top of his swing at the Golf Asylum Invitational",
-            "zoom": 150,
-            "focus_x": 30,
-            "focus_y": 30
+            "alt": "Junior golfer following through on a drive at the Golf Asylum Invitational",
+            "zoom": 100,
+            "focus_x": 50,
+            "focus_y": 50,
+            "image": "shopify://shop_images/invitational-2026-293.jpg"
           }
         },
         "ph3": {
           "type": "photo",
           "settings": {
-            "bundled_image": "ga-invitational-3.jpg",
-            "alt": "Junior golfer swinging beside the water at the Golf Asylum Invitational",
-            "zoom": 110,
-            "focus_x": 60,
-            "focus_y": 50
+            "alt": "Junior golfer with his driver at the Golf Asylum Invitational",
+            "zoom": 100,
+            "focus_x": 45,
+            "focus_y": 50,
+            "image": "shopify://shop_images/invitational-2026-398.jpg"
           }
         }
       },
@@ -245,10 +248,11 @@
         "button_label": "Become an Inmate",
         "button_link": "shopify://pages/brand-ambassadors",
         "video_link": "https://www.instagram.com/golf_asylum/",
-        "play_label": "Watch the Golf Asylum Invitational video on Instagram",
-        "bundled_cover": true,
+        "play_label": "Play the Golf Asylum Invitational video",
         "cover_alt": "Golf Asylum tee markers beside a lake at the Invitational",
-        "caption": "The Invitational, June 2026"
+        "caption": "The Invitational, June 2026",
+        "cover": "shopify://shop_images/ga-invitational-cover.jpg",
+        "video": "shopify://files/videos/golf-asylum-invitational-day-1-recap.mp4"
       }
     },
     "adult_caps": {
@@ -261,10 +265,10 @@
             "heading": "For the caddy.",
             "text": "Adult polos now. Hoodies coming soon.",
             "button_label": "Shop adult",
-            "button_link": "shopify://collections/adult-ballhead-polo-collection",
-            "bundled_image": "ga-placeholder-adult-golfer.jpg",
+            "button_link": "shopify://collections/adult",
             "black_and_white": false,
-            "image_alt": "Adult golfer in a navy Ballhead polo, seen from behind on a course"
+            "image_alt": "Adult golfer on a course in the electric blue and white Ballhead polo and a Golf Asylum cap",
+            "image": "shopify://shop_images/adult-ballhead-polo-on-course.jpg"
           }
         },
         "caps": {
@@ -274,9 +278,9 @@
             "heading": "Caps & beanies.",
             "text": "Finish the fit.",
             "button_label": "Shop caps & beanies",
-            "button_link": "shopify://collections/junior-golf-asylum-off-script-cap",
-            "bundled_image": "ga-caps.jpg",
-            "image_alt": "Three Golf Asylum Off Script caps in white and black, black, and white"
+            "button_link": "shopify://collections/caps-beanies",
+            "image_alt": "Three Golf Asylum Off Script caps in white and black, black, and white",
+            "image": "shopify://shop_images/ga-caps.jpg"
           }
         }
       },

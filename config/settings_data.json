@@ -116,7 +116,8 @@
     "ga_color_bone": "#F4F2EE",
     "ga_color_white": "#FFFFFF",
     "ga_color_accent": "#1F6BFF",
-    "ga_hand_font": "covered_by_your_grace_n4"
+    "ga_hand_font": "covered_by_your_grace_n4",
+    "favicon": "shopify://shop_images/golf-asylum-favicon.png"
   },
   "presets": {
     "Default": {

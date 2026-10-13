@@ -1,14 +1,27 @@
 {%- liquid
   assign s = section.settings
+
+  # On product pages the section can be limited to junior or adult products.
+  assign visible = true
+  if request.page_type == 'product' and s.visibility != 'all'
+    capture wearer
+      render 'ga-product-kind', product: product
+    endcapture
+    assign wearer = wearer | split: '-' | first
+    if wearer != s.visibility
+      assign visible = false
+    endif
+  endif
 -%}
 
+{%- if visible -%}
 <div class="ga ga--charcoal ga-stamps">
   <div class="ga-wrap ga-stamps__inner">
     {%- if s.heading != blank -%}
       <h2 class="ga-display ga-stamps__title">{{ s.heading | escape }}</h2>
     {%- endif -%}
 
-    <ul class="ga-stamps__grid" role="list">
+    <ul class="ga-stamps__grid ga-stamps__grid--{{ section.blocks.size }}" role="list">
       {%- for block in section.blocks -%}
         {%- liquid
           assign bs = block.settings
@@ -47,6 +60,7 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% stylesheet %}
   .ga-stamps {
@@ -141,6 +155,22 @@
       margin-block-start: calc(var(--ga-u) * 60);
     }
 
+    .ga-stamps__grid--4 {
+      grid-template-columns: repeat(4, calc(var(--ga-u) * 330));
+    }
+
+    .ga-stamps__grid--4 .ga-stamp__mark {
+      width: calc(var(--ga-u) * 262);
+    }
+
+    .ga-stamps__grid--4 .ga-stamp__text {
+      font-size: calc(var(--ga-u) * 52);
+    }
+
+    .ga-stamps__grid--4 .ga-stamp__desc {
+      max-width: calc(var(--ga-u) * 290);
+    }
+
     .ga-stamp__mark {
       width: calc(var(--ga-u) * 323);
     }
@@ -167,8 +197,28 @@
   "name": "GA Stamps",
   "tag": "section",
   "class": "ga-section",
-  "max_blocks": 3,
+  "max_blocks": 4,
   "settings": [
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "On product pages, show on",
+      "options": [
+        {
+          "value": "all",
+          "label": "Every product"
+        },
+        {
+          "value": "youth",
+          "label": "Junior products only"
+        },
+        {
+          "value": "adult",
+          "label": "Adult products only"
+        }
+      ],
+      "default": "all"
+    },
     {
       "type": "text",
       "id": "heading",

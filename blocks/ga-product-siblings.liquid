@@ -1,0 +1,173 @@
+{%- doc -%}
+  Links to the other colours of a product. Each colour is its own product in
+  this store, so the block finds the product's smallest collection (for example
+  "Ballhead Jr Polo") and shows the products in it that are the same kind.
+{%- enddoc -%}
+
+{%- liquid
+  assign bs = block.settings
+  assign product = closest.product
+
+  capture own_kind
+    render 'ga-product-kind', product: product
+  endcapture
+
+  assign ignored = ''
+  for c in bs.ignore
+    assign ignored = ignored | append: '|' | append: c.handle | append: '|'
+  endfor
+
+  assign family = blank
+  for c in product.collections
+    assign key = '|' | append: c.handle | append: '|'
+    if ignored contains key
+      continue
+    endif
+    if c.products_count < 2 or c.products_count > bs.max
+      continue
+    endif
+    if family == blank or c.products_count < family.products_count
+      assign family = c
+    endif
+  endfor
+
+  assign siblings = 0
+  if family != blank
+    for p in family.products
+      capture p_kind
+        render 'ga-product-kind', product: p
+      endcapture
+      if p_kind == own_kind
+        assign siblings = siblings | plus: 1
+      endif
+    endfor
+  endif
+-%}
+
+{%- if siblings > 1 -%}
+  <div class="ga-siblings" {{ block.shopify_attributes }}>
+    {%- if bs.label != blank -%}
+      <p class="ga-siblings__label">{{ bs.label | escape }}</p>
+    {%- endif -%}
+    <ul class="ga-siblings__list" role="list">
+      {%- for p in family.products -%}
+        {%- liquid
+          capture p_kind
+            render 'ga-product-kind', product: p
+          endcapture
+          if p_kind != own_kind
+            continue
+          endif
+          capture p_title
+            render 'ga-title', title: p.title
+          endcapture
+        -%}
+        <li>
+          <a
+            class="ga-siblings__item{% if p.id == product.id %} ga-siblings__item--current{% endif %}"
+            href="{{ p.url }}"
+            title="{{ p_title }}"
+            {% if p.id == product.id %}
+              aria-current="true"
+            {% endif %}
+          >
+            {%- if p.featured_image != blank -%}
+              {{ p.featured_image | image_url: width: 200 | image_tag: alt: p_title, loading: 'lazy', sizes: '80px' }}
+            {%- else -%}
+              <span class="visually-hidden">{{ p_title }}</span>
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ga-siblings {
+    width: 100%;
+  }
+
+  .ga-siblings__label {
+    margin: 0 0 10px;
+    font-family: var(--ga-font-display);
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .ga-siblings__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-siblings__item {
+    display: block;
+    width: 72px;
+    aspect-ratio: 4 / 5;
+    border: 2px solid #d9d7d2;
+    background: var(--ga-white);
+    transition: border-color 0.15s ease-out;
+  }
+
+  .ga-siblings__item:hover {
+    border-color: var(--ga-black);
+  }
+
+  .ga-siblings__item--current {
+    border-color: var(--ga-black);
+    box-shadow: inset 0 0 0 2px var(--ga-black);
+  }
+
+  .ga-siblings__item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ga-siblings__item:focus-visible {
+    outline: 2px solid var(--ga-accent);
+    outline-offset: 2px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Other colours",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Colours"
+    },
+    {
+      "type": "collection_list",
+      "id": "ignore",
+      "label": "Collections to ignore",
+      "info": "Broad collections such as Youth or Adult, which hold more than one product family."
+    },
+    {
+      "type": "range",
+      "id": "max",
+      "label": "Largest family size",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Other colours"
+    }
+  ]
+}
+{% endschema %}

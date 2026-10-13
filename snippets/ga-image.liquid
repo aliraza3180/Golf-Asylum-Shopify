@@ -1,9 +1,9 @@
 {%- doc -%}
-  Renders a merchant-picked image, or a bundled theme asset when none is picked.
-  The asset fallback keeps the design intact until real photos are uploaded.
+  Renders an image picked in the theme editor, with responsive sizes.
+  Shows a neutral placeholder when no image is picked, so the layout holds.
+  Images live in the store's Files; nothing is bundled with the theme.
 
-  @param {image} [image] - Image from an image_picker setting
-  @param {string} fallback - File name of the bundled asset to use when no image is picked
+  @param {image} [image] - Image from an image_picker setting, a product or a collection
   @param {string} [alt] - Alt text. Empty string marks the image as decorative
   @param {string} [class] - Class names for the img
   @param {string} [sizes] - Sizes attribute
@@ -11,35 +11,11 @@
   @param {boolean} [eager] - Load eagerly with high priority (first screen only)
 
   @example
-  {% render 'ga-image', image: section.settings.image, fallback: 'ga-hero-junior.jpg', alt: 'Junior golfer', sizes: '40vw' %}
+  {% render 'ga-image', image: section.settings.image, alt: 'Junior golfer', sizes: '40vw' %}
 {%- enddoc -%}
 
 {%- liquid
   assign max_width = width | default: 1600
-
-  # Intrinsic sizes of the bundled images, so the browser can reserve space.
-  assign fallback_width = 1000
-  assign fallback_height = 1250
-  case fallback
-    when 'ga-hero-junior.jpg', 'ga-waterproofs.jpg'
-      assign fallback_width = 1500
-      assign fallback_height = 2000
-    when 'ga-polo-navy.png', 'ga-polo-white.png', 'ga-polo-electric.png'
-      assign fallback_width = 1024
-      assign fallback_height = 1024
-    when 'ga-youth-polos.jpg', 'ga-caps.jpg'
-      assign fallback_width = 1800
-      assign fallback_height = 1200
-    when 'ga-youth-hoodies.jpg', 'ga-youth-shorts.jpg'
-      assign fallback_width = 1800
-      assign fallback_height = 2700
-    when 'ga-invitational-cover.jpg', 'ga-invitational-1.jpg', 'ga-invitational-2.jpg', 'ga-invitational-3.jpg'
-      assign fallback_width = 720
-      assign fallback_height = 1280
-    when 'ga-placeholder-adult-golfer.jpg'
-      assign fallback_width = 750
-      assign fallback_height = 606
-  endcase
   assign loading = 'lazy'
   assign priority = 'auto'
   if eager
@@ -56,22 +32,5 @@
     | image_tag: class: class, sizes: sizes, widths: '360, 540, 720, 960, 1200, 1600, 2000', alt: alt_text, loading: loading, fetchpriority: priority
   }}
 {%- else -%}
-  {%- assign size_small = max_width | divided_by: 2 | append: 'x' -%}
-  {%- assign size_large = max_width | append: 'x' -%}
-  <img
-    src="{{ fallback | asset_img_url: size_large }}"
-    srcset="{{ fallback | asset_img_url: size_small }} {{ max_width | divided_by: 2 }}w, {{ fallback | asset_img_url: size_large }} {{ max_width }}w"
-    {% if sizes != blank %}
-      sizes="{{ sizes }}"
-    {% endif %}
-    alt="{{ alt | escape }}"
-    width="{{ fallback_width }}"
-    height="{{ fallback_height }}"
-    {% if class != blank %}
-      class="{{ class }}"
-    {% endif %}
-    loading="{{ loading }}"
-    fetchpriority="{{ priority }}"
-    decoding="async"
-  >
+  {{ 'image' | placeholder_svg_tag: 'ga-image-empty' }}
 {%- endif -%}

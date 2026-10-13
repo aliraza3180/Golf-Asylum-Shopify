@@ -1,0 +1,262 @@
+{%- doc -%}
+  Fold-out rows under the buy button: fabric, shipping and returns.
+  The fabric row shows the text that matches the product type and is hidden
+  when that text is empty, so nothing is claimed that has not been confirmed.
+{%- enddoc -%}
+
+{%- liquid
+  assign bs = block.settings
+  assign product = closest.product
+
+  capture kind_full
+    render 'ga-product-kind', product: product
+  endcapture
+  assign kind = kind_full | split: '-' | last
+
+  assign fabric = blank
+  case kind
+    when 'polo'
+      assign fabric = bs.fabric_polo
+    when 'hoodie'
+      assign fabric = bs.fabric_hoodie
+    when 'shorts'
+      assign fabric = bs.fabric_shorts
+    when 'cap'
+      assign fabric = bs.fabric_cap
+    when 'beanie'
+      assign fabric = bs.fabric_beanie
+    when 'jacket', 'pants'
+      assign fabric = bs.fabric_waterproof
+  endcase
+-%}
+
+<div class="ga-acc" {{ block.shopify_attributes }}>
+  {%- if fabric != blank or bs.care != blank -%}
+    <details class="ga-acc__row">
+      <summary class="ga-acc__summary">
+        <span>{{ bs.fabric_heading | escape }}</span>
+        <span class="ga-acc__icon" aria-hidden="true"></span>
+      </summary>
+      <div class="ga-acc__body">
+        {%- if fabric != blank -%}
+          <p>{{ fabric | escape }}</p>
+        {%- endif -%}
+        {%- if bs.care != blank -%}
+          <p>{{ bs.care | escape }}</p>
+        {%- endif -%}
+      </div>
+    </details>
+  {%- endif -%}
+
+  {%- if bs.shipping_text != blank -%}
+    <details class="ga-acc__row">
+      <summary class="ga-acc__summary">
+        <span>{{ bs.shipping_heading | escape }}</span>
+        <span class="ga-acc__icon" aria-hidden="true"></span>
+      </summary>
+      <div class="ga-acc__body">
+        <p>{{ bs.shipping_text | escape }}</p>
+        {%- if shop.shipping_policy != blank -%}
+          <p><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></p>
+        {%- endif -%}
+      </div>
+    </details>
+  {%- endif -%}
+
+  {%- if bs.returns_text != blank -%}
+    <details class="ga-acc__row">
+      <summary class="ga-acc__summary">
+        <span>{{ bs.returns_heading | escape }}</span>
+        <span class="ga-acc__icon" aria-hidden="true"></span>
+      </summary>
+      <div class="ga-acc__body">
+        <p>{{ bs.returns_text | escape }}</p>
+        {%- if shop.refund_policy != blank -%}
+          <p><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></p>
+        {%- endif -%}
+      </div>
+    </details>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .ga-acc {
+    width: 100%;
+    border-block-end: 2px solid var(--ga-black);
+    color: var(--ga-black);
+  }
+
+  .ga-acc__row {
+    border-block-start: 2px solid var(--ga-black);
+  }
+
+  .ga-acc__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    padding-block: 6px;
+    font-family: var(--ga-font-display);
+    font-size: 20px;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    text-transform: uppercase;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .ga-acc__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ga-acc__summary:focus-visible {
+    outline: 2px solid var(--ga-accent);
+    outline-offset: 2px;
+  }
+
+  .ga-acc__icon {
+    position: relative;
+    flex: none;
+    width: 16px;
+    height: 16px;
+  }
+
+  .ga-acc__icon::before,
+  .ga-acc__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 16px;
+    height: 2.5px;
+    background: currentColor;
+    transition: transform 0.2s ease-out;
+  }
+
+  .ga-acc__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .ga-acc__row[open] .ga-acc__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .ga-acc__body {
+    padding-block: 0 20px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .ga-acc__body p {
+    margin: 0 0 0.5em;
+  }
+
+  .ga-acc__body a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ga-acc__icon::before,
+    .ga-acc__icon::after {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Product details rows",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Fabric and care",
+      "info": "The row shows the fabric that matches the product type. Leave a field empty until the fabric is confirmed."
+    },
+    {
+      "type": "text",
+      "id": "fabric_heading",
+      "label": "Row heading",
+      "default": "Fabric + care"
+    },
+    {
+      "type": "text",
+      "id": "fabric_polo",
+      "label": "Polos"
+    },
+    {
+      "type": "text",
+      "id": "fabric_hoodie",
+      "label": "Hoodies",
+      "default": "77% polyester, 23% spandex."
+    },
+    {
+      "type": "text",
+      "id": "fabric_shorts",
+      "label": "Shorts",
+      "default": "90% nylon, 10% spandex."
+    },
+    {
+      "type": "text",
+      "id": "fabric_cap",
+      "label": "Caps"
+    },
+    {
+      "type": "text",
+      "id": "fabric_beanie",
+      "label": "Beanies"
+    },
+    {
+      "type": "text",
+      "id": "fabric_waterproof",
+      "label": "Waterproof jackets and pants"
+    },
+    {
+      "type": "text",
+      "id": "care",
+      "label": "Care instructions, all products"
+    },
+    {
+      "type": "header",
+      "content": "Shipping"
+    },
+    {
+      "type": "text",
+      "id": "shipping_heading",
+      "label": "Row heading",
+      "default": "Shipping"
+    },
+    {
+      "type": "textarea",
+      "id": "shipping_text",
+      "label": "Text",
+      "default": "Shipping cost and delivery time are shown at checkout, before you pay."
+    },
+    {
+      "type": "header",
+      "content": "Returns"
+    },
+    {
+      "type": "text",
+      "id": "returns_heading",
+      "label": "Row heading",
+      "default": "Returns + exchanges"
+    },
+    {
+      "type": "textarea",
+      "id": "returns_text",
+      "label": "Text",
+      "default": "Wrong size? See how returns and exchanges work."
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Product details rows"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,196 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="ga ga--black ga-404">
+  <div class="ga-wrap ga-404__inner">
+    <div class="ga-ballhead-bg ga-404__ballhead" aria-hidden="true">
+      {%- render 'ga-ballhead' -%}
+    </div>
+
+    <div class="ga-404__copy">
+      {%- if s.note != blank -%}
+        <p class="ga-hand ga-hand--underline ga-404__note">{{ s.note | escape }}</p>
+      {%- endif -%}
+      <p class="ga-display ga-404__code" aria-hidden="true">{{ s.code | escape }}</p>
+      <h1 class="ga-display ga-404__title">
+        {{- s.heading | escape -}}
+        <span class="ga-404__dot" aria-hidden="true"></span>
+      </h1>
+      {%- if s.text != blank -%}
+        <p class="ga-text ga-text--muted ga-404__text">{{ s.text | escape }}</p>
+      {%- endif -%}
+      <div class="ga-btns ga-404__btns">
+        {%- if s.button_label != blank -%}
+          <a class="ga-btn ga-btn--light" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+        {%- endif -%}
+        {%- if s.button_2_label != blank -%}
+          <a class="ga-btn ga-btn--outline-light" href="{{ s.button_2_link | default: routes.root_url }}">{{ s.button_2_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-404__inner {
+    padding-block: 56px 72px;
+  }
+
+  .ga-404__ballhead {
+    width: 120vw;
+    right: -56vw;
+    top: -8vw;
+    --ga-ballhead-bg-color: #2a2a2e;
+    --ga-ballhead-stroke: 11;
+  }
+
+  .ga-404__copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ga-404__note {
+    font-size: 9vw;
+    margin-block-end: 0.4em;
+    --ga-hand-tilt: -5deg;
+  }
+
+  .ga-404__code {
+    color: transparent;
+    font-size: 46vw;
+    line-height: 0.86;
+    -webkit-text-stroke: 2px var(--ga-bone);
+  }
+
+  .ga-404__title {
+    margin-block-start: 0.1em;
+    font-size: 15vw;
+  }
+
+  .ga-404__dot {
+    display: inline-block;
+    width: 0.2em;
+    height: 0.21em;
+    margin-inline-start: 0.04em;
+    background: var(--ga-accent);
+  }
+
+  .ga-404__text {
+    max-width: 30em;
+    margin-block-start: 16px;
+  }
+
+  .ga-404__btns {
+    width: 100%;
+    margin-block-start: 28px;
+  }
+
+  .ga-404__btns .ga-btn {
+    flex: 1 1 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-404__inner {
+      min-height: calc(var(--ga-u) * 700);
+      padding-block: calc(var(--ga-u) * 70) calc(var(--ga-u) * 100);
+      padding-inline-start: calc(var(--ga-u) * 16);
+    }
+
+    .ga-404__ballhead {
+      width: calc(var(--ga-u) * 640);
+      right: calc(var(--ga-u) * -20);
+      top: calc(var(--ga-u) * 30);
+    }
+
+    .ga-404__note {
+      font-size: calc(var(--ga-u) * 50);
+    }
+
+    .ga-404__code {
+      font-size: calc(var(--ga-u) * 300);
+      -webkit-text-stroke-width: 3px;
+    }
+
+    .ga-404__title {
+      font-size: calc(var(--ga-u) * 120);
+    }
+
+    .ga-404__text {
+      margin-block-start: calc(var(--ga-u) * 22);
+    }
+
+    .ga-404__btns {
+      width: auto;
+      margin-block-start: calc(var(--ga-u) * 36);
+    }
+
+    .ga-404__btns .ga-btn {
+      flex: none;
+      min-width: calc(var(--ga-u) * 220);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Page not found",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note",
+      "default": "lost your ball?"
+    },
+    {
+      "type": "text",
+      "id": "code",
+      "label": "Large number",
+      "default": "404"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Out of bounds"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "That page isn't here. Take a drop and carry on."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "First button label",
+      "default": "Shop youth"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "First button link"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Second button label",
+      "default": "Shop adult"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Second button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Page not found"
+    }
+  ]
+}
+{% endschema %}

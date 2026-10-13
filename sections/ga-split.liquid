@@ -1,19 +1,28 @@
 {%- liquid
   assign s = section.settings
   assign tags = s.tags | split: ','
-  assign fallback = blank
-  if s.bundled_image
-    assign fallback = 'ga-waterproofs.jpg'
+
+  # On product pages the section can be limited to junior or adult products.
+  assign visible = true
+  if request.page_type == 'product' and s.visibility != 'all'
+    capture wearer
+      render 'ga-product-kind', product: product
+    endcapture
+    assign wearer = wearer | split: '-' | first
+    if wearer != s.visibility
+      assign visible = false
+    endif
   endif
 -%}
 
+{%- if visible -%}
 <div class="ga ga--black ga-split">
   <div class="ga-split__media ga-torn-edge--left">
     <div
       class="ga-split__photo ga-torn-edge--left-inner{% if s.black_and_white %} ga-split__photo--bw{% endif %}"
       style="--ga-zoom: {{ s.zoom | divided_by: 100.0 }}; --ga-focus-x: {{ s.focus_x }}%; --ga-focus-y: {{ s.focus_y }}%;"
     >
-      {%- render 'ga-image', image: s.image, fallback: fallback, alt: s.image_alt, sizes: '(min-width: 750px) 52vw, 100vw', width: 1600 -%}
+      {%- render 'ga-image', image: s.image, alt: s.image_alt, sizes: '(min-width: 750px) 52vw, 100vw', width: 1600 -%}
     </div>
   </div>
 
@@ -66,6 +75,7 @@
     </div>
   </div>
 </div>
+{%- endif -%}
 
 {% stylesheet %}
   .ga-split {
@@ -257,6 +267,26 @@
   "class": "ga-section",
   "settings": [
     {
+      "type": "select",
+      "id": "visibility",
+      "label": "On product pages, show on",
+      "options": [
+        {
+          "value": "all",
+          "label": "Every product"
+        },
+        {
+          "value": "youth",
+          "label": "Junior products only"
+        },
+        {
+          "value": "adult",
+          "label": "Adult products only"
+        }
+      ],
+      "default": "all"
+    },
+    {
       "type": "text",
       "id": "note",
       "label": "Handwritten note",
@@ -316,12 +346,6 @@
       "type": "image_picker",
       "id": "image",
       "label": "Photo"
-    },
-    {
-      "type": "checkbox",
-      "id": "bundled_image",
-      "label": "Use the bundled rain photo until one is picked",
-      "default": true
     },
     {
       "type": "checkbox",

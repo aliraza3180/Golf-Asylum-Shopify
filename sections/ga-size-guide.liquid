@@ -1,0 +1,849 @@
+{%- liquid
+  assign s = section.settings
+  assign no_convert = s.no_convert | downcase
+
+  assign has_youth = false
+  assign has_adult = false
+  for block in section.blocks
+    if block.settings.audience == 'adult'
+      assign has_adult = true
+    else
+      assign has_youth = true
+    endif
+  endfor
+  assign first_audience = 'youth'
+  unless has_youth
+    assign first_audience = 'adult'
+  endunless
+-%}
+
+<div class="ga ga--white ga-sg">
+  <ga-size-guide class="ga-wrap ga-sg__root" data-audience="{{ first_audience }}">
+    {%- if has_youth and has_adult -%}
+      <div class="ga-sg__tabs" role="group" aria-label="{{ s.tabs_label | escape }}">
+        <button type="button" class="ga-chip ga-sg__tab" data-tab="youth" aria-pressed="{% if first_audience == 'youth' %}true{% else %}false{% endif %}">
+          {{- s.youth_label | escape -}}
+        </button>
+        <button type="button" class="ga-chip ga-sg__tab" data-tab="adult" aria-pressed="{% if first_audience == 'adult' %}true{% else %}false{% endif %}">
+          {{- s.adult_label | escape -}}
+        </button>
+      </div>
+    {%- endif -%}
+
+    <ul class="ga-sg__jump" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign bs = block.settings -%}
+        <li data-audience="{{ bs.audience }}" {% if bs.audience != first_audience %}hidden{% endif %}>
+          <a class="ga-link ga-sg__jump-link" href="#chart-{{ bs.audience }}-{{ bs.kind }}">{{ bs.short_label | default: bs.heading | escape }}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign bs = block.settings
+        assign key = bs.audience | append: '-' | append: bs.kind
+        assign columns = bs.columns | split: '|'
+        assign rows = bs.rows | newline_to_br | split: '<br />'
+        assign has_photos = false
+        if bs.photo_1 != blank or bs.photo_2 != blank or bs.photo_3 != blank
+          assign has_photos = true
+        endif
+      -%}
+      <ga-size-chart
+        class="ga-chart{% if has_photos %} ga-chart--photos{% endif %}"
+        id="chart-{{ key }}"
+        data-ga-chart="{{ key }}"
+        data-audience="{{ bs.audience }}"
+        {% if bs.audience != first_audience %}
+          hidden
+        {% endif %}
+        {{ block.shopify_attributes }}
+      >
+        <div class="ga-chart__main">
+          <div class="ga-chart__head">
+            <h2 class="ga-display ga-chart__title">{{ bs.heading | escape }}</h2>
+            <div class="ga-chart__units" role="group" aria-label="{{ s.units_label | escape }}">
+              <button type="button" class="ga-chart__unit" data-unit="in" aria-pressed="true">{{ s.inches_label | escape }}</button>
+              <button type="button" class="ga-chart__unit" data-unit="cm" aria-pressed="false">{{ s.cm_label | escape }}</button>
+            </div>
+          </div>
+
+          <div class="ga-chart__scroll" tabindex="0" role="region" aria-label="{{ bs.heading | escape }}">
+            <table class="ga-chart__table">
+              <thead>
+                <tr>
+                  {%- for column in columns -%}
+                    <th scope="col">{{ column | strip | escape }}</th>
+                  {%- endfor -%}
+                </tr>
+              </thead>
+              <tbody>
+                {%- for row in rows -%}
+                  {%- assign cells = row | strip | split: '|' -%}
+                  {%- if cells.size < 2 -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  <tr>
+                    {%- for cell in cells -%}
+                      {%- liquid
+                        assign value = cell | strip
+                        assign column_name = columns[forloop.index0] | strip | downcase
+                        assign convert = true
+                        if forloop.first or no_convert contains column_name
+                          assign convert = false
+                        endif
+                      -%}
+                      {%- if forloop.first -%}
+                        <th scope="row">{{ value | escape }}</th>
+                      {%- elsif convert -%}
+                        <td data-in="{{ value | escape }}">{{ value | escape }}</td>
+                      {%- else -%}
+                        <td>{{ value | escape }}</td>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+
+          {%- if bs.note != blank -%}
+            <p class="ga-chart__note">
+              {{ bs.note | escape }}
+              <span data-unit-note data-in="{{ s.inches_note | escape }}" data-cm="{{ s.cm_note | escape }}">{{ s.inches_note | escape }}</span>
+            </p>
+          {%- endif -%}
+
+          {%- if bs.fit != blank -%}
+            <p class="ga-hand ga-chart__fit">{{ bs.fit | escape }}</p>
+          {%- endif -%}
+
+          {%- if bs.button_label != blank and bs.button_link != blank -%}
+            <a class="ga-btn ga-btn--dark ga-chart__btn" href="{{ bs.button_link }}">{{ bs.button_label | escape }}</a>
+          {%- endif -%}
+        </div>
+
+        {%- if has_photos -%}
+          <ul class="ga-chart__photos" role="list">
+            {%- for i in (1..3) -%}
+              {%- liquid
+                assign photo_key = 'photo_' | append: i
+                assign caption_key = 'caption_' | append: i
+                assign photo = bs[photo_key]
+                assign caption = bs[caption_key]
+              -%}
+              {%- if photo != blank -%}
+                <li class="ga-chart__photo ga-chart__photo--{{ i }}">
+                  <div class="ga-torn ga-torn--{{ i | plus: 1 }}">
+                    <div class="ga-torn__media">
+                      {{ photo | image_url: width: 700 | image_tag: alt: caption, loading: 'lazy', sizes: '(min-width: 750px) 14vw, 30vw', widths: '200, 300, 400, 700' }}
+                    </div>
+                  </div>
+                  {%- if caption != blank -%}
+                    <p class="ga-chart__caption">{{ caption | escape }}</p>
+                  {%- endif -%}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </ga-size-chart>
+    {%- endfor -%}
+  </ga-size-guide>
+</div>
+
+{%- if s.measure_heading != blank -%}
+  <div class="ga ga--charcoal ga-sg-measure">
+    <div class="ga-wrap ga-sg-measure__inner">
+      <div class="ga-sg-measure__copy">
+        <h2 class="ga-display ga-sg-measure__title">{{ s.measure_heading | escape }}</h2>
+        {%- if s.measure_text != blank -%}
+          <div class="ga-sg-measure__text">{{ s.measure_text }}</div>
+        {%- endif -%}
+        {%- if s.measure_note != blank -%}
+          <p class="ga-hand ga-hand--underline ga-sg-measure__note">{{ s.measure_note | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <svg class="ga-sg-measure__figure" viewBox="0 0 220 330" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="96" cy="46" r="30" />
+        <path d="M96 76v14M60 96c10-6 62-6 72 0l22 76-18 8-14-44v60H70v-60l-14 44-18-8z" />
+        <path d="M70 196v112M122 196v112M70 308H52M122 308h18M96 196v112" />
+        <path d="M44 128h104" stroke-dasharray="2 11" />
+        <path d="M196 18v292M184 18h24M184 310h24" stroke-width="4" />
+      </svg>
+
+      {%- if s.stamp != blank -%}
+        <div class="ga-sg-measure__stamp">
+          <svg viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+            <g fill="none" stroke="currentColor">
+              <circle cx="160" cy="160" r="149" stroke-width="11" />
+              <circle cx="160" cy="160" r="134" stroke-width="3.5" />
+            </g>
+          </svg>
+          <p class="ga-display">{{ s.stamp | escape | newline_to_br }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+<script src="{{ 'ga-size-chart.js' | asset_url }}" defer></script>
+
+{% stylesheet %}
+  .ga-sg {
+    padding-block: 28px 56px;
+  }
+
+  .ga-sg__root {
+    display: block;
+  }
+
+  .ga-sg__tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ga-sg__tab {
+    flex: 1 1 0;
+    justify-content: center;
+    min-height: 48px;
+    font-size: 19px;
+  }
+
+  .ga-sg__jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 22px;
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-sg__jump > [hidden] {
+    display: none;
+  }
+
+  .ga-sg__jump-link {
+    font-size: 16px;
+  }
+
+  /* One chart. Also used inside the size guide panel on product pages. */
+  .ga-chart {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    margin-block-start: 40px;
+    padding-block-start: 36px;
+    border-block-start: 2px solid var(--ga-black);
+    color: var(--ga-black);
+    scroll-margin-top: 120px;
+  }
+
+  .ga-chart[hidden] {
+    display: none;
+  }
+
+  .ga-chart__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-block-end: 18px;
+  }
+
+  .ga-chart__title {
+    font-size: 40px;
+  }
+
+  .ga-chart__units {
+    display: flex;
+    flex: none;
+  }
+
+  .ga-chart__unit {
+    min-width: 48px;
+    min-height: 36px;
+    padding: 0 10px;
+    border: 2px solid var(--ga-black);
+    border-radius: 0;
+    background: transparent;
+    color: var(--ga-black);
+    font-family: var(--ga-font-display);
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .ga-chart__unit + .ga-chart__unit {
+    border-inline-start: 0;
+  }
+
+  .ga-chart__unit[aria-pressed='true'] {
+    border-color: var(--ga-accent);
+    background: var(--ga-accent);
+    color: var(--ga-white);
+  }
+
+  .ga-chart__unit:focus-visible {
+    outline: 2px solid var(--ga-black);
+    outline-offset: 2px;
+  }
+
+  .ga-chart__scroll {
+    overflow-x: auto;
+  }
+
+  .ga-chart__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    text-align: start;
+  }
+
+  .ga-chart__table th,
+  .ga-chart__table td {
+    padding: 13px 7px;
+    border-block-end: 1px solid #d9d7d2;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  .ga-chart__table thead th {
+    padding-block: 10px;
+    border-block-end: 2px solid var(--ga-black);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    white-space: normal;
+    vertical-align: bottom;
+  }
+
+  .ga-chart__table tbody th {
+    position: sticky;
+    left: 0;
+    background: var(--ga-white);
+    font-family: var(--ga-font-display);
+    font-size: 22px;
+    font-weight: 400;
+  }
+
+  .ga-chart__note {
+    margin: 14px 0 0;
+    color: #6e6e73;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ga-chart__fit {
+    margin-block-start: 22px;
+    font-size: 30px;
+    white-space: normal;
+    --ga-hand-tilt: -2deg;
+  }
+
+  .ga-chart__btn {
+    margin-block-start: 26px;
+  }
+
+  .ga-chart__photos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-chart__photo .ga-torn {
+    aspect-ratio: 3 / 4;
+    --ga-paper: var(--ga-bone);
+  }
+
+  /* The studio photos have wide margins: bring the junior closer. */
+  .ga-chart__photo img {
+    transform: scale(1.3);
+  }
+
+  .ga-chart__photo--1 .ga-torn {
+    --ga-tilt: -1.5deg;
+  }
+
+  .ga-chart__photo--3 .ga-torn {
+    --ga-tilt: 1.5deg;
+  }
+
+  .ga-chart__caption {
+    margin: 12px 0 0;
+    font-family: var(--ga-font-display);
+    font-size: 15px;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* How to measure */
+  .ga-sg-measure {
+    padding-block: 52px 56px;
+  }
+
+  .ga-sg-measure__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+    justify-items: start;
+  }
+
+  .ga-sg-measure__title {
+    font-size: 14vw;
+  }
+
+  .ga-sg-measure__text {
+    margin-block-start: 18px;
+    color: var(--ga-grey);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .ga-sg-measure__text p {
+    margin: 0 0 0.5em;
+  }
+
+  .ga-sg-measure__text strong {
+    color: var(--ga-bone);
+  }
+
+  .ga-sg-measure__note {
+    margin-block-start: 22px;
+    font-size: 30px;
+    white-space: normal;
+    --ga-hand-tilt: -3deg;
+  }
+
+  .ga-sg-measure__figure {
+    width: 150px;
+    height: auto;
+    color: var(--ga-bone);
+  }
+
+  .ga-sg-measure__stamp {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 220px;
+    aspect-ratio: 1;
+    color: var(--ga-bone);
+  }
+
+  .ga-sg-measure__stamp svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ga-sg-measure__stamp p {
+    position: relative;
+    font-size: 40px;
+    text-align: center;
+    transform: rotate(-8deg);
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-sg {
+      padding-block: calc(var(--ga-u) * 48) calc(var(--ga-u) * 100);
+    }
+
+    .ga-sg__tab {
+      flex: none;
+      min-width: calc(var(--ga-u) * 190);
+      min-height: max(48px, calc(var(--ga-u) * 58));
+      font-size: max(19px, calc(var(--ga-u) * 24));
+    }
+
+    .ga-sg__jump {
+      gap: calc(var(--ga-u) * 16) calc(var(--ga-u) * 34);
+      margin-block-start: calc(var(--ga-u) * 30);
+    }
+
+    .ga-sg__jump-link {
+      font-size: max(16px, calc(var(--ga-u) * 19));
+    }
+
+    .ga-chart {
+      margin-block-start: calc(var(--ga-u) * 56);
+      padding-block-start: calc(var(--ga-u) * 56);
+    }
+
+    .ga-chart--photos {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: calc(var(--ga-u) * 70);
+      align-items: start;
+    }
+
+    .ga-chart__head {
+      margin-block-end: calc(var(--ga-u) * 26);
+    }
+
+    .ga-chart__title {
+      font-size: max(40px, calc(var(--ga-u) * 68));
+    }
+
+    .ga-chart__table {
+      font-size: max(15px, calc(var(--ga-u) * 17));
+    }
+
+    .ga-chart__table thead th {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    .ga-chart__table th,
+    .ga-chart__table td {
+      padding: max(13px, calc(var(--ga-u) * 17)) max(12px, calc(var(--ga-u) * 16));
+    }
+
+    .ga-chart__table tbody th {
+      font-size: max(22px, calc(var(--ga-u) * 26));
+    }
+
+    .ga-chart__fit {
+      font-size: max(28px, calc(var(--ga-u) * 38));
+    }
+
+    .ga-chart__photos {
+      gap: calc(var(--ga-u) * 18);
+      padding-block-start: calc(var(--ga-u) * 10);
+    }
+
+    .ga-chart__caption {
+      font-size: max(14px, calc(var(--ga-u) * 17));
+    }
+
+    .ga-sg-measure {
+      padding-block: calc(var(--ga-u) * 96) calc(var(--ga-u) * 100);
+    }
+
+    .ga-sg-measure__inner {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: calc(var(--ga-u) * 90);
+      align-items: center;
+      padding-inline: calc(var(--ga-u) * 16);
+    }
+
+    .ga-sg-measure__title {
+      font-size: calc(var(--ga-u) * 96);
+    }
+
+    .ga-sg-measure__text {
+      max-width: calc(var(--ga-u) * 560);
+      margin-block-start: calc(var(--ga-u) * 26);
+      font-size: max(15px, calc(var(--ga-u) * 19));
+    }
+
+    .ga-sg-measure__note {
+      margin-block-start: calc(var(--ga-u) * 34);
+      font-size: max(26px, calc(var(--ga-u) * 44));
+    }
+
+    .ga-sg-measure__figure {
+      width: calc(var(--ga-u) * 200);
+    }
+
+    .ga-sg-measure__stamp {
+      width: calc(var(--ga-u) * 300);
+    }
+
+    .ga-sg-measure__stamp p {
+      font-size: calc(var(--ga-u) * 60);
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class GaSizeGuide extends HTMLElement {
+    connectedCallback() {
+      this.tabs = Array.from(this.querySelectorAll('[data-tab]'));
+      for (const tab of this.tabs) {
+        tab.addEventListener('click', () => this.show(tab.dataset.tab));
+      }
+      // Open the right tab when arriving on a link such as #chart-adult-polo.
+      const target = window.location.hash ? this.querySelector(window.location.hash) : null;
+      if (target && target.dataset.audience) {
+        this.show(target.dataset.audience);
+        target.scrollIntoView();
+      }
+    }
+
+    show(audience) {
+      for (const item of this.querySelectorAll('[data-audience]')) {
+        if (item === this) continue;
+        item.hidden = item.dataset.audience !== audience;
+      }
+      for (const tab of this.tabs) {
+        tab.setAttribute('aria-pressed', String(tab.dataset.tab === audience));
+      }
+    }
+  }
+
+  if (!customElements.get('ga-size-guide')) customElements.define('ga-size-guide', GaSizeGuide);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "GA Size guide",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "youth_label",
+      "label": "Youth tab",
+      "default": "Youth"
+    },
+    {
+      "type": "text",
+      "id": "adult_label",
+      "label": "Adult tab",
+      "default": "Adult"
+    },
+    {
+      "type": "header",
+      "content": "Units"
+    },
+    {
+      "type": "text",
+      "id": "inches_label",
+      "label": "Inches button",
+      "default": "In"
+    },
+    {
+      "type": "text",
+      "id": "cm_label",
+      "label": "Centimetres button",
+      "default": "Cm"
+    },
+    {
+      "type": "text",
+      "id": "inches_note",
+      "label": "Words added to each note, inches",
+      "default": "Measurements in inches."
+    },
+    {
+      "type": "text",
+      "id": "cm_note",
+      "label": "Words added to each note, centimetres",
+      "default": "Measurements in centimetres, rounded to the nearest half."
+    },
+    {
+      "type": "text",
+      "id": "no_convert",
+      "label": "Columns that are not measurements",
+      "info": "Column names, separated by commas. These are never converted to centimetres.",
+      "default": "Size, Age"
+    },
+    {
+      "type": "header",
+      "content": "How to measure"
+    },
+    {
+      "type": "text",
+      "id": "measure_heading",
+      "label": "Heading",
+      "default": "How to measure"
+    },
+    {
+      "type": "richtext",
+      "id": "measure_text",
+      "label": "Text",
+      "default": "<p><strong>Chest:</strong> measure around the fullest part, under the arms.</p><p><strong>Height:</strong> stand against a wall without shoes.</p>"
+    },
+    {
+      "type": "text",
+      "id": "measure_note",
+      "label": "Handwritten note",
+      "default": "if age and height disagree, go by height"
+    },
+    {
+      "type": "textarea",
+      "id": "stamp",
+      "label": "Stamp text",
+      "default": "Athletic\njunior fit"
+    },
+    {
+      "type": "header",
+      "content": "Screen reader labels"
+    },
+    {
+      "type": "text",
+      "id": "tabs_label",
+      "label": "Tab group",
+      "default": "Choose youth or adult sizes"
+    },
+    {
+      "type": "text",
+      "id": "units_label",
+      "label": "Unit buttons",
+      "default": "Units"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chart",
+      "name": "Size chart",
+      "settings": [
+        {
+          "type": "select",
+          "id": "audience",
+          "label": "Who it is for",
+          "options": [
+            {
+              "value": "youth",
+              "label": "Youth"
+            },
+            {
+              "value": "adult",
+              "label": "Adult"
+            }
+          ],
+          "default": "youth"
+        },
+        {
+          "type": "select",
+          "id": "kind",
+          "label": "Product type",
+          "info": "Product pages show the chart that matches their product.",
+          "options": [
+            {
+              "value": "polo",
+              "label": "Polos"
+            },
+            {
+              "value": "hoodie",
+              "label": "Hoodies"
+            },
+            {
+              "value": "shorts",
+              "label": "Shorts"
+            },
+            {
+              "value": "jacket",
+              "label": "Jackets"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "cap",
+              "label": "Caps"
+            },
+            {
+              "value": "beanie",
+              "label": "Beanies"
+            }
+          ],
+          "default": "polo"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Youth polos"
+        },
+        {
+          "type": "text",
+          "id": "short_label",
+          "label": "Short name for the jump links",
+          "default": "Polos"
+        },
+        {
+          "type": "text",
+          "id": "columns",
+          "label": "Column names",
+          "info": "Separate with a vertical bar: Size | Chest | Length",
+          "default": "Size | Chest | Length | Sleeve"
+        },
+        {
+          "type": "textarea",
+          "id": "rows",
+          "label": "Rows",
+          "info": "One size per line, values separated with a vertical bar. Write measurements in inches, for example 19 1/4.",
+          "default": "S | 14 | 19 1/4 | 6 3/4"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Note under the table"
+        },
+        {
+          "type": "text",
+          "id": "fit",
+          "label": "Handwritten fit note"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "header",
+          "content": "Photos of each size"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_1",
+          "label": "Photo 1"
+        },
+        {
+          "type": "text",
+          "id": "caption_1",
+          "label": "Caption 1",
+          "info": "For example: Small. 45 in tall."
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_2",
+          "label": "Photo 2"
+        },
+        {
+          "type": "text",
+          "id": "caption_2",
+          "label": "Caption 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_3",
+          "label": "Photo 3"
+        },
+        {
+          "type": "text",
+          "id": "caption_3",
+          "label": "Caption 3"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Size guide",
+      "blocks": [
+        {
+          "type": "chart"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

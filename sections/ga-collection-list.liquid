@@ -1,0 +1,159 @@
+{%- liquid
+  assign s = section.settings
+
+  assign featured_handles = ''
+  for c in s.featured
+    assign featured_handles = featured_handles | append: '|' | append: c.handle | append: '|'
+  endfor
+-%}
+
+{%- if s.featured.count > 0 -%}
+  <div class="ga ga--black ga-clist ga-clist--featured">
+    <div class="ga-wrap">
+      {%- if s.featured_heading != blank -%}
+        <h2 class="ga-display ga-clist__title">{{ s.featured_heading | escape }}</h2>
+      {%- endif -%}
+      <ul class="ga-clist__tiles" role="list">
+        {%- for c in s.featured -%}
+          {%- assign variant = forloop.index0 | modulo: 3 | plus: 1 -%}
+          <li class="ga-tile ga-tile--{{ variant }}">
+            <a class="ga-tile__link" href="{{ c.url }}">
+              <span class="ga-torn ga-torn--{{ variant | plus: 1 }} ga-tile__paper ga-clist__paper">
+                <span class="ga-torn__media">
+                  {%- assign tile_image = c.image | default: c.products.first.featured_image -%}
+                  {%- if tile_image != blank -%}
+                    {{ tile_image | image_url: width: 1200 | image_tag: alt: '', loading: 'lazy', sizes: '(min-width: 750px) 31vw, 92vw', widths: '360, 540, 720, 960, 1200' }}
+                  {%- endif -%}
+                </span>
+              </span>
+              <span class="ga-label ga-tile__label">{{ c.title | escape }}</span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+<div class="ga ga--white ga-clist ga-clist--all">
+  <div class="ga-wrap">
+    {%- if s.all_heading != blank -%}
+      <h2 class="ga-display ga-clist__title">{{ s.all_heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- paginate collections by 48 -%}
+      <ul class="ga-grid" role="list">
+        {%- for c in collections -%}
+          {%- liquid
+            assign key = '|' | append: c.handle | append: '|'
+            if featured_handles contains key or c.products_count == 0 or c.handle == 'frontpage'
+              continue
+            endif
+            assign card_image = c.image | default: c.products.first.featured_image
+            assign fit = 'cover'
+            if card_image.src contains '.png'
+              assign fit = 'contain'
+            endif
+          -%}
+          <li>
+            <a class="ga-pcard" href="{{ c.url }}">
+              <span class="ga-pcard__frame ga-pcard__frame--{{ fit }}">
+                {%- if card_image != blank -%}
+                  {{ card_image | image_url: width: 900 | image_tag: class: 'ga-pcard__img', alt: '', loading: 'lazy', sizes: '(min-width: 990px) 23vw, (min-width: 750px) 31vw, 46vw', widths: '240, 360, 480, 640, 900' }}
+                {%- endif -%}
+                <span class="ga-pcard__price">{{ c.products_count }}</span>
+              </span>
+              <span class="ga-pcard__name">{{ c.title | remove: 'GOLF ASYLUM' | remove: 'Golf Asylum' | strip | escape }}</span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-clist {
+    padding-block: 44px 72px;
+  }
+
+  .ga-clist--all {
+    padding-block-end: 64px;
+  }
+
+  .ga-clist__title {
+    margin-block-end: 26px;
+    font-size: 13vw;
+  }
+
+  .ga-clist__tiles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 44px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-clist__paper {
+    --ga-paper: var(--ga-bone);
+  }
+
+  .ga-clist__paper .ga-torn__media {
+    background: var(--ga-white);
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-clist {
+      padding-block: calc(var(--ga-u) * 72) calc(var(--ga-u) * 130);
+    }
+
+    .ga-clist--all {
+      padding-block-end: calc(var(--ga-u) * 110);
+    }
+
+    .ga-clist__title {
+      margin-block-end: calc(var(--ga-u) * 40);
+      padding-inline-start: calc(var(--ga-u) * 16);
+      font-size: calc(var(--ga-u) * 97);
+    }
+
+    .ga-clist__tiles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: calc(var(--ga-u) * 26);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Collection list",
+  "tag": "section",
+  "class": "ga-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "featured_heading",
+      "label": "Heading above the main collections",
+      "default": "Start here"
+    },
+    {
+      "type": "collection_list",
+      "id": "featured",
+      "label": "Main collections",
+      "limit": 3
+    },
+    {
+      "type": "text",
+      "id": "all_heading",
+      "label": "Heading above the full list",
+      "default": "Every collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Collection list"
+    }
+  ]
+}
+{% endschema %}
