@@ -111,10 +111,10 @@
           "settings": {
             "label": "Youth polos",
             "collection": "ballhead-jr-polo-collection",
-            "zoom": 155,
-            "focus_x": 40,
-            "focus_y": 55,
-            "image": "shopify://shop_images/ga-youth-polos.jpg"
+            "zoom": 100,
+            "focus_x": 50,
+            "focus_y": 35,
+            "image": "shopify://shop_images/jr-ballhead-polo-electric-on-course.jpg"
           }
         },
         "hoodies": {
