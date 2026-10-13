@@ -242,20 +242,18 @@
       },
       "block_order": [
         "ph1",
-        "ph2",
-        "ph3"
+        "ph3",
+        "ph2"
       ],
       "settings": {
-        "heading": "Meet the\nInmates.",
-        "text": "Our ambassadors, our Invitational, our people. Juniors who play their own way.",
+        "heading": "Interested in\nbecoming\nan Inmate?",
+        "text": "Our ambassadors, our people. Juniors who play their own way.",
         "button_label": "Become an Inmate",
         "button_link": "shopify://pages/brand-ambassadors",
-        "video_link": "https://www.instagram.com/golf_asylum/",
         "play_label": "Play the Golf Asylum Invitational video",
         "cover_alt": "Golf Asylum tee markers beside a lake at the Invitational",
-        "caption": "The Invitational, June 2026",
-        "cover": "shopify://shop_images/ga-invitational-cover.jpg",
-        "video": "shopify://files/videos/golf-asylum-invitational-day-1-recap.mp4"
+        "caption": "",
+        "small_heading": true
       }
     },
     "adult_caps": {

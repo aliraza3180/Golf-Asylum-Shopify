@@ -61,8 +61,10 @@
             "link_1_url": "shopify://pages/about-us",
             "link_2_label": "Inmates",
             "link_2_url": "shopify://pages/brand-ambassadors",
-            "link_3_label": "Instagram",
-            "link_3_url": "https://www.instagram.com/golf_asylum/"
+            "link_3_label": "Invitational",
+            "link_3_url": "shopify://pages/invitational",
+            "link_4_label": "Instagram",
+            "link_4_url": "https://www.instagram.com/golf_asylum/"
           }
         }
       },

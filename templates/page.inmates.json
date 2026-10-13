@@ -8,8 +8,8 @@
         "show_dot": true,
         "text": "Are you passionate about golf and rocking unique, high-quality apparel? Our Brand Ambassador team is looking for you.",
         "show_ballhead": true,
-        "image": "shopify://shop_images/Inmates_nikki.jpg",
-        "image_alt": "Golf Asylum ambassadors"
+        "image": "shopify://shop_images/TB_1_group_3.jpg",
+        "image_alt": "Six junior golfers in Golf Asylum polos and caps"
       }
     },
     "steps": {
@@ -49,64 +49,10 @@
         "ask",
         "apply"
       ]
-    },
-    "invitational": {
-      "type": "ga-community",
-      "blocks": {
-        "ph1": {
-          "type": "photo",
-          "settings": {
-            "alt": "Junior golfer following through on a drive at the Golf Asylum Invitational",
-            "zoom": 100,
-            "focus_x": 50,
-            "focus_y": 50,
-            "image": "shopify://shop_images/invitational-2026-295.jpg"
-          }
-        },
-        "ph2": {
-          "type": "photo",
-          "settings": {
-            "alt": "Junior golfer following through on a drive at the Golf Asylum Invitational",
-            "zoom": 100,
-            "focus_x": 50,
-            "focus_y": 50,
-            "image": "shopify://shop_images/invitational-2026-293.jpg"
-          }
-        },
-        "ph3": {
-          "type": "photo",
-          "settings": {
-            "alt": "Junior golfer with his driver at the Golf Asylum Invitational",
-            "zoom": 100,
-            "focus_x": 45,
-            "focus_y": 50,
-            "image": "shopify://shop_images/invitational-2026-398.jpg"
-          }
-        }
-      },
-      "block_order": [
-        "ph1",
-        "ph2",
-        "ph3"
-      ],
-      "settings": {
-        "heading": "The\nInvitational.",
-        "text": "The first Golf Asylum Invitational was held in June 2026.",
-        "button_label": "Follow on Instagram",
-        "button_link": "https://www.instagram.com/golf_asylum/",
-        "video_link": "https://www.instagram.com/golf_asylum/",
-        "play_label": "Play the Golf Asylum Invitational video",
-        "cover_alt": "Golf Asylum tee markers beside a lake at the Invitational",
-        "caption": "The Invitational, June 2026",
-        "small_heading": true,
-        "cover": "shopify://shop_images/ga-invitational-cover.jpg",
-        "video": "shopify://files/videos/golf-asylum-invitational-day-1-recap.mp4"
-      }
     }
   },
   "order": [
     "hero",
-    "steps",
-    "invitational"
+    "steps"
   ]
 }

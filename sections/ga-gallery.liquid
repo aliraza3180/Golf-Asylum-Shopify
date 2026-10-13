@@ -1,0 +1,198 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="ga ga--{{ s.tone }} ga-gallery">
+  <div class="ga-wrap">
+    {%- if s.note != blank or s.heading != blank -%}
+      <div class="ga-gallery__head">
+        {%- if s.note != blank -%}
+          <p class="ga-hand ga-hand--underline ga-gallery__note">{{ s.note | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="ga-display ga-gallery__title">{{ s.heading | escape }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <ul class="ga-gallery__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign bs = block.settings -%}
+        {%- if bs.image == blank -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- assign variant = forloop.index0 | modulo: 4 | plus: 1 -%}
+        <li class="ga-gallery__item ga-gallery__item--{{ variant }}" {{ block.shopify_attributes }}>
+          <div class="ga-torn ga-torn--{{ variant }}" style="aspect-ratio: {{ bs.image.aspect_ratio | default: 1 }};">
+            <div class="ga-torn__media">
+              {%- render 'ga-image', image: bs.image, alt: bs.alt, sizes: '(min-width: 750px) 31vw, 46vw', width: 1400 -%}
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ga-gallery {
+    padding-block: 48px 64px;
+  }
+
+  .ga-gallery__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-block-end: 28px;
+  }
+
+  .ga-gallery__note {
+    font-size: 32px;
+    margin-block-end: 0.5em;
+    --ga-hand-tilt: -4deg;
+  }
+
+  .ga-gallery__title {
+    font-size: 15vw;
+  }
+
+  /* Columns of photos at their own shapes, like prints pinned to a wall. */
+  .ga-gallery__grid {
+    columns: 2;
+    column-gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ga-gallery__item {
+    break-inside: avoid;
+    margin-block-end: 12px;
+  }
+
+  .ga-gallery__item .ga-torn {
+    --ga-paper: var(--ga-bone);
+    padding: max(4px, calc(var(--ga-u) * 8));
+  }
+
+  .ga-gallery__item--1 .ga-torn {
+    --ga-tilt: -1deg;
+  }
+
+  .ga-gallery__item--3 .ga-torn {
+    --ga-tilt: 1deg;
+  }
+
+  .ga-gallery__item--4 .ga-torn {
+    --ga-tilt: -0.5deg;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-gallery {
+      padding-block: calc(var(--ga-u) * 96) calc(var(--ga-u) * 120);
+    }
+
+    .ga-gallery__head {
+      margin-block-end: calc(var(--ga-u) * 48);
+      padding-inline-start: calc(var(--ga-u) * 16);
+    }
+
+    .ga-gallery__note {
+      font-size: calc(var(--ga-u) * 44);
+    }
+
+    .ga-gallery__title {
+      font-size: calc(var(--ga-u) * 104);
+    }
+
+    .ga-gallery__grid {
+      columns: 3;
+      column-gap: calc(var(--ga-u) * 24);
+    }
+
+    .ga-gallery__item {
+      margin-block-end: calc(var(--ga-u) * 24);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GA Photo gallery",
+  "tag": "section",
+  "class": "ga-section",
+  "max_blocks": 24,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Background",
+      "options": [
+        {
+          "value": "black",
+          "label": "Black"
+        },
+        {
+          "value": "charcoal",
+          "label": "Charcoal"
+        },
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "bone",
+          "label": "Off-white"
+        }
+      ],
+      "default": "black"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Handwritten note"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The photos"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Photo description",
+          "info": "Read out by screen readers."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GA Photo gallery",
+      "blocks": [
+        {
+          "type": "photo"
+        },
+        {
+          "type": "photo"
+        },
+        {
+          "type": "photo"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

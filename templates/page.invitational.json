@@ -1,0 +1,158 @@
+{
+  "sections": {
+    "hero": {
+      "type": "ga-page-hero",
+      "settings": {
+        "note": "June 2026",
+        "heading": "The\nInvitational",
+        "show_dot": true,
+        "text": "Our first Invitational. Juniors who play their own way.",
+        "image": "shopify://shop_images/invitational-2026-529.jpg",
+        "image_alt": "Junior golfers high-fiving at the Golf Asylum Invitational",
+        "show_ballhead": true
+      }
+    },
+    "video": {
+      "type": "ga-community",
+      "blocks": {
+        "ph1": {
+          "type": "photo",
+          "settings": {
+            "alt": "Junior golfer following through on a drive at the Golf Asylum Invitational",
+            "zoom": 100,
+            "focus_x": 50,
+            "focus_y": 50,
+            "image": "shopify://shop_images/invitational-2026-295.jpg"
+          }
+        },
+        "ph2": {
+          "type": "photo",
+          "settings": {
+            "alt": "Junior golfer following through on a drive at the Golf Asylum Invitational",
+            "zoom": 100,
+            "focus_x": 50,
+            "focus_y": 50,
+            "image": "shopify://shop_images/invitational-2026-293.jpg"
+          }
+        },
+        "ph3": {
+          "type": "photo",
+          "settings": {
+            "alt": "Junior golfer with his driver at the Golf Asylum Invitational",
+            "zoom": 100,
+            "focus_x": 45,
+            "focus_y": 50,
+            "image": "shopify://shop_images/invitational-2026-398.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "ph1",
+        "ph3",
+        "ph2"
+      ],
+      "settings": {
+        "heading": "Day 1\nrecap.",
+        "text": "The first Golf Asylum Invitational was held in June 2026.",
+        "button_label": "Follow on Instagram",
+        "button_link": "https://www.instagram.com/golf_asylum/",
+        "video_link": "https://www.instagram.com/golf_asylum/",
+        "play_label": "Play the Golf Asylum Invitational video",
+        "cover_alt": "Golf Asylum tee markers beside a lake at the Invitational",
+        "caption": "The Invitational, June 2026",
+        "cover": "shopify://shop_images/ga-invitational-cover.jpg",
+        "video": "shopify://files/videos/golf-asylum-invitational-day-1-recap.mp4",
+        "small_heading": false
+      }
+    },
+    "gallery": {
+      "type": "ga-gallery",
+      "settings": {
+        "tone": "black",
+        "note": "from the course",
+        "heading": "The photos"
+      },
+      "blocks": {
+        "p027": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-027.jpg",
+            "alt": "Junior golfer holding his finish after a tee shot at the Golf Asylum Invitational"
+          }
+        },
+        "p402": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-402.jpg",
+            "alt": "Junior golfer teeing off beside the Golf Asylum tee markers"
+          }
+        },
+        "p483": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-483.jpg",
+            "alt": "Junior golfer lining up a shot at the Golf Asylum Invitational"
+          }
+        },
+        "p534": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-534.jpg",
+            "alt": "Junior golfer playing beside the lake at the Golf Asylum Invitational"
+          }
+        },
+        "p297": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-297.jpg",
+            "alt": "Junior golfer at the Golf Asylum Invitational"
+          }
+        },
+        "p460": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-460.jpg",
+            "alt": "Junior golfer watching his drive at the Golf Asylum Invitational"
+          }
+        },
+        "p450": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-450.jpg",
+            "alt": "Junior golfer celebrating on the green at the Golf Asylum Invitational"
+          }
+        },
+        "p094": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-094.jpg",
+            "alt": "Junior golfer chipping at the Golf Asylum Invitational"
+          }
+        },
+        "p379": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-379.jpg",
+            "alt": "Junior golfer walking the course at the Golf Asylum Invitational"
+          }
+        }
+      },
+      "block_order": [
+        "p027",
+        "p402",
+        "p483",
+        "p534",
+        "p297",
+        "p460",
+        "p450",
+        "p094",
+        "p379"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "video",
+    "gallery"
+  ]
+}

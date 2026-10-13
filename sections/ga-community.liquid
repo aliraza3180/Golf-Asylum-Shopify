@@ -6,7 +6,7 @@
   endif
 -%}
 
-<div class="ga ga--black ga-community">
+<div class="ga ga--black ga-community{% unless has_cover %} ga-community--photos{% endunless %}">
   <div class="ga-wrap ga-community__inner">
     <div class="ga-ballhead-bg ga-community__ballhead" aria-hidden="true">
       {%- render 'ga-ballhead' -%}
@@ -240,6 +240,32 @@
 
   .ga-community__photo--3 .ga-torn {
     --ga-tilt: 2deg;
+  }
+
+  /* Without a video the three photos carry the section. */
+  .ga-community--photos .ga-community__photo .ga-torn {
+    aspect-ratio: 2 / 3;
+  }
+
+  .ga-community--photos .ga-community__photos {
+    margin: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ga-community--photos .ga-community__inner {
+      display: grid;
+      grid-template-columns: calc(var(--ga-u) * 420) minmax(0, 1fr);
+      gap: calc(var(--ga-u) * 70);
+      align-items: center;
+      min-height: 0;
+      padding-block: calc(var(--ga-u) * 110) calc(var(--ga-u) * 120);
+    }
+
+    .ga-community--photos .ga-community__photos {
+      position: static;
+      width: auto;
+      gap: calc(var(--ga-u) * 18);
+    }
   }
 
   @media screen and (min-width: 750px) {
