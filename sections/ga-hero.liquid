@@ -11,7 +11,7 @@
 
     <div class="ga-hero__copy">
       {%- if s.note != blank -%}
-        <p class="ga-hand ga-hand--underline ga-hero__note">{{ s.note | escape }}</p>
+        <p class="ga-hand ga-hand--underline ga-hero__note" style="--ga-note-length: {{ s.note.size }};">{{ s.note | escape }}</p>
       {%- endif -%}
 
       {%- if s.heading != blank -%}
@@ -87,7 +87,8 @@
   }
 
   .ga-hero__note {
-    font-size: 11vw;
+    /* A character is about 0.44em wide, so this keeps the note on one line. */
+    font-size: min(11vw, calc(196vw / var(--ga-note-length, 20)));
     margin-block: 0 0.5em;
     --ga-hand-tilt: -6deg;
     --ga-underline-start: 44%;
@@ -199,7 +200,7 @@
       "type": "text",
       "id": "note",
       "label": "Handwritten note",
-      "default": "the only way to play"
+      "default": "the only way to play is"
     },
     {
       "type": "textarea",

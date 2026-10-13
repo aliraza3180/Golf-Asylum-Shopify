@@ -12,7 +12,7 @@
     "hero": {
       "type": "ga-hero",
       "settings": {
-        "note": "the only way to play",
+        "note": "the only way to play is",
         "heading": "Out of\nyour\nmind",
         "show_dot": true,
         "button_label": "Shop youth polos",
@@ -63,8 +63,8 @@
             "sticker": "New",
             "note": "",
             "note_position": "none",
-            "image": "shopify://shop_images/jr-ballhead-polo-navy-front.jpg",
-            "zoom": 100
+            "image": "shopify://shop_images/jr-ballhead-polo-navy.jpg",
+            "zoom": 110
           }
         },
         "white": {
@@ -75,8 +75,8 @@
             "sticker": "",
             "note": "4-way\nstretch",
             "note_position": "left",
-            "image": "shopify://shop_images/jr-ballhead-polo-white-front.jpg",
-            "zoom": 100
+            "image": "shopify://shop_images/jr-ballhead-polo-white.jpg",
+            "zoom": 110
           }
         },
         "electric": {
@@ -87,8 +87,8 @@
             "sticker": "",
             "note": "the Ballhead\npatch",
             "note_position": "right",
-            "image": "shopify://shop_images/jr-ballhead-polo-electric-front.jpg",
-            "zoom": 100
+            "image": "shopify://shop_images/jr-ballhead-polo-electric.jpg",
+            "zoom": 110
           }
         }
       },
