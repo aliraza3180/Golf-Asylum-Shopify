@@ -138,6 +138,20 @@
             "image": "shopify://shop_images/invitational-2026-379.jpg",
             "alt": "Junior golfer walking the course at the Golf Asylum Invitational"
           }
+        },
+        "bunker": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-bunker-shot.jpg",
+            "alt": "Junior golfer playing out of a bunker at the Golf Asylum Invitational"
+          }
+        },
+        "driver": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/invitational-2026-driver-swing.jpg",
+            "alt": "Junior golfer finishing a drive at the Golf Asylum Invitational"
+          }
         }
       },
       "block_order": [
@@ -149,7 +163,9 @@
         "p460",
         "p450",
         "p094",
-        "p379"
+        "p379",
+        "bunker",
+        "driver"
       ]
     }
   },
