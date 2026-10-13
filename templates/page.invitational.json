@@ -7,9 +7,12 @@
         "heading": "The\nInvitational",
         "show_dot": true,
         "text": "Our first Invitational. Juniors who play their own way.",
-        "image": "shopify://shop_images/invitational-2026-529.jpg",
-        "image_alt": "Junior golfers high-fiving at the Golf Asylum Invitational",
-        "show_ballhead": true
+        "image": "shopify://shop_images/invitational-2026-fist-bump.jpg",
+        "image_alt": "Two junior golfers about to fist-bump on the green at the Golf Asylum Invitational",
+        "show_ballhead": true,
+        "zoom": 100,
+        "focus_x": 50,
+        "focus_y": 25
       }
     },
     "video": {
@@ -53,7 +56,7 @@
       ],
       "settings": {
         "heading": "Day 1\nrecap.",
-        "text": "The first Golf Asylum Invitational was held in June 2026.",
+        "text": "The first Golf Asylum Invitational was held at Broomsedge GC in Camden, SC June 2026.",
         "button_label": "Follow on Instagram",
         "button_link": "https://www.instagram.com/golf_asylum/",
         "video_link": "https://www.instagram.com/golf_asylum/",
