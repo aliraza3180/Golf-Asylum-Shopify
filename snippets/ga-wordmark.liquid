@@ -1,0 +1,16 @@
+{%- doc -%}
+  The "GOLF ASYLUM" wordmark. Shows the wordmark image chosen in theme settings
+  (Golf Asylum brand > Wordmark image), or the shop name as text when none is chosen.
+
+  @param {string} [class] - Class names for the element
+
+  @example
+  {% render 'ga-wordmark', class: 'ga-logo__wordmark' %}
+{%- enddoc -%}
+
+{%- if settings.ga_wordmark != blank -%}
+  {%- assign wordmark_class = 'ga-wordmark-image ' | append: class | strip -%}
+  {{ settings.ga_wordmark | image_url: width: 560 | image_tag: class: wordmark_class, alt: shop.name, loading: 'eager', sizes: '280px', widths: '140, 280, 560' }}
+{%- else -%}
+  <span class="{{ class }}">{{ shop.name }}</span>
+{%- endif -%}

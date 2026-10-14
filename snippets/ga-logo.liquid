@@ -11,5 +11,5 @@
 
 <span class="ga-logo{% if stacked %} ga-logo--stacked{% endif %}{% if class != blank %} {{ class }}{% endif %}">
   {%- render 'ga-mark', class: 'ga-logo__mark' -%}
-  <span class="ga-logo__wordmark">{{ shop.name }}</span>
+  {%- render 'ga-wordmark', class: 'ga-logo__wordmark' -%}
 </span>

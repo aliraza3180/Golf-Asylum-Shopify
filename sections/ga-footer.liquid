@@ -42,8 +42,8 @@
       {%- if s.show_logo -%}
         <div class="ga-footer__brand">
           <a class="ga-footer__logo" href="{{ routes.root_url }}">
-            {%- render 'ga-ballhead', class: 'ga-footer__mark' -%}
-            <span class="ga-footer__wordmark">{{ shop.name }}</span>
+            {%- render 'ga-mark', class: 'ga-footer__mark' -%}
+            {%- render 'ga-wordmark', class: 'ga-footer__wordmark' -%}
           </a>
           {%- if s.tagline != blank -%}
             <p class="ga-hand ga-footer__tagline">{{ s.tagline | escape | newline_to_br }}</p>
@@ -174,6 +174,10 @@
   .ga-footer__mark {
     width: 110px;
     --ga-ballhead-stroke: 7;
+  }
+
+  .ga-footer__wordmark.ga-wordmark-image {
+    height: 58px;
   }
 
   .ga-footer__wordmark {

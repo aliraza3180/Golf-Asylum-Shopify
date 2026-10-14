@@ -361,3 +361,24 @@
   display: block;
   height: auto;
 }
+
+/* The wordmark as an image (set in theme settings) rather than text */
+.ga-wordmark-image {
+  display: block;
+  width: auto;
+  height: max(34px, calc(var(--ga-u) * 62));
+}
+
+.header-logo .ga-wordmark-image {
+  height: 40px;
+}
+
+@media screen and (min-width: 750px) {
+  .header-logo .ga-wordmark-image {
+    height: 52px;
+  }
+}
+
+.ga-logo__wordmark.ga-wordmark-image {
+  font-size: 0;
+}

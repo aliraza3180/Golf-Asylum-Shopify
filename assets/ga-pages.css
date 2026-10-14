@@ -629,3 +629,8 @@ body.gift-card .button.button-secondary {
 .ga-blog-empty__title {
   font-size: clamp(44px, 9vw, 110px);
 }
+
+.gift-card__wordmark.ga-wordmark-image {
+  height: 64px;
+  margin-inline: auto;
+}
