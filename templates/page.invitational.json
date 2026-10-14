@@ -76,13 +76,6 @@
         "heading": "The photos"
       },
       "blocks": {
-        "p027": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/invitational-2026-027.jpg",
-            "alt": "Junior golfer holding his finish after a tee shot at the Golf Asylum Invitational"
-          }
-        },
         "p402": {
           "type": "photo",
           "settings": {
@@ -94,7 +87,7 @@
           "type": "photo",
           "settings": {
             "image": "shopify://shop_images/invitational-2026-483.jpg",
-            "alt": "Junior golfer lining up a shot at the Golf Asylum Invitational"
+            "alt": "Junior golfer in sunglasses lining up a shot at the Golf Asylum Invitational"
           }
         },
         "p534": {
@@ -155,9 +148,8 @@
         }
       },
       "block_order": [
-        "p027",
-        "p402",
         "p483",
+        "p402",
         "p534",
         "p297",
         "p460",

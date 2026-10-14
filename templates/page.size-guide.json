@@ -95,9 +95,9 @@
             "kind": "jacket",
             "heading": "Youth waterproof jacket",
             "short_label": "Waterproof jacket",
-            "columns": "Size | Chest | Bottom opening | Front length | Shoulder",
-            "rows": "S | 33 | 33 | 19 1/4 | 13\nM | 36 | 36 | 22 1/2 | 14 1/2\nL | 39 | 39 | 23 1/2 | 16\nXL | 42 | 42 | 24 1/2 | 17 1/2",
-            "note": "Front length is measured from the high point of the shoulder."
+            "columns": "Size | Chest | Leg opening | Front length | Shoulder",
+            "rows": "S | 16.5 | 16.5 | 19 1/4 | 13\nM | 18 | 18 | 22 1/2 | 14 1/2\nL | 19.5 | 19.5 | 23 1/2 | 16\nXL | 21 | 21 | 24 1/2 | 17 1/2",
+            "note": "Chest is measured across the garment laid flat. Front length is measured from the high point of the shoulder. Leg opening is measured straight across the bottom of the garment while it's laid flat. This is the width from side to side, not the full circumference."
           }
         },
         "youth_pants": {
@@ -133,7 +133,7 @@
             "short_label": "Waterproof pants",
             "columns": "Size | Waist | Leg opening | Inseam",
             "rows": "S | 16 | 9.25 | 32\nM | 16.5 | 9.5 | 32\nL | 17 | 9.75 | 32\nXL | 17.5 | 10 | 32",
-            "note": "Waist is measured straight across the top of the waistband."
+            "note": "Waist is measured straight across the top of the waistband. Leg opening is measured straight across the bottom of the garment while it's laid flat. This is the width from side to side, not the full circumference."
           }
         }
       },
