@@ -66,12 +66,29 @@
             "link_4_label": "Instagram",
             "link_4_url": "https://www.instagram.com/golf_asylum/"
           }
+        },
+        "legal": {
+          "type": "column",
+          "settings": {
+            "heading": "Legal",
+            "link_1_label": "Privacy policy",
+            "link_1_url": "/policies/privacy-policy",
+            "link_2_label": "Return policy",
+            "link_2_url": "/policies/refund-policy",
+            "link_3_label": "Terms of service",
+            "link_3_url": "/policies/terms-of-service",
+            "link_4_label": "Terms and policies",
+            "link_4_url": "shopify://pages/golf-asylum-privacy-policy-terms",
+            "link_5_label": "Privacy choices",
+            "link_5_url": "shopify://pages/data-sharing-opt-out"
+          }
         }
       },
       "block_order": [
         "shop",
         "help",
-        "brand"
+        "brand",
+        "legal"
       ],
       "settings": {
         "show_logo": true,
