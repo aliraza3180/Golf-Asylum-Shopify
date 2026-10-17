@@ -103,11 +103,19 @@
   content="{{ og_description | escape }}"
 >
 
+{%- liquid
+  assign title_has_brand = false
+  assign brand_lower = shop.name | strip | downcase
+  assign page_title_lower = page_title | downcase
+  if page_title_lower contains brand_lower
+    assign title_has_brand = true
+  endif
+-%}
 <title>
   {{ page_title }}
   {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
   {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-  {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  {%- unless title_has_brand %} &ndash; {{ shop.name | strip }}{% endunless -%}
 </title>
 
 <link
